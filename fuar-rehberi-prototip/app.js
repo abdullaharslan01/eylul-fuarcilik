@@ -84,27 +84,37 @@ function toast(message){const box=$('#toast');box.textContent=message;box.classL
 function hideDemoNotification(){
   clearTimeout(window.pushTimer);
   clearTimeout(window.pushHideTimer);
+  clearTimeout(window.pushEntranceTimer);
   const banner=$('#push-notification');
   banner.classList.remove('show');
   $('#phone').classList.remove('is-notifying');
   window.pushHideTimer=setTimeout(()=>{if(!banner.classList.contains('show'))banner.hidden=true},240);
 }
+let demoNoticeCursor=0;
 function showDemoNotification(message){
-  const notice=message||{title:state.fair==='ankara'?'24. Ankara Kitap Fuarı yaklaşıyor':'Çocuk Şenliği duyurusu',body:state.fair==='ankara'?'4–13 Aralık’ta görüşmek üzere. Fuar haberlerini bu rehberden takip et.':'Şenlik haberlerini ve etkinlikleri bu rehberden takip et.',audience:'Tüm ziyaretçiler'};
+  const samples=state.fair==='ankara'?[{title:'24. Ankara Kitap Fuarı yaklaşıyor',body:'4–13 Aralık’ta görüşmek üzere. Fuar haberlerini bu rehberden takip et.'},{title:'Örnek: Söyleşi saati güncellendi',body:'İlgilendiğin söyleşinin yeni saatini programdan kontrol et.'},{title:'Örnek: Yeni buluşma duyurusu',body:'Bugünün imza ve söyleşi programına göz at.'}]:[{title:'Çocuk Şenliği duyurusu',body:'Şenlik haberlerini ve etkinlikleri bu rehberden takip et.'},{title:'Örnek: Atölye saati güncellendi',body:'Ailen için seçtiğin atölyenin güncel saatini programdan gör.'},{title:'Örnek: Yeni etkinlik açıldı',body:'Çocuk Şenliği programındaki yeni etkinliğe göz at.'}];
+  const notice=message||{...samples[demoNoticeCursor++%samples.length],audience:'Tüm ziyaretçiler'};
   state.demoNotice=notice;
   state.noticeFilter='Tümü';
   if(state.page==='notifications')render();
-  $('#push-title').textContent=notice.title;
-  $('#push-body').textContent=notice.body;
   const banner=$('#push-notification');
+  const wasVisible=!banner.hidden;
   clearTimeout(window.pushTimer);
   clearTimeout(window.pushHideTimer);
+  clearTimeout(window.pushEntranceTimer);
   banner.classList.remove('show');
-  banner.hidden=false;
-  void banner.offsetWidth;
-  banner.classList.add('show');
-  $('#phone').classList.add('is-notifying');
-  window.pushTimer=setTimeout(hideDemoNotification,8000);
+  $('#phone').classList.remove('is-notifying');
+  const open=()=>{
+    $('#push-title').textContent=notice.title;
+    $('#push-body').textContent=notice.body;
+    banner.hidden=false;
+    void banner.offsetWidth;
+    banner.classList.add('show');
+    $('#phone').classList.add('is-notifying');
+    window.pushTimer=setTimeout(hideDemoNotification,8000);
+  };
+  if(wasVisible)window.pushEntranceTimer=setTimeout(open,320);
+  else open();
 }
 function nav(){document.querySelectorAll('.bottom-nav button').forEach(button=>button.classList.toggle('active',button.dataset.page===state.page||((state.page==='event'||state.page==='participant')&&button.dataset.page===state.previous)||(state.page==='passport'&&button.dataset.page==='home')))}
 function render(){const photoDetail=state.fair==='ankara'&&((state.page==='event'&&(authors.some(a=>a.name===events().find(e=>e.id===state.detail)?.title)||bookTalks.some(e=>e.id===state.detail)))||(state.page==='participant'&&authors.some(a=>a.id===state.detail)));$('#phone').classList.toggle('detail-open',state.page==='event'||state.page==='participant');$('#phone').classList.toggle('photo-detail',photoDetail);const pages={welcome,home,program,map,discover,plan,notifications,admin,passport,event:eventDetail,participant:participantDetail,about};$('#screen').innerHTML=pages[state.page]();if(animateNextRender){$('#screen>.screen')?.classList.add('route-enter',routeTransition);animateNextRender=false}nav();updatePresentation()}
@@ -206,18 +216,32 @@ function admin(){return `<div class="screen"><button class="link-button" data-pa
 
 const tourOrder=['welcome','home','program','event','map','discover','participant','plan','notifications','admin','passport','about'];
 const compactSlides={
-  welcome:{kicker:'EYLÜL FUAR REHBERİ',title:'Fuarın tamamı.|Tek ekranda.',description:'Ziyaretçi fuarını seçer, yolculuk başlar.'},
-  home:{kicker:'KİTAP FUARI',title:'Kitap fuarı|cebinde.',description:'İmza, söyleşi ve yayınevleri bir arada.'},
-  program:{kicker:'PROGRAM',title:'Program hep|elinin altında.',description:'Güne ve konuya göre buluşmalar.'},
-  event:{kicker:'ETKİNLİK',title:'Her detay|bir arada.',description:'Kim, nerede, ne zaman?'},
-  map:{kicker:'HARİTA',title:'Standı bul.|Yolunu gör.',description:'Fuar alanında kolay yön bulma.'},
-  discover:{kicker:'KATILIMCILAR',title:'Yazarları|keşfet.',description:'Yazar ve yayınevi profilleri.'},
-  participant:{kicker:'PROFİL',title:'Yazar ve kitabı|tanı.',description:'Gerçek portre ve kitap kapağı.'},
-  plan:{kicker:'PLANIM',title:'Gününü|sen kur.',description:'Seçtiğin etkinlikler bir arada.'},
-  notifications:{kicker:'BİLDİRİMLER',title:'Duyurular|yerini bulur.',description:'Önemli bilgi doğru anda görünür.'},
-  admin:{kicker:'EYLÜL İÇİN',title:'Kontrol|Eylül’de.',description:'Duyuruyu hazırla, hedef kitleyi seç.'},
-  passport:{kicker:'FUAR PASAPORTU',title:'Katıldıkça|keşfet.',description:'QR ile isteğe bağlı küçük bir oyun.'},
-  about:{kicker:'EYLÜL FUARCILIK',title:'Her adımda|Eylül.',description:'Organizatör deneyimin merkezinde.'}
+  welcome:{kicker:'EYLÜL FUAR REHBERİ',title:'Fuarın tamamı.|Tek ekranda.',description:'Ziyaretçi kitap fuarını veya çocuk şenliğini seçer. Bütün yolculuk aynı uygulamada başlar.'},
+  home:{kicker:'KİTAP FUARI',title:'Kitap fuarı|cebinde.',description:'İmza günleri, söyleşiler ve yayınevleri ilk ekranda. Eylül’ün önemli duyuruları da burada görünür.'},
+  program:{kicker:'PROGRAM',title:'Program hep|elinin altında.',description:'Ziyaretçi günü seçer, imza ve söyleşilere ayrı bakar. İstediği buluşmayı kendi planına ekler.'},
+  event:{kicker:'ETKİNLİK',title:'Her detay|bir arada.',description:'Yazar, saat ve konum tek sayfada. Buluşmayı planına eklemek için bir dokunuş yeterli.'},
+  map:{kicker:'HARİTA',title:'Standı bul.|Yolunu gör.',description:'Ziyaretçi resmî krokiyi büyütüp alanı inceler. Stand arama için hazır bir giriş de bulunur.'},
+  discover:{kicker:'KATILIMCILAR',title:'Yazarları|keşfet.',description:'Yazar ve yayınevlerini isimle arar; ilgili profile ve imza bilgilerine kolayca geçer.'},
+  participant:{kicker:'PROFİL',title:'Yazar ve kitabı|tanı.',description:'Gerçek yazar fotoğrafı, kitap kapağı ve imza buluşması aynı profilde yer alır.'},
+  plan:{kicker:'PLANIM',title:'Gününü|sen kur.',description:'Seçtiği buluşmalar kişisel listesinde toplanır. Ziyaretçi hatırlatmaları istediği gibi yönetir.'},
+  notifications:{kicker:'BİLDİRİMLER',title:'Duyurular|yerini bulur.',description:'Program değişikliği veya genel fuar duyurusu telefonun üstünde belirir. Ziyaretçi ayrıntıyı açabilir.'},
+  admin:{kicker:'EYLÜL İÇİN',title:'Kontrol|Eylül’de.',description:'Eylül ekibi duyuruyu hazırlar, hedef kitleyi seçer ve ziyaretçi görünümünde önizler.'},
+  passport:{kicker:'FUAR PASAPORTU',title:'Katıldıkça|keşfet.',description:'Etkinlik QR kodlarıyla katılım fikri, küçük ödüller için isteğe bağlı bir keşif akışı.'},
+  about:{kicker:'EYLÜL FUARCILIK',title:'Her adımda|Eylül.',description:'Fuarı düzenleyen marka, uygulamanın içinde de görünür. Ziyaretçi organizatörü kolayca tanır.'}
+};
+const presentationHighlights={
+  welcome:['Kitap fuarı ve çocuk şenliği seçimi','Bütün fuarlar için aynı uygulama'],
+  home:['İmza, söyleşi ve yayınevlerine hızlı erişim','Eylül duyurusu ilk ekranda'],
+  program:['Güne ve etkinlik türüne göre program','Tek dokunuşla kişisel plana ekleme'],
+  event:['Yazar, saat ve konum bilgisi','Buluşmayı kaydetme'],
+  map:['Resmî fuar krokisi','Stant aramaya hazır alan'],
+  discover:['Yazar ve yayınevi araması','QR ile doğrudan profil fikri'],
+  participant:['Gerçek yazar fotoğrafı ve kitap kapağı','İlgili imza buluşması'],
+  plan:['Kişisel etkinlik listesi','Hatırlatma tercihi'],
+  notifications:['Herkese veya ilgili kitleye duyuru','Telefon üstünde canlı önizleme'],
+  admin:['Hedef kitle ve mesaj seçimi','Göndermeden ziyaretçi önizlemesi'],
+  passport:['Etkinlik QR damgası','İsteğe bağlı ödül fikri'],
+  about:['Eylül logosu ve kurumsal bilgisi','Organizatörün her ekranda görünürlüğü']
 };
 $('.presentation').style.setProperty('--tour-steps',tourOrder.length);
 function showTourStep(index){
@@ -236,25 +260,31 @@ function moveTour(direction){
   showTourStep(next);
   if(window.innerWidth>850)window.scrollTo({top:next*window.innerHeight,behavior:'instant'});
 }
-function restartDemo(){hideDemoNotification();routeTransition='page';animateNextRender=true;state.page='welcome';state.fair='ankara';state.day=1;state.kind='Tümü';state.programQuery='';state.category='Tümü';state.query='';state.saved.clear();state.stamps.clear();state.quizAnswer=null;state.demoNotice=null;state.noticeFilter='Tümü';state.prefs={event:true,change:true,general:false};localStorage.removeItem('eylul-rehber-saved');localStorage.removeItem('eylul-rehber-stamps');closeSheet();render();$('#scroll-area').scrollTop=0;window.scrollTo({top:0,behavior:'instant'})}
+function restartDemo(){hideDemoNotification();demoNoticeCursor=0;routeTransition='page';animateNextRender=true;state.page='welcome';state.fair='ankara';state.day=1;state.kind='Tümü';state.programQuery='';state.category='Tümü';state.query='';state.saved.clear();state.stamps.clear();state.quizAnswer=null;state.demoNotice=null;state.noticeFilter='Tümü';state.prefs={event:true,change:true,general:false};localStorage.removeItem('eylul-rehber-saved');localStorage.removeItem('eylul-rehber-stamps');closeSheet();render();$('#scroll-area').scrollTop=0;window.scrollTo({top:0,behavior:'instant'})}
 let lastPresentedKey='';
 function updatePresentation(){
   const presentationKey=`${state.fair}:${state.page}:${state.page==='participant'?state.detail:''}`;
   if(presentationKey!==lastPresentedKey){const preview=$('.preview-copy');preview.classList.remove('is-changing');void preview.offsetWidth;preview.classList.add('is-changing');lastPresentedKey=presentationKey}
   let slide=compactSlides[state.page]||compactSlides.home;
+  let highlights=presentationHighlights[state.page]||presentationHighlights.home;
   if(state.fair==='children'){
-    const childSlides={home:{kicker:'ÇOCUK ŞENLİĞİ',title:'Ailece|kolay keşif.',description:'Program, markalar ve alanlar.'},program:{title:'Günü birlikte|planla.',description:'Yaşa ve saate göre etkinlikler.'},event:{description:'Yaş, saat ve yer tek ekranda.'},map:{description:'Sahne ve atölyeleri bul.'},discover:{title:'Markaları|keşfet.',description:'Etkinlikler ve marka profilleri.'},participant:{kicker:'MARKA PROFİLİ',title:'Markaya|yakından bak.',description:'Web sitesi ve örnek fırsatlar.'}};
+    const childSlides={home:{kicker:'ÇOCUK ŞENLİĞİ',title:'Ailece|kolay keşif.',description:'Aileler programı, markaları ve alanları tek yerden görür. Önemli duyurular ilk ekranda.'},program:{title:'Günü birlikte|planla.',description:'Etkinlikler yaşa ve saate göre görülebilir. Aileler ilgilendiklerini planına ekler.'},event:{description:'Etkinliğin yaşı, saati ve yeri açıkça görünür; aileler kendi planına ekleyebilir.'},map:{description:'Sahne ve atölyeler alan planında bulunur; konumlar gerçek programla güncellenebilir.'},discover:{title:'Markaları|keşfet.',description:'Markalar ve etkinlik alanları isimle aranır; her birinin ayrı profili açılır.'},participant:{kicker:'MARKA PROFİLİ',title:'Markaya|yakından bak.',description:'Markanın web sitesi, etkinlikleri ve örnek fırsat alanı tek sayfada buluşur.'}};
+    const childHighlights={home:['Aileler için program ve alanlar','Duyurular ilk ekranda'],program:['Yaş ve güne göre etkinlikler','Aile planına ekleme'],event:['Yaş, saat ve yer bilgisi','Etkinliği plana ekleme'],map:['Sahne ve atölye alanları','Temsili yön bulma'],discover:['Marka ve alan araması','QR ile profil fikri'],participant:['Marka logosu ve resmî web sitesi','Örnek kampanya alanı']};
     slide={...slide,...childSlides[state.page]};
+    highlights=childHighlights[state.page]||highlights;
   }else if(state.page==='participant'&&publishers.some(p=>p.id===state.detail)){
-    slide={...slide,kicker:'YAYINEVİ',title:'Yayınevini|keşfet.',description:'Kitapları ve imza buluşmaları.'};
+    slide={...slide,kicker:'YAYINEVİ',title:'Yayınevini|keşfet.',description:'Gerçek logo, ilgili imza buluşmaları ve resmî web sitesi aynı profilde yer alır.'};
+    highlights=['Gerçek yayınevi logosu','İmza arşivi ve web sitesi'];
   }else if(state.page==='event'&&bookTalks.some(e=>e.id===state.detail)){
-    slide={...slide,kicker:'SÖYLEŞİ',title:'Söyleşiye|yakından bak.',description:'Konu, saat ve konuşmacı.'};
+    slide={...slide,kicker:'SÖYLEŞİ',title:'Söyleşiye|yakından bak.',description:'Konu, saat, salon ve konuşmacı tek ekranda görünür. Ziyaretçi bu buluşmayı planına ekleyebilir.'};
+    highlights=['Konu, konuşmacı ve salon','Buluşmayı kişisel plana ekleme'];
   }
   const step=Math.max(0,tourOrder.indexOf(state.page));
   $('#preview-count').textContent=`${String(step+1).padStart(2,'0')} / ${tourOrder.length}`;
   $('#preview-kicker').textContent=slide.kicker;
   $('#preview-title').innerHTML=slide.title.split('|').map((part,index)=>`<span class="${index?'accent':''}">${escapeHTML(part)}</span>`).join('<br>');
   $('#preview-description').textContent=slide.description;
+  $('#preview-highlights').innerHTML=highlights.map(item=>`<div><i aria-hidden="true"></i><span>${escapeHTML(item)}</span></div>`).join('');
   $('#tour-step-label').textContent=`${step+1}. adım / ${tourOrder.length}`;
   $('#tour-progress b').style.width=`${(step+1)/tourOrder.length*100}%`;
   $('#tour-previous').disabled=step===0;
