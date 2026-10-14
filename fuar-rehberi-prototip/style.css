@@ -130,7 +130,7 @@ body{overflow-x:hidden}
 /* Daha canlı ama sade sunum akışı */
 :root{--orange:#f69a12;--orange-soft:#fff0d4;--paper:#fffaf4;--line:#e8e2d8;--muted:#59636a;--shadow:0 28px 75px rgba(15,22,30,.19)}
 body{background:radial-gradient(circle at 76% 14%,#ffe8c1 0,#f2ede5 29%,#eae6df 70%)}
-.phone{background:var(--paper);overflow:clip}
+.phone{background:var(--paper);color:var(--ink);overflow:clip}
 .phone-scroll{overscroll-behavior:contain}
 .screen.route-enter{animation:screenEnter .26s cubic-bezier(.2,.82,.25,1) both}
 .screen.route-enter.route-forward{animation:detailForward .28s cubic-bezier(.2,.82,.25,1) both}
