@@ -77,8 +77,9 @@ function list(){return state.fair==='ankara'?[...authors,...publishers]:[...chil
 function events(){return state.fair==='ankara'?[...eventSets.ankara,...bookTalks]:eventSets.children}
 let animateNextRender=false;
 let routeTransition='page';
-function go(page){const from=state.page;const detail=page==='event'||page==='participant';const leavingDetail=from==='event'||from==='participant';routeTransition=detail&&from!==page?'route-forward':leavingDetail&&!detail?'route-back':'page';animateNextRender=from!==page;state.page=page;state.query='';render();$('#phone').scrollTop=0;$('#scroll-area').scrollTop=0}
-function pickFair(fair){routeTransition='page';animateNextRender=true;state.fair=fair;state.page='home';state.phase='during';state.day=1;state.kind='Tümü';state.programQuery='';state.category='Tümü';state.query='';state.selectedZone='A12';closeSheet();render();$('#phone').scrollTop=0;$('#scroll-area').scrollTop=0}
+let tourNavigationFromScroll=false;
+function go(page){const from=state.page;const detail=page==='event'||page==='participant';const leavingDetail=from==='event'||from==='participant';routeTransition=detail&&from!==page?'route-forward':leavingDetail&&!detail?'route-back':'page';animateNextRender=from!==page;state.page=page;state.query='';render();$('#phone').scrollTop=0;$('#scroll-area').scrollTop=0;if(!tourNavigationFromScroll&&window.innerWidth>850){const step=tourOrder.indexOf(page);if(step>=0)window.scrollTo({top:step*window.innerHeight,behavior:'instant'})}}
+function pickFair(fair){routeTransition='page';animateNextRender=true;state.fair=fair;state.page='home';state.phase='during';state.day=1;state.kind='Tümü';state.programQuery='';state.category='Tümü';state.query='';state.selectedZone='A12';closeSheet();render();$('#phone').scrollTop=0;$('#scroll-area').scrollTop=0;if(window.innerWidth>850)window.scrollTo({top:window.innerHeight,behavior:'instant'})}
 function toast(message){const box=$('#toast');box.textContent=message;box.classList.add('show');clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>box.classList.remove('show'),2600)}
 function hideDemoNotification(){
   clearTimeout(window.pushTimer);
@@ -205,47 +206,54 @@ function admin(){return `<div class="screen"><button class="link-button" data-pa
 
 const tourOrder=['welcome','home','program','event','map','discover','participant','plan','notifications','admin','passport','about'];
 const compactSlides={
-  welcome:{kicker:'EYLÜL FUAR REHBERİ',title:'Fuar burada başlar.',description:'Bütün fuarlar, tek bir giriş.'},
-  home:{kicker:'KİTAP FUARI',title:'Her şey elinin altında.',description:'İmza, söyleşi ve yayınevleri.'},
-  program:{kicker:'PROGRAM',title:'Hiçbir buluşmayı kaçırma.',description:'Güne göre etkinlikler.'},
-  event:{kicker:'ETKİNLİK',title:'Detaylar tek ekranda.',description:'Kim, nerede, ne zaman?'},
-  map:{kicker:'HARİTA',title:'Aradığın yeri bul.',description:'Fuar alanı cebinde.'},
-  discover:{kicker:'KATILIMCILAR',title:'Herkese bir kapı.',description:'Yazarları ve yayınevlerini keşfet.'},
-  participant:{kicker:'PROFİL',title:'Yakından tanı.',description:'Yazar, kitap ve imza buluşması.'},
-  plan:{kicker:'PLANIM',title:'Gününü sen kur.',description:'Seçtiklerin bir arada.'},
-  notifications:{kicker:'BİLDİRİMLER',title:'Herkes haberdar.',description:'Önemli duyurular doğru anda.'},
-  admin:{kicker:'EYLÜL İÇİN',title:'Tek mesajla ulaş.',description:'Duyurunu seç, önizle.'},
-  passport:{kicker:'FUAR PASAPORTU',title:'Keşfet, katıl, biriktir.',description:'Etkinlik QR kodlarıyla küçük bir oyun.'},
-  about:{kicker:'EYLÜL FUARCILIK',title:'Marka hep görünür.',description:'Fuar deneyiminin her adımında.'}
+  welcome:{kicker:'EYLÜL FUAR REHBERİ',title:'Fuarın tamamı.|Tek ekranda.',description:'Ziyaretçi fuarını seçer, yolculuk başlar.'},
+  home:{kicker:'KİTAP FUARI',title:'Kitap fuarı|cebinde.',description:'İmza, söyleşi ve yayınevleri bir arada.'},
+  program:{kicker:'PROGRAM',title:'Program hep|elinin altında.',description:'Güne ve konuya göre buluşmalar.'},
+  event:{kicker:'ETKİNLİK',title:'Her detay|bir arada.',description:'Kim, nerede, ne zaman?'},
+  map:{kicker:'HARİTA',title:'Standı bul.|Yolunu gör.',description:'Fuar alanında kolay yön bulma.'},
+  discover:{kicker:'KATILIMCILAR',title:'Yazarları|keşfet.',description:'Yazar ve yayınevi profilleri.'},
+  participant:{kicker:'PROFİL',title:'Yazar ve kitabı|tanı.',description:'Gerçek portre ve kitap kapağı.'},
+  plan:{kicker:'PLANIM',title:'Gününü|sen kur.',description:'Seçtiğin etkinlikler bir arada.'},
+  notifications:{kicker:'BİLDİRİMLER',title:'Duyurular|yerini bulur.',description:'Önemli bilgi doğru anda görünür.'},
+  admin:{kicker:'EYLÜL İÇİN',title:'Kontrol|Eylül’de.',description:'Duyuruyu hazırla, hedef kitleyi seç.'},
+  passport:{kicker:'FUAR PASAPORTU',title:'Katıldıkça|keşfet.',description:'QR ile isteğe bağlı küçük bir oyun.'},
+  about:{kicker:'EYLÜL FUARCILIK',title:'Her adımda|Eylül.',description:'Organizatör deneyimin merkezinde.'}
 };
+$('.presentation').style.setProperty('--tour-steps',tourOrder.length);
+function showTourStep(index){
+  const page=tourOrder[index];
+  if(!page||page===state.page)return;
+  if(page==='program'&&state.fair==='ankara'){state.day=2;state.kind='İmza'}
+  if(page==='event')state.detail=state.fair==='ankara'?'a7':'c1';
+  if(page==='participant')state.detail=state.fair==='ankara'?'buket':'toyzz';
+  tourNavigationFromScroll=true;
+  try{closeSheet();go(page)}finally{tourNavigationFromScroll=false}
+}
 function moveTour(direction){
   const current=Math.max(0,tourOrder.indexOf(state.page));
   const next=Math.max(0,Math.min(tourOrder.length-1,current+direction));
   if(next===current)return;
-  const page=tourOrder[next];
-  if(page==='program'&&state.fair==='ankara'){state.day=2;state.kind='İmza'}
-  if(page==='event')state.detail=state.fair==='ankara'?'a7':'c1';
-  if(page==='participant')state.detail=state.fair==='ankara'?'buket':'toyzz';
-  closeSheet();go(page);
+  showTourStep(next);
+  if(window.innerWidth>850)window.scrollTo({top:next*window.innerHeight,behavior:'instant'});
 }
-function restartDemo(){hideDemoNotification();routeTransition='page';animateNextRender=true;state.page='welcome';state.fair='ankara';state.day=1;state.kind='Tümü';state.programQuery='';state.category='Tümü';state.query='';state.saved.clear();state.stamps.clear();state.quizAnswer=null;state.demoNotice=null;state.noticeFilter='Tümü';state.prefs={event:true,change:true,general:false};localStorage.removeItem('eylul-rehber-saved');localStorage.removeItem('eylul-rehber-stamps');closeSheet();render();$('#scroll-area').scrollTop=0}
+function restartDemo(){hideDemoNotification();routeTransition='page';animateNextRender=true;state.page='welcome';state.fair='ankara';state.day=1;state.kind='Tümü';state.programQuery='';state.category='Tümü';state.query='';state.saved.clear();state.stamps.clear();state.quizAnswer=null;state.demoNotice=null;state.noticeFilter='Tümü';state.prefs={event:true,change:true,general:false};localStorage.removeItem('eylul-rehber-saved');localStorage.removeItem('eylul-rehber-stamps');closeSheet();render();$('#scroll-area').scrollTop=0;window.scrollTo({top:0,behavior:'instant'})}
 let lastPresentedKey='';
 function updatePresentation(){
   const presentationKey=`${state.fair}:${state.page}:${state.page==='participant'?state.detail:''}`;
   if(presentationKey!==lastPresentedKey){const preview=$('.preview-copy');preview.classList.remove('is-changing');void preview.offsetWidth;preview.classList.add('is-changing');lastPresentedKey=presentationKey}
   let slide=compactSlides[state.page]||compactSlides.home;
   if(state.fair==='children'){
-    const childSlides={home:{kicker:'ÇOCUK ŞENLİĞİ',title:'Ailece kolay keşif.',description:'Program, markalar ve alanlar.'},program:{title:'Günü birlikte planla.',description:'Yaşa ve saate göre etkinlikler.'},event:{description:'Yaş, saat ve yer tek ekranda.'},map:{description:'Sahne ve atölyeleri bul.'},discover:{title:'Markaları keşfet.',description:'Etkinlikler ve marka profilleri.'},participant:{kicker:'MARKA PROFİLİ',title:'Markaya yakından bak.',description:'Web sitesi ve örnek fırsatlar.'}};
+    const childSlides={home:{kicker:'ÇOCUK ŞENLİĞİ',title:'Ailece|kolay keşif.',description:'Program, markalar ve alanlar.'},program:{title:'Günü birlikte|planla.',description:'Yaşa ve saate göre etkinlikler.'},event:{description:'Yaş, saat ve yer tek ekranda.'},map:{description:'Sahne ve atölyeleri bul.'},discover:{title:'Markaları|keşfet.',description:'Etkinlikler ve marka profilleri.'},participant:{kicker:'MARKA PROFİLİ',title:'Markaya|yakından bak.',description:'Web sitesi ve örnek fırsatlar.'}};
     slide={...slide,...childSlides[state.page]};
   }else if(state.page==='participant'&&publishers.some(p=>p.id===state.detail)){
-    slide={...slide,kicker:'YAYINEVİ',title:'Yayınevini keşfet.',description:'Kitapları ve imza buluşmaları.'};
+    slide={...slide,kicker:'YAYINEVİ',title:'Yayınevini|keşfet.',description:'Kitapları ve imza buluşmaları.'};
   }else if(state.page==='event'&&bookTalks.some(e=>e.id===state.detail)){
-    slide={...slide,kicker:'SÖYLEŞİ',title:'Söyleşiye yakından bak.',description:'Konu, saat ve konuşmacı.'};
+    slide={...slide,kicker:'SÖYLEŞİ',title:'Söyleşiye|yakından bak.',description:'Konu, saat ve konuşmacı.'};
   }
   const step=Math.max(0,tourOrder.indexOf(state.page));
   $('#preview-count').textContent=`${String(step+1).padStart(2,'0')} / ${tourOrder.length}`;
   $('#preview-kicker').textContent=slide.kicker;
-  $('#preview-title').textContent=slide.title;
+  $('#preview-title').innerHTML=slide.title.split('|').map((part,index)=>`<span class="${index?'accent':''}">${escapeHTML(part)}</span>`).join('<br>');
   $('#preview-description').textContent=slide.description;
   $('#tour-step-label').textContent=`${step+1}. adım / ${tourOrder.length}`;
   $('#tour-progress b').style.width=`${(step+1)/tourOrder.length*100}%`;
@@ -253,13 +261,13 @@ function updatePresentation(){
   $('#tour-next').disabled=step===tourOrder.length-1;
   $('#preview-note').textContent=state.fair==='ankara'?'Konsept demo · 2025 arşivi ve örnek içerikler':'Konsept demo · Çocuk Şenliği içeriği örnektir';
 }
-let tourWheelLocked=false;
-$('.preview-copy').addEventListener('wheel',event=>{
-  if(window.innerWidth<=850||Math.abs(event.deltaY)<8)return;
-  event.preventDefault();
-  if(tourWheelLocked)return;
-  tourWheelLocked=true;
-  moveTour(event.deltaY>0?1:-1);
-  window.setTimeout(()=>{tourWheelLocked=false},550);
-},{passive:false});
+let tourScrollFrame=0;
+window.addEventListener('scroll',()=>{
+  if(window.innerWidth<=850||tourScrollFrame)return;
+  tourScrollFrame=requestAnimationFrame(()=>{
+    tourScrollFrame=0;
+    const index=Math.max(0,Math.min(tourOrder.length-1,Math.round(window.scrollY/window.innerHeight)));
+    showTourStep(index);
+  });
+},{passive:true});
 render();

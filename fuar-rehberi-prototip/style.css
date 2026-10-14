@@ -226,3 +226,53 @@ button:active,.event-copy:active{transform:scale(.99)}
   .preview-push{margin-top:29px;width:min(100%,350px);background:#fff9ef;box-shadow:none}
   .preview-reset{margin-top:13px}
 }
+
+/* Canlı sunum: içerik akarken telefon yerinde kalır. */
+@media(min-width:851px){
+  html{scroll-behavior:auto}
+  body{background:#11191d}
+  .presentation{--tour-steps:12;min-height:calc(var(--tour-steps) * 100svh);align-items:start;position:relative;isolation:isolate;padding:0 clamp(32px,5vw,84px);background:linear-gradient(90deg,#11191df2 0%,#11191de8 47%,#11191df5 100%),url('assets/ankara-fuar-arsiv.jpg') center/cover fixed;color:#f8f6f0}
+  .preview-copy{position:sticky;top:0;align-self:start;width:100%;height:100svh;max-width:460px;padding:0;display:flex;align-items:flex-start;justify-content:center;flex-direction:column;z-index:2}
+  .preview-logo{position:absolute;top:clamp(28px,4.5vh,66px);left:0;width:172px;margin:0;padding:10px 12px;background:#fff;border-radius:9px}
+  .preview-main{width:100%;padding-bottom:40px}
+  .preview-heading{justify-content:flex-start;gap:18px}
+  .preview-copy .eyebrow{color:#ffae30;font-size:11px;letter-spacing:.18em}
+  .preview-count{color:#aeb5b5;font-size:11px}
+  .preview-copy h1{max-width:500px;min-height:0;margin:22px 0 17px;color:#fff;font-size:clamp(50px,5vw,62px);font-weight:800;line-height:.99;letter-spacing:-.064em}
+  .preview-copy h1 .accent{color:#f59b1b}
+  .preview-copy p{max-width:390px;min-height:0;color:#c0c8ca;font-size:18px;line-height:1.45}
+  .preview-scroll-hint{margin-top:clamp(44px,8vh,96px);color:#d4d7d4;font-size:12px}
+  .preview-scroll-hint i{border-color:#f59b1b;color:#f59b1b}
+  .preview-footer{position:absolute;bottom:clamp(25px,4.5vh,66px);left:0;width:min(100%,385px)}
+  .presenter-controls{width:100%;margin:0 0 14px}
+  .presenter-controls button{background:#ffffff0b;border-color:#ffffff38;color:#f8f6f0}
+  .presenter-controls>span{color:#c3c9c7}
+  .presenter-controls i{background:#ffffff2b}
+  .preview-copy #preview-note{color:#9fa9a8;font-size:10px}
+  .preview-push{width:100%;margin-top:21px;background:#ffffff0d;border-color:#f2a12793;color:#fff;box-shadow:none}
+  .preview-copy .preview-push small{color:#bfc4be}
+  .preview-push b{color:#f5a437}
+  .preview-reset{color:#d4d3ce;border-color:#ffffff6a}
+  .device-stage{position:sticky;top:0;align-self:start;height:100svh;max-width:500px;padding:0;display:grid;place-items:center;perspective:none}
+  .device-stage:before{inset:20% -14%;background:radial-gradient(circle at 50% 48%,#f29c2659 0 17%,#eea54f18 45%,transparent 67%);filter:blur(22px)}
+  .device-stage .phone,.device-stage .phone:hover,.device-stage .phone.is-notifying{width:min(100%,448px);height:min(940px,calc(100svh - 115px));min-height:0;box-shadow:0 0 0 1px #818b8e,0 0 0 4px #a2aaab,0 0 0 5px #454e50,16px 39px 75px #0009,0 12px 22px #0008}
+  .preview-copy.is-changing .preview-main{animation:presentEnter .42s cubic-bezier(.2,.82,.25,1) both}
+}
+@media(max-width:850px){.presentation{min-height:100dvh}.device-stage{position:relative;height:auto}}
+@media(prefers-reduced-motion:reduce){.preview-copy.is-changing .preview-main{animation:none!important}}
+
+/* İlk telefon ekranı fuarın enerjisini ilk bakışta göstersin. */
+.welcome-screen .welcome-photo{height:min(42svh,410px);background-position:center 72%;border-radius:20px}
+.welcome-screen .welcome-photo:before{background:linear-gradient(180deg,#0d171d08 0%,#0d171d3b 47%,#0d171de8 100%)}
+.welcome-screen .welcome-content{bottom:23px}
+.welcome-screen .welcome-photo h1{font-size:34px;line-height:1.02}
+@media(min-width:851px){
+  html{scrollbar-width:none}
+  html::-webkit-scrollbar{display:none}
+  .device-button{display:none}
+}
+@media(min-width:851px) and (max-height:1000px){
+  .preview-main{padding-bottom:0}
+  .preview-scroll-hint{margin-top:30px}
+  .welcome-screen .welcome-photo{height:clamp(210px,29svh,285px)}
+}
