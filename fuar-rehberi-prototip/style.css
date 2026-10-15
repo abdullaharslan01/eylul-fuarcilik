@@ -100,7 +100,7 @@ body{overflow-x:hidden}
 .phone.photo-detail .signal-bars b,.phone.photo-detail .wifi-mark:after,.phone.photo-detail .battery-mark:before,.phone.photo-detail .battery-mark:after{background:white}
 .phone.photo-detail .wifi-mark{border-top-color:white}
 .phone.photo-detail .battery-mark{border-color:white}
-@media(max-width:850px){.phone.detail-open .detail-screen{padding-top:calc(86px + env(safe-area-inset-top))}.phone.detail-open .detail-screen.has-hero{padding-top:0}.phone.detail-open .author-hero{height:56dvh;min-height:390px;max-height:600px}.detail-back{top:calc(47px + env(safe-area-inset-top))}}
+@media(max-width:850px){.phone.detail-open .detail-screen{padding-top:calc(86px + env(safe-area-inset-top))}.phone.detail-open .detail-screen.has-hero{padding-top:0}.phone.detail-open .author-hero{height:56dvh;min-height:390px;max-height:600px}.detail-back{top:calc(20px + env(safe-area-inset-top))}}
 
 /* Yayınevi logoları ve çocuk şenliği örnek marka profilleri */
 .brand-logo-wrap{height:74px;width:100%;display:grid;place-items:center;overflow:hidden;border-radius:10px;background:#fff}
@@ -328,3 +328,228 @@ button:active,.event-copy:active{transform:scale(.99)}
 .global-empty{display:grid;gap:6px;margin-top:18px;padding:23px 16px;border:1px dashed #d9d4ca;border-radius:14px;background:#fff;text-align:center}
 .global-empty strong{font-size:13px;color:#232b2e}
 .global-empty span{font-size:11px;color:#7e888a}
+
+/* Kitap fuarı vitrini: arşiv fotoğrafları ve üç kısa giriş noktası. */
+.home-hero-carousel{margin:2px 0 15px}
+.home-hero-card{height:241px;position:relative;overflow:hidden;border-radius:20px;background:#15252d;isolation:isolate;color:#fff}
+.home-hero-card:before{content:"";position:absolute;inset:0;z-index:-2;background-image:var(--hero-image);background-position:var(--hero-position);background-size:cover;transform:scale(1.025);animation:heroPhotoIn .6s ease-out both}
+.home-hero-card:after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(10,20,26,.88) 0%,rgba(10,20,26,.55) 54%,rgba(10,20,26,.08) 100%),linear-gradient(0deg,rgba(10,20,26,.4),transparent 55%)}
+.home-hero-content{position:absolute;inset:auto 16px 17px;max-width:285px;animation:heroCopyIn .34s ease-out both}
+.home-hero-label{display:inline-flex;align-items:center;gap:6px;color:#ffc36d;font-size:9px;font-weight:800;letter-spacing:.12em}
+.home-hero-label:before{content:"";width:13px;height:2px;background:#f5a326}
+.home-hero-content h2{margin:8px 0 7px;font-size:30px;line-height:1.03;letter-spacing:-.045em;font-weight:800}
+.home-hero-content p{max-width:235px;margin:0 0 13px;color:#eef1ef;font-size:11px;line-height:1.38;font-weight:600}
+.home-hero-cta{display:inline-flex;align-items:center;gap:16px;border:0;border-radius:10px;background:#f7a21e;color:#202123;padding:9px 12px;font-size:10px;font-weight:800;box-shadow:0 5px 16px #0003}
+.home-hero-cta span{font-size:16px;line-height:.8}
+.home-hero-controls{display:flex;align-items:center;justify-content:center;height:37px;padding:0 2px;position:relative}
+.home-hero-counter{color:#343d40;font-size:10px;letter-spacing:.07em;font-weight:800;font-variant-numeric:tabular-nums;position:absolute;left:2px}
+.home-hero-counter i{color:#afb2b0;font-style:normal;padding:0 3px}
+.home-hero-dots{display:flex;align-items:center;justify-content:center;gap:6px}
+.home-hero-dots button{width:7px;height:7px;padding:0;border:0;border-radius:20px;background:#d7d2c9;transition:width .2s ease,background-color .2s ease}
+.home-hero-dots button.active{width:23px;background:#e68a0e}
+.subpage-back{display:inline-flex;align-items:center;gap:7px;border:0;background:transparent;color:#b66b08;font-size:12px;font-weight:800;padding:4px 0;margin:0 0 11px}
+.subpage-back span{font-size:21px;line-height:1}
+.program-hub .page-sub{margin-bottom:22px}
+.program-entry{width:100%;min-height:88px;display:flex;align-items:center;gap:15px;border:1px solid #e5ded2;background:#fff;border-radius:17px;padding:14px;text-align:left;margin:10px 0;box-shadow:0 5px 18px #3e2c0c08}
+.program-entry-icon{width:47px;height:47px;flex:0 0 47px;border-radius:13px;background:#fff2dc;color:#cc7808;font-size:24px;display:grid;place-items:center}
+.program-entry strong{display:block;font-size:16px;line-height:1.2;color:#1b2226}
+.program-entry small{display:block;font-size:11px;color:#7d8585;margin-top:5px}
+.program-entry b{margin-left:auto;color:#cc7808;font-size:21px;font-weight:500}
+.book-list-screen .search,.publishers-screen .search{margin:7px 0 8px}
+.book-list-screen .chip-row{margin:10px 0 17px}
+.book-list-note{font-size:10px;line-height:1.5;color:#7e8787;margin:18px 2px 6px}
+.publisher-count{font-size:10px;letter-spacing:.08em;color:#a26a1c;font-weight:800;margin:13px 1px 10px}
+@keyframes heroPhotoIn{from{opacity:.8;transform:scale(1.07)}to{opacity:1;transform:scale(1.025)}}
+@keyframes heroCopyIn{from{opacity:.2;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+
+/* Yayınevi profili: doğrulanmış kurum bilgisi, yazarlar ve geçmiş imzalar. */
+.publisher-detail{padding-bottom:40px}
+.phone.detail-open .publisher-detail{padding-top:84px}
+.publisher-profile-hero{position:relative;overflow:hidden;padding:17px 17px 20px;border-radius:21px;background:radial-gradient(circle at 86% 10%,#f8cf8190,transparent 42%),linear-gradient(145deg,#fff9ed,#f1e7d6);border:1px solid #e9dbc6}
+.publisher-profile-kicker{display:block;color:#a75e00;font-size:9px;font-weight:800;letter-spacing:.11em}
+.publisher-profile-kicker b{padding:0 3px;color:#c8a068}
+.publisher-profile-mark{width:100%;height:115px;display:grid;place-items:center;margin:16px 0 13px;border-radius:14px;background:#fff;box-shadow:0 8px 23px #6c411117}
+.publisher-profile-mark img{display:block;max-width:76%;max-height:86px;width:auto;height:auto;object-fit:contain}
+.publisher-profile-hero h1{position:relative;margin:0;font-size:29px;line-height:1.08;letter-spacing:-.04em}
+.publisher-profile-hero p{position:relative;margin:6px 0 0;color:#626b6d;font-size:11px;line-height:1.42}
+.publisher-profile-hero{margin-bottom:27px}
+.publisher-section{margin:0 0 27px}
+.publisher-section-heading{display:flex;align-items:center;gap:9px;margin-bottom:8px}
+.publisher-section-heading span{width:26px;height:26px;display:grid;place-items:center;border-radius:50%;background:#ffedd1;color:#b76b02;font-size:10px;font-weight:800}
+.publisher-section-heading h2{margin:0;color:#1d2529;font-size:19px;line-height:1.1;letter-spacing:-.035em}
+.publisher-section>p{margin:0 0 8px;color:#4d5a5f;font-size:12px;line-height:1.58}
+.publisher-source{display:inline-block;color:#ac6504;font-size:10px;font-weight:800;text-decoration:underline;text-underline-offset:3px}
+.publisher-section .publisher-section-note{color:#788185;font-size:10px;line-height:1.45;margin:1px 0 10px}
+.publisher-author-list{display:grid;gap:8px}
+.publisher-author-card{display:flex;align-items:center;gap:11px;width:100%;padding:8px;border:1px solid #e8e1d7;border-radius:14px;background:#fff;text-align:left;color:#20272a}
+.publisher-author-card img{width:57px;height:62px;flex:0 0 57px;border-radius:9px;object-fit:cover;object-position:center 28%;background:#ded9cf}
+.publisher-author-card span{display:block;min-width:0;flex:1}
+.publisher-author-card small{display:block;color:#b56e0d;font-size:8px;font-weight:800;letter-spacing:.08em}
+.publisher-author-card strong{display:block;margin:3px 0 2px;font-size:13px;line-height:1.15}
+.publisher-author-card em{display:block;color:#899194;font-size:10px;font-style:normal}
+.publisher-author-card b{color:#c67908;font-size:17px;font-weight:500;padding-right:5px}
+.publisher-section .event-card{margin:7px 0}
+.publisher-location{display:flex;align-items:center;gap:9px;padding:14px;margin:1px 0 11px;border-radius:16px;background:#252d31;color:#fff}
+.publisher-location div{flex:1;min-width:0}
+.publisher-location small{display:block;color:#ffc067;font-size:9px;font-weight:800;letter-spacing:.08em}
+.publisher-location strong{display:block;margin:3px 0;font-size:14px;line-height:1.15}
+.publisher-location p{margin:0;color:#c7d0d1;font-size:10px;line-height:1.32}
+.publisher-location button{flex:0 0 95px;display:flex;align-items:center;justify-content:center;gap:4px;padding:9px 5px;border:0;border-radius:9px;background:#f5a328;color:#1b2427;font-size:10px;font-weight:800}
+.publisher-location button span{font-size:15px}
+.publisher-website{display:flex;align-items:center;justify-content:space-between;padding:13px 14px;border:1px solid #e7dfd3;border-radius:13px;background:#fff;color:#20282b;font-size:11px;font-weight:800}
+.publisher-website span{color:#c4780e;font-size:19px;line-height:1}
+.author-program-link{display:flex;align-items:center;justify-content:space-between;width:100%;margin:20px 0 0;padding:13px 15px;border:1px solid #e7d6ba;border-radius:13px;background:#fff9ef;color:#9e5f06;text-align:left;font-size:12px;font-weight:800}
+.author-program-link span{font-size:18px;line-height:1}
+@media(max-width:850px){.phone.detail-open .publisher-detail{padding-top:calc(83px + env(safe-area-inset-top))}}
+@media(prefers-reduced-motion:reduce){.home-hero-card:before,.home-hero-content{animation:none}.home-hero-dots button{transition:none}}
+
+/* Yayınevi profili: fuar arşivi, doğrulanmış imzalar ve yazar kitapları. */
+.phone.detail-open .publisher-detail.has-hero{padding:0 0 34px}
+.publisher-cover{height:225px;position:relative;display:flex;flex-direction:column;justify-content:flex-end;gap:6px;padding:0 24px 22px;color:#fff;background:linear-gradient(180deg,#0c182728 0%,#0c1827c9 72%,#0c1827ed 100%),url('assets/ankara-fuar-arsiv.jpg') center 57%/cover}
+.publisher-cover span{font-size:9px;font-weight:800;letter-spacing:.14em;color:#ffbb58}
+.publisher-cover strong{font-size:27px;line-height:1.05;letter-spacing:-.04em}
+.publisher-identity{display:flex;align-items:center;gap:16px;margin:20px 21px 0}
+.publisher-identity-logo{flex:0 0 112px;width:112px;height:83px;display:grid;place-items:center;padding:9px;border:1px solid #ece6dd;border-radius:13px;background:#fff}
+.publisher-identity-logo img{max-width:100%;max-height:100%;object-fit:contain}
+.publisher-identity>div:last-child{min-width:0}
+.publisher-identity small{display:block;color:#b67212;font-size:9px;letter-spacing:.13em;font-weight:800}
+.publisher-identity h1{margin:5px 0 0;font-size:23px;line-height:1.07;letter-spacing:-.04em;overflow-wrap:anywhere}
+.publisher-facts{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:20px 21px 29px}
+.publisher-facts div{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #eae1d4;border-radius:13px;padding:11px 10px}
+.publisher-facts strong{font-size:22px;line-height:1;color:#bc700b}
+.publisher-facts span{font-size:10px;line-height:1.18;color:#697274;font-weight:700}
+.publisher-detail .publisher-section{margin:0 21px 28px}
+.publisher-detail .publisher-section h2{font-size:21px;line-height:1.12;letter-spacing:-.035em;margin:0 0 10px}
+.publisher-detail .publisher-section>p{font-size:13px;line-height:1.58}
+.publisher-detail .publisher-source{font-size:11px;margin-top:3px}
+.publisher-signings{display:grid;gap:8px;margin-top:13px}
+.publisher-signing{width:100%;display:flex;align-items:center;gap:11px;text-align:left;padding:10px;border:1px solid #e9e1d4;background:#fff;border-radius:14px;color:#1d2529}
+.publisher-signing-date{height:48px;width:43px;flex:0 0 43px;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:10px;background:#fff1dc;color:#aa6506}
+.publisher-signing-date strong{font-size:18px;line-height:1}
+.publisher-signing-date small{font-size:8px;font-weight:800;letter-spacing:.09em;margin-top:3px}
+.publisher-signing-copy{display:block;min-width:0;flex:1}
+.publisher-signing-copy strong{display:block;font-size:13px;line-height:1.23}
+.publisher-signing-copy small{display:block;font-size:10px;line-height:1.3;color:#7d8789;margin-top:5px}
+.publisher-signing-arrow{color:#bc700b;font-size:20px}
+.publisher-detail .publisher-author-card{min-height:116px;padding:11px;gap:12px}
+.publisher-detail .publisher-author-card .publisher-author-photo{width:78px;height:92px;flex:0 0 78px;object-fit:cover;border-radius:9px}
+.publisher-detail .publisher-author-card .publisher-author-book{width:59px;height:87px;flex:0 0 59px;object-fit:contain;border-radius:2px}
+.publisher-detail .publisher-author-card strong{font-size:15px}
+.publisher-detail .publisher-author-card em{font-size:11px;color:#6d797c;line-height:1.28;white-space:normal}
+.publisher-actions{display:grid;gap:9px;margin:0 21px}
+.publisher-map-link,.publisher-detail .publisher-website{width:100%;min-height:64px;display:flex;align-items:center;gap:11px;padding:11px 13px;border:1px solid #e8dfd2;border-radius:13px;background:#fff;text-align:left;color:#20282b}
+.publisher-map-link>span:first-child{font-size:25px;color:#bb730d;width:32px;text-align:center}
+.publisher-map-link>span:nth-child(2),.publisher-website>span{flex:1;min-width:0}
+.publisher-map-link strong,.publisher-website strong{display:block;font-size:12px}
+.publisher-map-link small,.publisher-website small{display:block;margin-top:3px;font-size:10px;line-height:1.25;color:#859092;font-weight:500}
+.publisher-map-link b,.publisher-website b{color:#bb730d;font-size:18px;font-weight:500}
+@media(max-width:850px){.phone.detail-open .publisher-detail.has-hero{padding-top:0}.publisher-cover{height:256px;padding-top:env(safe-area-inset-top)}}
+
+/* Tek fuara ait uygulama: seçici yerine sabit fuar kimliği. */
+.fair-context{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin:2px 0 12px}
+.fair-context span{color:#b9720d;font-size:9px;font-weight:800;letter-spacing:.11em;white-space:nowrap}
+.fair-context strong{color:#24292b;font-size:12px;font-weight:800;text-align:right;line-height:1.2}
+.home-screen .home-search{margin-top:0}
+
+/* İmza detayında birden çok gerçek kitap kapağı yan yana. */
+.author-books-section{margin:21px 0 25px}
+.author-books-section .section-title{margin:0 0 12px}
+.author-books-section .section-title h2{font-size:20px}
+.author-books-row{display:flex;gap:11px;overflow-x:auto;scrollbar-width:none;scroll-snap-type:x proximity;padding:1px 1px 6px}
+.author-books-row::-webkit-scrollbar{display:none}
+.author-book{flex:0 0 126px;min-width:0;scroll-snap-align:start}
+.author-book-cover{height:178px;display:grid;place-items:center;overflow:hidden;border:1px solid #e9e0d5;border-radius:12px;background:#fff;box-shadow:0 5px 15px #4d3c2612}
+.author-book-cover img{display:block;width:100%;height:100%;object-fit:contain}
+.author-book strong{display:block;margin:8px 2px 0;color:#222a2d;font-size:11px;line-height:1.28;font-weight:800}
+.author-books-note{margin:7px 2px 0;color:#8b9292;font-size:9px;line-height:1.4}
+
+/* Sunucunun üç konuşma notu görünür ve kısa kalır. */
+@media(min-width:851px){
+  .preview-main{margin-top:clamp(116px,14vh,178px)}
+  .preview-highlights{gap:10px;margin-top:19px}
+  .preview-highlights .pitch-note{display:block;padding:0 0 0 12px;border-left:2px solid #e69218;line-height:1.24}
+  .pitch-label{display:block;color:#efa330;font-size:9px;font-weight:800;letter-spacing:.12em}
+  .pitch-text{display:block;margin-top:3px;color:#e4e8e6;font-size:14px;font-weight:700;line-height:1.31}
+  .preview-footer{margin-top:20px}
+  .preview-sources{display:flex;align-items:center;flex-wrap:wrap;gap:5px 11px;margin-top:9px;color:#a8b2b2;font-size:10px}
+  .preview-sources span{width:100%;font-size:8px;font-weight:800;letter-spacing:.1em;color:#828f90}
+  .preview-sources a{text-decoration:underline;text-underline-offset:3px}
+  .preview-push{margin-top:13px}
+  .preview-reset{margin-top:10px}
+}
+@media(min-width:851px) and (max-height:820px){
+  .preview-main{margin-top:105px}
+  .preview-copy h1{font-size:clamp(40px,4.1vw,52px);margin:13px 0 11px}
+  .preview-copy p{font-size:16px;line-height:1.35}
+  .preview-highlights{gap:7px;margin-top:13px}
+  .pitch-text{font-size:12px}
+  .preview-footer{margin-top:14px}
+  .preview-push{margin-top:10px}
+}
+@media(min-width:851px){
+  .phone-home-indicator{position:absolute;z-index:9;bottom:6px;left:50%;width:103px;height:4px;border-radius:99px;background:#1b2226;transform:translateX(-50%);pointer-events:none}
+  .phone.detail-open .phone-home-indicator,.phone.subpage-open .phone-home-indicator{background:#1b2226}
+  .phone.subpage-open .app-header,.phone.subpage-open .bottom-nav{display:none}
+  .phone.subpage-open .phone-scroll{padding-bottom:0}
+  .phone.subpage-open .book-list-screen,.phone.subpage-open .publishers-screen{padding-top:53px}
+}
+@media(max-width:850px){
+  .phone-home-indicator{display:none}
+  .phone.subpage-open .app-header,.phone.subpage-open .bottom-nav{display:none}
+  .phone.subpage-open .phone-scroll{padding-bottom:0}
+  .phone.subpage-open .book-list-screen,.phone.subpage-open .publishers-screen{padding-top:calc(49px + env(safe-area-inset-top))}
+}
+
+/* Fuar ve organizatör bilgileri: resmî kaynaklardan, kısa ve taranabilir. */
+.organizer-card{margin:20px 0 4px;padding:15px}
+.organizer-card-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.organizer-card-top img{width:116px}
+.organizer-card-top span{color:#bc730d;font-size:9px;font-weight:800;letter-spacing:.08em;white-space:nowrap}
+.organizer-card p{margin:12px 0 9px;color:#5d696c;font-size:11px;line-height:1.45}
+.organizer-card button{font-size:11px}
+.fair-info-screen{padding-bottom:35px}
+.fair-info-screen .page-title{font-size:29px}
+.fair-info-alert{display:grid;gap:5px;margin:18px 0;padding:14px;border-radius:14px;background:#fff6e7;border:1px solid #efd8b2}
+.fair-info-alert strong{font-size:12px;color:#8f570d}
+.fair-info-alert span{font-size:11px;line-height:1.45;color:#5c676a}
+.fair-info-links{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.fair-info-links button{display:flex;align-items:center;gap:7px;min-height:55px;padding:10px;border:1px solid #e9e1d6;border-radius:13px;background:#fff;text-align:left;color:#20282b}
+.fair-info-links button span{color:#bd7106;font-size:17px}
+.fair-info-links button strong{flex:1;font-size:10px;line-height:1.18}
+.fair-info-links button b{font-size:15px;color:#bd7106;font-weight:500}
+.fair-faq{display:grid;gap:8px}
+.fair-faq div{padding:13px;border:1px solid #e9e4dc;border-radius:13px;background:#fff}
+.fair-faq strong{font-size:11px;line-height:1.3}
+.fair-faq p{margin:5px 0 0;color:#697477;font-size:10px;line-height:1.42}
+.fair-organizer{padding:15px;border-radius:15px;background:#fff;border:1px solid #e9e4dc}
+.fair-organizer img{width:139px;height:auto;display:block}
+.fair-organizer p{margin:11px 0;color:#5c676a;font-size:11px;line-height:1.48}
+.fair-organizer a{font-size:11px;font-weight:800;color:#ad6709;text-decoration:underline;text-underline-offset:3px}
+.fair-contact{display:grid;gap:8px}
+.fair-contact div{padding:11px 13px;border:1px solid #e9e4dc;border-radius:12px;background:#fff}
+.fair-contact small{display:block;color:#ad690c;font-size:9px;font-weight:800;letter-spacing:.1em}
+.fair-contact strong{display:block;margin-top:3px;color:#263034;font-size:11px;line-height:1.35}
+.fair-official-link{display:flex;align-items:center;justify-content:space-between;padding:13px 2px;border-bottom:1px solid #e2ded6;color:#85520e;font-size:11px;font-weight:800}
+.fair-official-link span{font-size:16px}
+.phone-scroll{overscroll-behavior-y:contain;-webkit-overflow-scrolling:touch}
+
+/* Kapaktan açılan kitap sayfası, telefonun tamamını kullanan ayrı bir ekran. */
+.author-book{display:block;border:0;padding:0;background:transparent;text-align:left;color:inherit;cursor:pointer}
+.author-book:focus-visible .author-book-cover{outline:3px solid #e89b25;outline-offset:3px}
+.author-book-cover{transition:transform .2s ease,box-shadow .2s ease}
+.author-book:hover .author-book-cover{transform:translateY(-3px);box-shadow:0 9px 18px #4d3c2626}
+.phone.detail-open .book-detail-screen{min-height:100%;padding:0;background:var(--paper)}
+.book-detail-visual{height:410px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:95px 26px 30px;background:radial-gradient(circle at 50% 35%,#d1984b5e,transparent 42%),linear-gradient(155deg,#23343b,#0f1b24 66%,#354045);color:#f8c782}
+.book-detail-visual img{display:block;max-width:85%;max-height:100%;width:auto;height:auto;object-fit:contain;box-shadow:5px 14px 29px #0009}
+.book-detail-copy{position:relative;margin-top:-25px;padding:29px 21px 40px;border-radius:25px 25px 0 0;background:var(--paper)}
+.book-detail-copy .kicker{font-size:9px}
+.book-detail-copy h1{margin:9px 0 4px;color:#20282b;font-size:28px;letter-spacing:-.045em;line-height:1.06}
+.book-detail-publisher{margin:0;color:#899194;font-size:11px;font-weight:700}
+.book-detail-divider{height:1px;background:#e5e0d8;margin:23px 0 19px}
+.book-detail-copy h2{margin:0 0 9px;color:#263034;font-size:17px;letter-spacing:-.025em}
+.book-detail-description{margin:0;color:#4c5a5d;font-size:13px;line-height:1.6}
+.book-detail-source{display:flex;align-items:center;justify-content:space-between;margin-top:21px;padding:14px;border:1px solid #e9dfcf;border-radius:13px;background:#fff;color:#a16108;font-size:11px;font-weight:800}
+.book-detail-source span{font-size:17px}
+.book-detail-copy .muted-note{margin-top:14px}
+@media(max-width:850px){.book-detail-visual{height:min(52dvh,480px);min-height:340px;padding-top:calc(80px + env(safe-area-inset-top))}}
+@media(prefers-reduced-motion:reduce){.author-book-cover{transition:none}.author-book:hover .author-book-cover{transform:none}}

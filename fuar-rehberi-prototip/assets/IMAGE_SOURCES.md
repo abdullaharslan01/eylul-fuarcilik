@@ -12,6 +12,19 @@ Bu dosya tasarım örneğinde kullanılan gerçek görsellerin kaynaklarını ka
 | Nehir Yarar | [Elma Yayınevi](https://www.elmayayinevi.com/Nehir%20Yarar-fID1.html) | [Kitapyurdu — Veda Turtası](https://www.kitapyurdu.com/kitap/veda-turtasi/663921.html) |
 | Saygı Öztürk | [İleri Gazetesi](https://www.ilerigazetesi.com.tr/yozgatli-usta-gazeteci-saygi-ozturkten-yeni-kitap-biz-tegmeniz) | [Doğan Kitap — Menzil](https://www.dogankitap.com.tr/kitap/menzil) |
 
+Ek kitap kapakları, ilgili yayınevi ve kitap satış sayfalarındaki gerçek eser görsellerinden alınmıştır. Kitap detayındaki kısa tanıtımlar kaynak sayfalarının özgün metinleri kopyalanmadan özetlenmiştir.
+
+| Kitap | Görsel / tanıtım kaynağı |
+| --- | --- |
+| 21 Köy Enstitüsü / Çınarlar Anlatıyor | [Bilgi Yayınevi](https://www.bilgiyayinevi.com.tr/doc/32), [Kitapyurdu kapak görseli](https://img.kitapyurdu.com/v1/getImage/fn%3A11406334/wi%3A800/wh%3Ad4a99308c) |
+| Korkma Ben Varım | [Alfa Yayınları](https://www.alfayayinlari.com/kitap.php?id=389458), [Kitapyurdu kapak görseli](https://img.kitapyurdu.com/v1/getImage/fn%3A11461084/wi%3A800/wh%3A880c23e3d) |
+| Ruhi Mücerret | [Alfa Yayınları](https://www.alfayayinlari.com/kitap.php?id=385625) |
+| Kumral Ada Mavi Tuna | [Everest Yayınları](https://everestyayinlari.com/kumral-ada-mavi-tuna-midi-boy-buket-uzuner-kitabi-182618-9786051851747) |
+| Baron İstilası | [Kırmızı Kedi Yayınları](https://kirmizikediyayinevi.com/product/baron-istilasi/) |
+| Cumhuriyetin İkinci Yüzyılı | [Bilgi Yayınevi](https://www.bilgiyayinevi.com.tr/cumhuriyetin-ikinci-yuzyili) |
+| Nehir Yarar ikinci kitap kapağı | [Can Yayınları çocuk kitapları](https://www.canyayinlari.com/kitap-cocuk) |
+| Biz Teğmeniz | [Doğan Kitap](https://www.dogankitap.com.tr/kitap/biz-tegmeniz) |
+
 ## Logo ve çocuk şenliği görselleri
 
 Yayınevi adları ve imza ilişkileri 2025 arşivini örnekler; 2026 katılımcı listesi değildir. Çocuk Şenliği marka profilleri, kampanya kodu ve programı tamamen konsepttir. Burada adı geçen markaların Eylül Fuarcılık etkinliğine sponsorluğu doğrulanmış değildir.
@@ -32,3 +45,19 @@ Yayınevi adları ve imza ilişkileri 2025 arşivini örnekler; 2026 katılımc�
 | Çocuk atölyesi fotoğrafı | [Unsplash, ücretsiz kullanım](https://unsplash.com/photos/adults-and-children-crafting-at-tables-with-plants-ukTZrFNqCXU) |
 
 `24-ankara-kitap-fuari.png` sunum için üretilmiş bir konsept afiştir; organizatörün resmî afişi değildir.
+
+## Yayınevi profili tanıtım kaynakları
+
+Profildeki kısa kurum tanıtımları yayınevlerinin kendi sayfalarından özetlenmiştir. Fuara katılım, stand ve 2026 programı için bu sayfalar kaynak olarak kullanılmaz.
+
+| Yayınevi | Tanıtım kaynağı |
+| --- | --- |
+| Can Çocuk | [Can Yayınları — Çocuk kitapları](https://www.canyayinlari.com/kitap-cocuk) |
+| Doğan Kitap | [Hakkımızda](https://www.dogankitap.com.tr/hakkimizda) |
+| Altın Kitaplar | [Hakkımızda](https://b2b.altinkitaplar.com.tr/cms/hakkimizda/1333) |
+| Ötüken Neşriyat | [Resmî katalog](https://otukenyayinlari.com/) |
+| Alfa Yayınları | [Hakkımızda](https://www.alfayayinlari.com/icerik.php?sayfa=about) |
+| Everest Yayınları | [Resmî katalog](https://www.everestyayinlari.com/) |
+| Kırmızı Kedi Yayınları | [Hakkımızda](https://kirmizikediyayinevi.com/hakkimizda/) |
+| Bilgi Yayınevi | [Hakkımızda](https://www.bilgiyayinevi.com.tr/hakkimizda) |
+| Timaş Yayınları | [Hakkımızda](https://timas.com.tr/hakkimizda) |

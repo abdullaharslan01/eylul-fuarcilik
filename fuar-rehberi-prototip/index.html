@@ -7,18 +7,18 @@
   <title>Eylül Fuar Rehberi — Etkileşimli tasarım</title>
   <meta name="description" content="Eylül Fuarcılık için ziyaretçinin fuarı baştan sona takip edebildiği etkileşimli mobil rehber tasarımı.">
   <link rel="icon" type="image/png" href="assets/eylul-fuarcilik-logo.png">
-  <link rel="stylesheet" href="style.css">
-  <script src="app.js" defer></script>
+  <link rel="stylesheet" href="style.css?v=20261015-14">
+  <script src="app.js?v=20261015-14" defer></script>
 </head>
 <body>
   <div class="presentation">
     <aside class="preview-copy" id="preview-copy">
       <img src="assets/eylul-fuarcilik-logo.png" alt="Eylül Fuarcılık" class="preview-logo">
       <div class="preview-main">
-        <div class="preview-heading"><span class="eyebrow" id="preview-kicker">ZİYARETÇİ DENEYİMİ</span><span class="preview-count" id="preview-count">01 / 06</span></div>
-        <h1 id="preview-title" aria-live="polite">Her fuar, tek bir giriş.</h1>
-        <p id="preview-description">Ziyaretçi fuarını seçer, yolculuk başlar.</p>
-        <div class="preview-highlights" id="preview-highlights" aria-label="Bu ekranda gösterilecekler"></div>
+        <div class="preview-heading"><span class="eyebrow" id="preview-kicker">ZİYARETÇİ DENEYİMİ</span><span class="preview-count" id="preview-count">01 / 10</span></div>
+        <h1 id="preview-title" aria-live="polite">Kitap fuarı cebinde.</h1>
+        <p id="preview-description">Ankara Kitap Fuarı ziyaretçisi aradığını tek yerde bulur.</p>
+        <div class="preview-highlights" id="preview-highlights" aria-label="Sunum notları"></div>
       </div>
       <div class="preview-footer">
         <div class="presenter-controls" aria-label="Sunum adımları">
@@ -27,6 +27,7 @@
           <button type="button" data-tour="next" id="tour-next">Sonraki →</button>
         </div>
         <small id="preview-note">Konsept demo · Geçmiş ve örnek içerikler</small>
+        <div class="preview-sources"><span>ARAŞTIRMA DAYANAĞI</span><a href="https://ankarakitapfuari.org.tr/" target="_blank" rel="noopener noreferrer">Ankara fuarı ↗</a><a href="https://www.buchmesse.de/en/app" target="_blank" rel="noopener noreferrer">Frankfurt uygulaması ↗</a></div>
         <button class="preview-push" type="button" data-action="simulate-notification"><span>◉</span><span><strong>Eylül bildirimi göster</strong><small>Her tıklamada yeni bir örnek</small></span><b>→</b></button>
         <button class="preview-reset" type="button" data-action="restart-demo">Baştan göster ↺</button>
       </div>
@@ -57,6 +58,7 @@
         <button type="button" data-page="discover" aria-label="Katılımcılar"><svg viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg><span>Katılımcı</span></button>
         <button type="button" data-page="plan" aria-label="Planım"><svg viewBox="0 0 24 24"><path d="M12 21s-8-5-8-11a4.6 4.6 0 0 1 8-2.8A4.6 4.6 0 0 1 20 10c0 6-8 11-8 11z"/></svg><span>Planım</span></button>
       </nav>
+      <div class="phone-home-indicator" aria-hidden="true"></div>
       <div class="push-notification" id="push-notification" role="alert" hidden>
         <button class="push-open" type="button" data-action="open-notification" aria-label="Eylül bildirimini aç">
           <span class="push-icon"><img src="assets/eylul-fuarcilik-logo.png" alt=""></span>
