@@ -628,3 +628,46 @@ button:active,.event-copy:active{transform:scale(.99)}
 }
 @keyframes sheetShadeIn{from{background:#10161d00}to{background:#10161db5}}
 @keyframes sheetRiseIn{from{opacity:.9;transform:translateY(34px)}to{opacity:1;transform:translateY(0)}}
+
+/* Sunumda çalışan QR okuma önizlemesi. */
+.qr-intro{text-align:center;padding:13px 4px 20px}
+.qr-intro-icon{display:grid;place-items:center;width:64px;height:64px;margin:0 auto 15px;border-radius:19px;background:#fff0d6;color:#cb7e0d;font-size:36px;line-height:1}
+.qr-intro h2{max-width:290px;margin:0 auto 8px}
+.qr-intro p{max-width:280px;margin:0 auto;color:#727c7e;line-height:1.45}
+.qr-camera-button{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;font-size:13px}
+.qr-camera-button span{font-size:19px;line-height:1}
+.qr-manual{margin-top:23px;padding-top:16px;border-top:1px solid #e9e8e2}
+.qr-manual>span{display:block;margin-bottom:5px;color:#8a9292;font-size:10px;font-weight:800}
+.qr-manual .row{gap:8px}
+.qr-manual .search{min-width:0;flex:1;margin:0}
+.qr-manual .ghost{flex:none}
+.sheet-backdrop.scanner-open{align-items:stretch;background:#0d1418}
+.sheet-backdrop.scanner-open .sheet{display:flex;flex-direction:column;width:100%;height:100%;max-height:none;overflow:hidden;padding:0;border-radius:0;background:#11191d;color:#fff;box-shadow:none}
+.scanner-header{z-index:2;display:flex;align-items:center;justify-content:space-between;flex:none;min-height:85px;padding:35px 23px 12px;background:#11191d;color:#fff}
+.scanner-header>span{font-size:12px;font-weight:800;letter-spacing:.13em}
+.scanner-header small{margin-left:6px;padding:4px 6px;border:1px solid #f5a0217d;border-radius:5px;color:#f5a021;font-size:8px;letter-spacing:.08em}
+.scanner-header button{display:grid;place-items:center;width:31px;height:31px;border:1px solid #ffffff42;border-radius:50%;background:#ffffff12;color:#fff;font-size:23px;line-height:1}
+.scanner-camera{position:relative;display:grid;place-items:center;flex:1;min-height:0;overflow:hidden;background:linear-gradient(180deg,#11191d55,#11191d1e 35%,#11191d72),url('assets/eylul-galeri-2.jpg') center/cover}
+.scanner-vignette{position:absolute;inset:0;background:linear-gradient(180deg,#10171ecc 0%,#10171e00 23% 73%,#10171ebb 100%)}
+.scanner-target{position:relative;display:grid;place-items:center;width:min(73%,265px);aspect-ratio:1;z-index:1}
+.scanner-code-card{display:flex;flex-direction:column;align-items:center;justify-content:center;width:77%;height:83%;padding:12px;border-radius:13px;background:#fdfcf9;box-shadow:0 16px 50px #07111890;transform:rotate(-3deg);transition:transform .35s ease}
+.scanner-brand{display:block;max-width:90%;width:auto;height:30px;object-fit:contain;margin-bottom:10px}
+.scanner-qr{display:block;width:min(100%,134px);aspect-ratio:1;padding:5px;border:1px solid #e6e6e1;background:#fff;object-fit:contain}
+.scanner-code-card strong{margin-top:9px;color:#1d262a;font-size:12px}
+.scan-corner{position:absolute;width:29px;height:29px;border:4px solid #f5a021;filter:drop-shadow(0 0 8px #f5a0218f)}
+.scan-corner.top-left{top:0;left:0;border-right:0;border-bottom:0;border-radius:11px 0 0 0}
+.scan-corner.top-right{top:0;right:0;border-left:0;border-bottom:0;border-radius:0 11px 0 0}
+.scan-corner.bottom-left{bottom:0;left:0;border-right:0;border-top:0;border-radius:0 0 0 11px}
+.scan-corner.bottom-right{bottom:0;right:0;border-left:0;border-top:0;border-radius:0 0 11px 0}
+.scanner-beam{position:absolute;z-index:2;left:7%;right:7%;top:12%;height:3px;border-radius:99px;background:#f6a129;box-shadow:0 0 13px 4px #f6a12994,0 9px 30px 11px #f6a12930;animation:qrBeam 1.65s ease-in-out infinite alternate}
+.scanner-bottom{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:none;min-height:118px;padding:15px 20px 27px;text-align:center;background:#11191d}
+.scanner-pulse{display:block;width:10px;height:10px;margin-bottom:9px;border-radius:50%;background:#f5a021;box-shadow:0 0 0 5px #f5a0212e;animation:qrPulse .8s ease-in-out infinite alternate}
+.scanner-bottom strong{font-size:14px}
+.scanner-bottom p{margin:5px 0 0;color:#aeb9b9;font-size:10px}
+.scan-found .scanner-code-card{transform:rotate(0) scale(1.035)}
+.scan-found .scanner-pulse{background:#77d49d;box-shadow:0 0 0 5px #77d49d2e;animation:none}
+.scan-found .scanner-beam{animation:none;top:50%;background:#77d49d;box-shadow:0 0 16px #77d49d}
+.scan-found .scan-corner{border-color:#77d49d}
+@keyframes qrBeam{to{top:86%}}
+@keyframes qrPulse{to{opacity:.45;transform:scale(.8)}}
+@media(prefers-reduced-motion:reduce){.scanner-beam,.scanner-pulse{animation:none}}
