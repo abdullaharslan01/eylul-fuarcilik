@@ -553,3 +553,88 @@ button:active,.event-copy:active{transform:scale(.99)}
 .book-detail-copy .muted-note{margin-top:14px}
 @media(max-width:850px){.book-detail-visual{height:min(52dvh,480px);min-height:340px;padding-top:calc(80px + env(safe-area-inset-top))}}
 @media(prefers-reduced-motion:reduce){.author-book-cover{transition:none}.author-book:hover .author-book-cover{transform:none}}
+
+/* Ana sekmelerde organizatör logosu yerine geçerli ekranın adı görünür. */
+.app-header-title{min-width:0;display:flex;flex-direction:column;justify-content:center;gap:2px;line-height:1.1}
+.app-header-title small{display:block;color:#a36b19;font-size:9px;font-weight:800;letter-spacing:.12em}
+.app-header-title strong{display:block;color:#202629;font-size:19px;font-weight:800;letter-spacing:-.035em}
+@media(max-width:850px){.app-header-title strong{font-size:18px}}
+
+.book-map-status{display:flex;align-items:center;gap:10px;margin:15px 0 12px;padding:11px 12px;border:1px solid #e8dfce;border-radius:13px;background:#fffaf1}
+.book-map-status span{flex:none;color:#a8660b;font-size:9px;font-weight:800;letter-spacing:.1em}
+.book-map-status p{margin:0;color:#677074;font-size:10px;line-height:1.35}
+.book-map-visual{position:relative;overflow:hidden;min-height:336px;padding:15px;border-radius:20px;background:repeating-linear-gradient(0deg,transparent 0 24px,#ffffff10 25px),repeating-linear-gradient(90deg,transparent 0 24px,#ffffff10 25px),linear-gradient(135deg,#173039,#294a4e);box-shadow:0 15px 30px #1631382b}
+.book-map-entrance{position:relative;z-index:1;width:max-content;margin:0 auto;padding:7px 17px;border-radius:0 0 12px 12px;background:#f4a21f;color:#17252a;font-size:10px;font-weight:800;letter-spacing:.1em}
+.book-map-entrance span{margin-left:6px;font-size:16px}
+.book-map-walkway{position:absolute;left:50%;top:54px;bottom:15px;width:44px;transform:translateX(-50%);border-left:2px dashed #f7bd656e;border-right:2px dashed #f7bd656e;display:grid;place-items:center;pointer-events:none}
+.book-map-walkway span{color:#e7cfa46b;font-size:8px;font-weight:800;letter-spacing:.14em;writing-mode:vertical-rl}
+.book-map-areas{position:relative;z-index:1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px 48px;margin-top:28px}
+.book-map-areas button{min-height:104px;padding:10px;border:1px solid #ffffff6e;border-radius:13px;background:#f8f6ef;color:#223136;text-align:left;box-shadow:0 5px 14px #061b2270}
+.book-map-areas button:nth-child(2),.book-map-areas button:nth-child(3){background:#fff5de}
+.book-map-areas button small{display:block;color:#aa6b13;font-size:8px;font-weight:800;letter-spacing:.12em}
+.book-map-areas button strong{display:block;margin-top:8px;font-size:13px;line-height:1.1}
+.book-map-areas button span{display:block;margin-top:6px;color:#657075;font-size:9px}
+.book-map-areas button:hover{transform:translateY(-2px);border-color:#f4a21f}
+@media(prefers-reduced-motion:no-preference){.book-map-areas button{transition:transform .2s ease,border-color .2s ease}}
+
+.sheet.map-sheet{height:100%;max-height:100%;border-radius:0;padding-top:57px;background:#f8f7f3}
+.map-sheet .sheet-top{position:sticky;top:-57px;z-index:2;margin:-57px -22px 18px;padding:54px 22px 12px;background:#f8f7f3;border-bottom:1px solid #e9e5dd}
+.official-map h2{margin:5px 0 9px;font-size:24px}
+.official-map p{margin:0 0 15px;color:#59656a;font-size:11px;line-height:1.5}
+.official-map .map-zoom{height:430px;overflow:auto;overscroll-behavior:contain;background:#fff;touch-action:pan-x pan-y}
+.official-map .map-zoom img{width:710px}
+.map-sheet-hint{margin:8px 0 15px;color:#b36d0d;font-size:10px;font-weight:800;text-align:center}
+.official-map-link{display:flex;align-items:center;justify-content:center;min-height:42px;border:1px solid #dfd4c0;border-radius:12px;background:#fff;color:#a16108;font-size:11px;font-weight:800}
+.service-strip{position:relative;padding-right:34px}
+.service-strip .service-row{scroll-behavior:smooth}
+.service-next{position:absolute;top:0;right:0;bottom:0;width:29px;border:1px solid #e5d6bc;border-radius:11px;background:#fff8e9;color:#a8620d;font-size:19px;font-weight:800}
+
+.plan-hero{display:flex;flex-direction:column;justify-content:space-between;min-height:192px;margin-top:18px;padding:20px;border-radius:20px;background:radial-gradient(circle at 88% 20%,#d38a2b65,transparent 42%),linear-gradient(135deg,#192b33,#0e2028);color:#fff;box-shadow:0 14px 24px #18272e29}
+.plan-hero small{color:#f9b749;font-size:9px;font-weight:800;letter-spacing:.14em}
+.plan-hero strong{display:block;margin:12px 0 8px;font-size:30px;line-height:1.04;letter-spacing:-.05em}
+.plan-hero span{max-width:270px;color:#d5e0df;font-size:11px;line-height:1.45}
+.plan-section-heading{display:flex;align-items:baseline;justify-content:space-between;margin:24px 0 12px}
+.plan-section-heading h2{margin:0;font-size:18px;letter-spacing:-.035em}
+.plan-section-heading small{color:#a16c21;font-size:9px;font-weight:800;letter-spacing:.1em}
+.plan-day-heading{display:flex;justify-content:space-between;align-items:center;margin:17px 0 9px;color:#b46c0b;font-size:10px;font-weight:800;letter-spacing:.08em}
+.plan-day-heading small{color:#8b9290;font-size:10px;font-weight:700;letter-spacing:0}
+.plan-day-list{position:relative;display:grid;gap:9px}
+.plan-day-list:before{content:"";position:absolute;left:42px;top:24px;bottom:24px;border-left:1px dashed #e9c78d}
+.plan-event{position:relative;display:flex;align-items:stretch;border:1px solid #e8e2d7;border-radius:15px;background:#fff;box-shadow:0 5px 15px #3128190b}
+.plan-event-main{flex:1;min-width:0;display:flex;align-items:center;gap:11px;padding:13px 0 13px 12px;border:0;background:transparent;color:#263035;text-align:left}
+.plan-event-main time{width:42px;flex:none;color:#b76d0c;font-size:14px;font-weight:800}
+.plan-event-main span{min-width:0;flex:1}
+.plan-event-main small{display:block;color:#a56b1f;font-size:8px;font-weight:800;letter-spacing:.1em}
+.plan-event-main strong{display:block;overflow:hidden;margin:3px 0 2px;font-size:12px;line-height:1.25;text-overflow:ellipsis;white-space:nowrap}
+.plan-event-main em{display:block;color:#8a9291;font-size:10px;font-style:normal}
+.plan-event-main b{color:#c8872a;font-size:16px}
+.plan-event-remove{width:38px;flex:none;border:0;background:transparent;color:#d98410;font-size:19px}
+.plan-explore{margin:19px 0 10px}
+.plan-reminder{display:flex;align-items:center;gap:11px;width:100%;padding:12px;border:1px solid #e7e2d8;border-radius:14px;background:#fff;color:#263035;text-align:left}
+.plan-reminder .nicon{display:grid;place-items:center;width:34px;height:34px;flex:none;border-radius:10px;background:#fff1d9;color:#aa6b0e}
+.plan-reminder span:nth-child(2){flex:1}
+.plan-reminder strong{display:block;font-size:11px}
+.plan-reminder small{display:block;color:#87908f;font-size:10px}
+.plan-reminder b{color:#ba7413;font-size:17px}
+.fair-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:14px 0}
+.fair-facts div{min-height:72px;padding:12px;border:1px solid #e7e1d7;border-radius:13px;background:#fff}
+.fair-facts small{display:block;color:#a86e19;font-size:8px;font-weight:800;letter-spacing:.1em}
+.fair-facts strong{display:block;margin-top:7px;color:#263034;font-size:11px;line-height:1.25}
+.fair-guide-features{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.fair-guide-features div{padding:12px;border-radius:13px;background:#fff;border:1px solid #e7e1d7}
+.fair-guide-features span{color:#bd7b1c;font-size:10px;font-weight:800}
+.fair-guide-features strong{display:block;margin:5px 0 3px;color:#263034;font-size:11px}
+.fair-guide-features small{display:block;color:#748084;font-size:9px;line-height:1.4}
+.event-about{margin:19px 0 15px;padding:15px;border:1px solid #e7e1d8;border-radius:15px;background:#fff}
+.event-about h2{margin:0 0 7px;color:#263034;font-size:16px;letter-spacing:-.025em}
+.event-about p{margin:0;color:#697477;font-size:11px;line-height:1.52}
+@media(prefers-reduced-motion:no-preference){
+  .sheet-backdrop:not([hidden]){animation:sheetShadeIn .22s ease-out both}
+  .sheet-backdrop:not([hidden]) .sheet{animation:sheetRiseIn .3s cubic-bezier(.2,.8,.2,1) both}
+  .screen.route-enter .plan-hero{animation:tileEnter .32s both}
+  .screen.route-enter .plan-event{animation:tileEnter .3s both}
+  .screen.route-enter .plan-event:nth-child(2){animation-delay:.045s}
+  .screen.route-enter .plan-event:nth-child(3){animation-delay:.09s}
+}
+@keyframes sheetShadeIn{from{background:#10161d00}to{background:#10161db5}}
+@keyframes sheetRiseIn{from{opacity:.9;transform:translateY(34px)}to{opacity:1;transform:translateY(0)}}

@@ -27,7 +27,9 @@ Ek kitap kapakları, ilgili yayınevi ve kitap satış sayfalarındaki gerçek e
 
 ## Logo ve çocuk şenliği görselleri
 
-Yayınevi adları ve imza ilişkileri 2025 arşivini örnekler; 2026 katılımcı listesi değildir. Çocuk Şenliği marka profilleri, kampanya kodu ve programı tamamen konsepttir. Burada adı geçen markaların Eylül Fuarcılık etkinliğine sponsorluğu doğrulanmış değildir.
+Yayınevi adları ve yazar ilişkileri önceki fuar kayıtlarından alınmıştır. Uygulamada gösterilen 4–6 Aralık 2026 imza ve söyleşi saatleri yalnızca gelecek fuar için arayüz örneğidir; 2026 katılımı veya programı teyit edilmiş değildir. Çocuk Şenliği marka profilleri, kampanya kodu ve programı tamamen konsepttir. Burada adı geçen markaların Eylül Fuarcılık etkinliğine sponsorluğu doğrulanmış değildir.
+
+Etkinlik detayında açılan [resmî site krokisi](https://ankarakitapfuari.org.tr/fuar-alani-krokisi), görselin üzerinde de yazdığı üzere 3–12 Nisan 2026 fuarına aittir. Aralık 2026 stant yerleşimi olarak kullanılmaz.
 
 | Görsel | Kaynak |
 | --- | --- |
