@@ -388,32 +388,6 @@ const compactSlides={
   passport:{kicker:'FUAR PASAPORTU',title:'Katıldıkça|keşfet.',description:'Etkinlik QR kodlarıyla katılım fikri, küçük ödüller için isteğe bağlı bir keşif akışı.'},
   about:{kicker:'EYLÜL FUARCILIK',title:'Her adımda|Eylül.',description:'Fuarı düzenleyen marka, uygulamanın içinde de görünür. Ziyaretçi organizatörü kolayca tanır.'}
 };
-const pitchNotes={
-  welcome:['Hangi fuara ait bilgiye bakacağım?','Kitap fuarı ve çocuk şenliğini tek girişten seç.','Eylül, bütün fuarlarında aynı rehberi kullanabilir.'],
-  home:['Sevdiğim yazar veya yayınevi nerede?','Üstteki aramaya isim yaz; sonuçtan doğrudan detaya geç.','Ziyaretçi aradığını fuarın içindeyken de hızla bulur.'],
-  program:['İmza mı, söyleşi mi; nereden başlamalıyım?','Programın iki ayrı girişini aç.','Kalabalık programı anlaşılır bir yolculuğa dönüştürür.'],
-  signings:['Yazarın imzası hangi gün, saat kaçta?','Günü seç, yazarı ara, kaydı aç.','Örnek program ve güncel içerik aynı düzende sunulur.'],
-  event:['İmzanın yeri ve saati tam olarak ne?','Etkinlik detayını, kalbi ve kroki bağlantısını göster.','Eksik bilgiyle danışmaya dönme ihtiyacı azalabilir.'],
-  talks:['İlgimi çeken söyleşiyi nasıl kaçırmam?','Konuya göre ara ve planına ekle.','Programın keşfedilmesi kolaylaşır.'],
-  publishersPage:['Yayınevi listesinde aradığımı nasıl bulurum?','Yayınevini ara, logosundan profiline gir.','Katılımcıya fuar boyunca görünür bir alan açar.'],
-  book:['Bu kitap hakkında ne biliyorum?','Kapağa dokun, tanıtımı ve kaynak sayfasını aç.','Kitap keşfi de uygulamanın içinde tamamlanır.'],
-  participant:['Bu yayınevinin yazarları ve imzaları kimler?','Kurum bilgisi, imza kaydı, yazar ve kitap kapağını göster.','Yayınevi için zengin ve güncellenebilir bir profil sunar.'],
-  plan:['Birden çok buluşmayı nasıl takip edeceğim?','Kalple kaydet, Planım ekranında listeyi aç.','Ziyaretçinin kişisel fuar akışı oluşur.'],
-  map:['Seçtiğim standa nasıl ulaşacağım?','Örnek alan planından yayınevi, imza ve söyleşi bölümlerine geç.','Alana dair soruları tek ekranda cevaplar.'],
-  notifications:['Saat veya salon değişirse nasıl haberim olur?','Ekranın üstündeki örnek bildirimi canlı göster.','Eylül, önemli güncellemeler için doğrudan bir kanal kazanır.'],
-  admin:['Duyuruyu herkes mi, ilgili ziyaretçi mi görmeli?','Hedef kitleyi seçip mesajı ziyaretçi ekranında önizle.','Duyuru akışı organizatörün kontrolünde olur.'],
-  discover:['Yazar ile yayınevi arasında nasıl gezineceğim?','Tek aramada isme göre bul, ilgili profili aç.','Katılımcı ve program bilgisi birbirine bağlanır.'],
-  passport:['Etkinliklere katılım nasıl oyunlaştırılabilir?','Örnek QR damgasını ve ilerlemeyi göster.','İsteğe bağlı katılım deneyimi tasarlanabilir.'],
-  about:['Uygulamanın arkasında kim var?','Eylül logosunu ve organizatör sayfasını aç.','Ziyaretçi ilişkiyi doğrudan Eylül markasıyla kurar.']
-};
-const childPitchNotes={
-  home:['Ailece hangi etkinlik bize uygun?','Etkinliği veya markayı ara, yaş ve saat bilgisini aç.','Aileler şenliği daha rahat planlayabilir.'],
-  program:['Çocuğuma uygun atölye ne zaman?','Günü ve etkinlik türünü seç.','Program aileler için daha kolay taranır.'],
-  event:['Yaş aralığı, saat ve alan bilgisi nerede?','Etkinlik detayını aç, planına ekle.','Aileye karar için gereken bilgiyi tek yerde sunar.'],
-  discover:['Hangi marka veya alanı arıyorum?','Katılımcı aramasını ve QR profil fikrini göster.','Marka ve etkinlik alanları keşfedilebilir olur.'],
-  participant:['Markanın şenlikteki yeri ve içeriği ne?','Profilde logo, web sitesi ve örnek fırsat alanını göster.','İş ortaklarına ayrı bir görünürlük alanı açar.'],
-  map:['Atölye ve sahne nerede?','Konsept krokide alanı seç.','Ailelerin yön bulmasını kolaylaştıracak temel hazırdır.']
-};
 $('.presentation').style.setProperty('--tour-steps',tourOrder.length);
 function showTourStep(index){
   const page=tourOrder[index];
@@ -456,8 +430,6 @@ function updatePresentation(){
   $('#preview-kicker').textContent=slide.kicker;
   $('#preview-title').innerHTML=slide.title.split('|').map((part,index)=>`<span class="${index?'accent':''}">${escapeHTML(part)}</span>`).join('<br>');
   $('#preview-description').textContent=slide.description;
-  const notes=(state.fair==='children'?childPitchNotes[state.page]:null)||pitchNotes[state.page]||pitchNotes.home;
-  $('#preview-highlights').innerHTML=notes.map((item,index)=>`<div class="pitch-note"><span class="pitch-label">${['ZİYARETÇİNİN SORUSU','EKRANDA GÖSTER','EYLÜL’E FAYDASI'][index]}</span><span class="pitch-text">${escapeHTML(item)}</span></div>`).join('');
   $('#tour-step-label').textContent=pageStep>=0?`${step+1}. adım / ${tourOrder.length}`:'Serbest keşif';
   $('#tour-progress b').style.width=`${(step+1)/tourOrder.length*100}%`;
   $('#tour-previous').disabled=step===0;
