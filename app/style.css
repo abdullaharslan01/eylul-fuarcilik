@@ -992,9 +992,28 @@ mark { background: #ffe3b0; color: inherit; border-radius: 3px; padding: 0 1px; 
 .fac-card.on .fc-ico { background: var(--fc); color: #fff; }
 
 /* Hizmet noktaları: iki sütunlu geniş kartlar */
-.fac-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 0 18px; }
-.fac-grid2 .fac-card { width: auto; flex-direction: row; align-items: center; gap: 10px; padding: 12px; border-radius: 16px; }
+.fac-grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; padding: 0 18px; }
+.fac-grid2 .fac-card { min-width: 0; width: auto; flex-direction: row; align-items: center; gap: 10px; padding: 12px; border-radius: 16px; }
 .fac-grid2 .fac-card .fc-ico { width: 40px; height: 40px; border-radius: 12px; margin: 0; }
 .fac-grid2 .fc-txt { min-width: 0; display: flex; flex-direction: column; }
 .fac-grid2 .fac-card strong { font-size: 14px; line-height: 1.2; }
 .fac-grid2 .fac-card small { font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* ---------- Tasarım cilası ---------- */
+svg.i { stroke-width: 1.9; }
+.tabbar button.on svg { fill: currentColor; fill-opacity: .16; }
+.tabbar button { font-size: 10.5px; }
+.ev-ico { width: 44px; height: 44px; border-radius: 13px; display: grid; place-items: center; flex: none; }
+.ev-ico.lg { width: 46px; height: 46px; }
+.date-chip { width: 46px; height: 46px; border-radius: 13px; background: var(--brand-soft); color: var(--brand-deep); display: flex; flex-direction: column; align-items: center; justify-content: center; flex: none; line-height: 1; }
+.date-chip b { font-size: 18px; font-weight: 800; }
+.date-chip small { font-size: 10px; font-weight: 800; text-transform: uppercase; margin-top: 2px; }
+.notice.new { box-shadow: var(--shadow-1); position: relative; }
+.notice.new::after { content: ''; position: absolute; top: 14px; right: 12px; width: 8px; height: 8px; border-radius: 50%; background: var(--hot); }
+.notice.new .txt time { margin-right: 14px; }
+.notice .ico-tile.eylul { background: var(--brand-soft); color: var(--brand-deep); }
+.hero .inner h1 { text-shadow: 0 2px 16px rgba(0, 0, 0, .25); }
+.row .chev, .row > svg.i:last-child { color: #c4baa9; }
+.t-card { border-left-width: 3px; }
+.quick button { font-weight: 700; }
+.quick .q-ico svg { width: 24px; height: 24px; }

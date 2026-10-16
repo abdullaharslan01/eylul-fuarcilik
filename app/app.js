@@ -8,55 +8,60 @@ const STORE_KEY = 'eylul-rehber-v2';
 
 /* ---------- İkonlar ---------- */
 const P = {
-  home: '<path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/>',
-  cal: '<rect x="3" y="4.5" width="18" height="16.5" rx="3"/><path d="M8 2.5v4M16 2.5v4M3 9.5h18"/>',
-  map: '<path d="m9 4-6 2.5v14L9 18l6 2.5 6-2.5v-14L15 6.5z"/><path d="M9 4v14M15 6.5v14"/>',
-  search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
-  heart: '<path d="M12 20.5s-8-4.7-8-11a4.5 4.5 0 0 1 8-2.8 4.5 4.5 0 0 1 8 2.8c0 6.3-8 11-8 11z"/>',
-  bell: '<path d="M18 9a6 6 0 0 0-12 0c0 6.5-2.5 8-2.5 8h17S18 15.5 18 9M10 20.5a2.2 2.2 0 0 0 4 0"/>',
-  pen: '<path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16z"/><path d="m13.5 6.5 4 4"/>',
-  mic: '<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/>',
-  ticket: '<path d="M3 8a2 2 0 0 0 2-2h14a2 2 0 0 0 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 0-2 2H5a2 2 0 0 0-2-2v-2a2 2 0 0 0 0-4z"/><path d="M14 6v12" stroke-dasharray="2 2.5"/>',
-  bus: '<rect x="4" y="3" width="16" height="15" rx="3"/><path d="M4 11h16M8 18v2.5M16 18v2.5"/><circle cx="8" cy="14.5" r=".6"/><circle cx="16" cy="14.5" r=".6"/>',
-  tag: '<path d="M3 12V4a1 1 0 0 1 1-1h8l9 9-9 9z"/><circle cx="7.5" cy="7.5" r="1.5"/>',
-  kid: '<circle cx="12" cy="6" r="3"/><path d="M8 21v-5l-2-4 6-2 6 2-2 4v5M10 21v-4h4v4"/>',
-  help: '<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.5V14M12 17.2v.1"/>',
-  pin: '<path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/>',
-  clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
-  users: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/>',
-  route: '<circle cx="6" cy="19" r="2.5"/><circle cx="18" cy="5" r="2.5"/><path d="M8.5 19H16a3.5 3.5 0 0 0 0-7H8a3.5 3.5 0 0 1 0-7h7.5"/>',
-  share: '<path d="M12 15V3M7.5 7.5 12 3l4.5 4.5M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/>',
-  back: '<path d="M15 5l-7 7 7 7"/>',
-  chev: '<path d="m9 5 7 7-7 7"/>',
+  home: '<path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/> <path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
+  cal: '<path d="M8 2v4"/> <path d="M16 2v4"/> <rect width="18" height="18" x="3" y="4" rx="2"/> <path d="M3 10h18"/>',
+  map: '<path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z"/> <path d="M15 5.764v15"/> <path d="M9 3.236v15"/>',
+  search: '<circle cx="11" cy="11" r="8"/> <path d="m21 21-4.3-4.3"/>',
+  heart: '<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>',
+  bell: '<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/> <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>',
+  pen: '<path d="M12 20h9"/> <path d="M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.838a.5.5 0 0 1-.62-.62l.838-2.872a2 2 0 0 1 .506-.854z"/>',
+  mic: '<path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/> <path d="M19 10v2a7 7 0 0 1-14 0v-2"/> <line x1="12" x2="12" y1="19" y2="22"/>',
+  ticket: '<path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/> <path d="M13 5v2"/> <path d="M13 17v2"/> <path d="M13 11v2"/>',
+  bus: '<path d="M8 6v6"/> <path d="M15 6v6"/> <path d="M2 12h19.6"/> <path d="M18 18h3s.5-1.7.8-2.8c.1-.4.2-.8.2-1.2 0-.4-.1-.8-.2-1.2l-1.4-5C20.1 6.8 19.1 6 18 6H4a2 2 0 0 0-2 2v10h3"/> <circle cx="7" cy="18" r="2"/> <path d="M9 18h5"/> <circle cx="16" cy="18" r="2"/>',
+  tag: '<path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/> <circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/>',
+  kid: '<circle cx="12" cy="12" r="10"/> <path d="M8 14s1.5 2 4 2 4-2 4-2"/> <line x1="9" x2="9.01" y1="9" y2="9"/> <line x1="15" x2="15.01" y1="9" y2="9"/>',
+  help: '<circle cx="12" cy="12" r="10"/> <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/> <path d="M12 17h.01"/>',
+  pin: '<path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/> <circle cx="12" cy="10" r="3"/>',
+  clock: '<circle cx="12" cy="12" r="10"/> <polyline points="12 6 12 12 16 14"/>',
+  users: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/> <circle cx="9" cy="7" r="4"/> <path d="M22 21v-2a4 4 0 0 0-3-3.87"/> <path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+  route: '<circle cx="6" cy="19" r="3"/> <path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/> <circle cx="18" cy="5" r="3"/>',
+  share: '<path d="M15 3h6v6"/> <path d="M10 14 21 3"/> <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>',
+  back: '<path d="m15 18-6-6 6-6"/>',
+  chev: '<path d="m9 18 6-6-6-6"/>',
   down: '<path d="m6 9 6 6 6-6"/>',
-  x: '<path d="M6 6l12 12M18 6 6 18"/>',
-  check: '<path d="m4.5 12.5 5 5 10-11"/>',
-  plus: '<path d="M12 5v14M5 12h14"/>',
-  book: '<path d="M4 4.5A1.5 1.5 0 0 1 5.5 3H11v17H5.5A1.5 1.5 0 0 0 4 21.5zM20 4.5A1.5 1.5 0 0 0 18.5 3H13v17h5.5a1.5 1.5 0 0 1 1.5 1.5z"/>',
-  bookmark: '<path d="M6 3h12v18l-6-4.5L6 21z"/>',
-  alert: '<path d="M12 3 2 20h20zM12 10v4M12 17v.1"/>',
-  star: '<path d="m12 3 2.8 5.8 6.2.9-4.5 4.4 1 6.3L12 17.5l-5.5 2.9 1-6.3L3 9.7l6.2-.9z"/>',
-  layers: '<path d="m12 3 9 5-9 5-9-5zM3 13l9 5 9-5"/>',
-  wc: '<circle cx="7" cy="4.5" r="1.8"/><circle cx="17" cy="4.5" r="1.8"/><path d="M5 9h4l.5 6H8.5v6h-3v-6h-1zM15 9h4l2 7h-2.5v5h-3v-5H13z"/>',
-  cup: '<path d="M4 9h13v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5zM17 10h1.5a2.5 2.5 0 0 1 0 5H17M8 3v3M12 3v3"/>',
-  info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.1"/>',
-  car: '<path d="M5 17h14M4 17v-5l2.5-5h11L20 12v5M4 17v2.5M20 17v2.5"/><circle cx="7.5" cy="13.5" r="1"/><circle cx="16.5" cy="13.5" r="1"/>',
-  train: '<rect x="5" y="3" width="14" height="14" rx="4"/><path d="M5 11h14M8 21l2-4M16 21l-2-4"/><circle cx="9" cy="14" r=".6"/><circle cx="15" cy="14" r=".6"/>',
-  school: '<path d="m2 9 10-5 10 5-10 5z"/><path d="M6 11v5c0 1.5 3 3 6 3s6-1.5 6-3v-5M22 9v6"/>',
-  shield: '<path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/><path d="m8.5 12 2.5 2.5 4.5-5"/>',
-  qr: '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3M21 14v.1M17 21h4v-4M14 21v-3"/>',
-  sparkle: '<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"/>',
-  stage: '<path d="M3 20h18M5 20V9l7-5 7 5v11M9 20v-5h6v5"/>',
-  brush: '<path d="M14 4l6 6-8.5 8.5a3 3 0 0 1-2 .9H5v-4.5a3 3 0 0 1 .9-2z"/><path d="m11 7 6 6"/>',
-  play: '<circle cx="12" cy="12" r="9"/><path d="m10 8.5 5.5 3.5-5.5 3.5z"/>',
-  flame: '<path d="M12 21c-4 0-7-2.7-7-6.5 0-4 3.5-6 3.5-10 2.5 1.5 4 3.5 4.5 6 1-1 1.5-2 1.5-3.5C17 9 19 11.5 19 14.5c0 3.8-3 6.5-7 6.5z"/>',
-  walk: '<circle cx="13" cy="4" r="2"/><path d="M9 21l2-6 3 3v3M7.5 12.5 10 8.5l4 1 2 3.5h3M10 8.5 9 14"/>',
-  phone: '<rect x="6" y="2.5" width="12" height="19" rx="3"/><path d="M11 18.5h2"/>',
-  gift: '<rect x="3.5" y="8.5" width="17" height="12" rx="2"/><path d="M3.5 12.5h17M12 8.5v12M12 8.5S10.8 4 8 4.6c-2.2.5-1.6 3.9 4 3.9zM12 8.5s1.2-4.5 4-3.9c2.2.5 1.6 3.9-4 3.9z"/>',
-  trophy: '<path d="M7 4h10v5a5 5 0 0 1-10 0zM7 6H4a3 3 0 0 0 3 4M17 6h3a3 3 0 0 1-3 4M12 14v4M8 21h8M9.5 18h5"/>',
-  moon: '<path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/>',
-  card: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M7 15h4"/>',
-  scan: '<path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3M4 12h16"/>'
+  x: '<path d="M18 6 6 18"/> <path d="m6 6 12 12"/>',
+  check: '<path d="M20 6 9 17l-5-5"/>',
+  plus: '<path d="M5 12h14"/> <path d="M12 5v14"/>',
+  book: '<path d="M12 7v14"/> <path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>',
+  bookmark: '<path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/>',
+  alert: '<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/> <path d="M12 9v4"/> <path d="M12 17h.01"/>',
+  star: '<path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/>',
+  layers: '<path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/> <path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/> <path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/>',
+  wc: '<path d="M7 12h13a1 1 0 0 1 1 1 5 5 0 0 1-5 5h-.598a.5.5 0 0 0-.424.765l1.544 2.47a.5.5 0 0 1-.424.765H5.402a.5.5 0 0 1-.424-.765L7 18"/> <path d="M8 18a5 5 0 0 1-5-5V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8"/>',
+  cup: '<path d="M10 2v2"/> <path d="M14 2v2"/> <path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1"/> <path d="M6 2v2"/>',
+  info: '<circle cx="12" cy="12" r="10"/> <path d="M12 16v-4"/> <path d="M12 8h.01"/>',
+  car: '<path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/> <circle cx="7" cy="17" r="2"/> <path d="M9 17h6"/> <circle cx="17" cy="17" r="2"/>',
+  train: '<path d="M8 3.1V7a4 4 0 0 0 8 0V3.1"/> <path d="m9 15-1-1"/> <path d="m15 15 1-1"/> <path d="M9 19c-2.8 0-5-2.2-5-5v-4a8 8 0 0 1 16 0v4c0 2.8-2.2 5-5 5Z"/> <path d="m8 19-2 3"/> <path d="m16 19 2 3"/>',
+  school: '<path d="M14 22v-4a2 2 0 1 0-4 0v4"/> <path d="m18 10 3.447 1.724a1 1 0 0 1 .553.894V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-7.382a1 1 0 0 1 .553-.894L6 10"/> <path d="M18 5v17"/> <path d="m4 6 7.106-3.553a2 2 0 0 1 1.788 0L20 6"/> <path d="M6 5v17"/> <circle cx="12" cy="9" r="2"/>',
+  shield: '<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/> <path d="m9 12 2 2 4-4"/>',
+  qr: '<rect width="5" height="5" x="3" y="3" rx="1"/> <rect width="5" height="5" x="16" y="3" rx="1"/> <rect width="5" height="5" x="3" y="16" rx="1"/> <path d="M21 16h-3a2 2 0 0 0-2 2v3"/> <path d="M21 21v.01"/> <path d="M12 7v3a2 2 0 0 1-2 2H7"/> <path d="M3 12h.01"/> <path d="M12 3h.01"/> <path d="M12 16v.01"/> <path d="M16 12h1"/> <path d="M21 12v.01"/> <path d="M12 21v-1"/>',
+  sparkle: '<path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/> <path d="M20 3v4"/> <path d="M22 5h-4"/> <path d="M4 17v2"/> <path d="M5 18H3"/>',
+  stage: '<path d="M10 11h.01"/> <path d="M14 6h.01"/> <path d="M18 6h.01"/> <path d="M6.5 13.1h.01"/> <path d="M22 5c0 9-4 12-6 12s-6-3-6-12c0-2 2-3 6-3s6 1 6 3"/> <path d="M17.4 9.9c-.8.8-2 .8-2.8 0"/> <path d="M10.1 7.1C9 7.2 7.7 7.7 6 8.6c-3.5 2-4.7 3.9-3.7 5.6 4.5 7.8 9.5 8.4 11.2 7.4.9-.5 1.9-2.1 1.9-4.7"/> <path d="M9.1 16.5c.3-1.1 1.4-1.7 2.4-1.4"/>',
+  brush: '<path d="m14.622 17.897-10.68-2.913"/> <path d="M18.376 2.622a1 1 0 1 1 3.002 3.002L17.36 9.643a.5.5 0 0 0 0 .707l.944.944a2.41 2.41 0 0 1 0 3.408l-.944.944a.5.5 0 0 1-.707 0L8.354 7.348a.5.5 0 0 1 0-.707l.944-.944a2.41 2.41 0 0 1 3.408 0l.944.944a.5.5 0 0 0 .707 0z"/> <path d="M9 8c-1.804 2.71-3.97 3.46-6.583 3.948a.507.507 0 0 0-.302.819l7.32 8.883a1 1 0 0 0 1.185.204C12.735 20.405 16 16.792 16 15"/>',
+  play: '<path d="M15.39 4.39a1 1 0 0 0 1.68-.474 2.5 2.5 0 1 1 3.014 3.015 1 1 0 0 0-.474 1.68l1.683 1.682a2.414 2.414 0 0 1 0 3.414L19.61 15.39a1 1 0 0 1-1.68-.474 2.5 2.5 0 1 0-3.014 3.015 1 1 0 0 1 .474 1.68l-1.683 1.682a2.414 2.414 0 0 1-3.414 0L8.61 19.61a1 1 0 0 0-1.68.474 2.5 2.5 0 1 1-3.014-3.015 1 1 0 0 0 .474-1.68l-1.683-1.682a2.414 2.414 0 0 1 0-3.414L4.39 8.61a1 1 0 0 1 1.68.474 2.5 2.5 0 1 0 3.014-3.015 1 1 0 0 1-.474-1.68l1.683-1.682a2.414 2.414 0 0 1 3.414 0z"/>',
+  flame: '<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>',
+  walk: '<path d="M4 16v-2.38C4 11.5 2.97 10.5 3 8c.03-2.72 1.49-6 4.5-6C9.37 2 10 3.8 10 5.5c0 3.11-2 5.66-2 8.68V16a2 2 0 1 1-4 0Z"/> <path d="M20 20v-2.38c0-2.12 1.03-3.12 1-5.62-.03-2.72-1.49-6-4.5-6C14.63 6 14 7.8 14 9.5c0 3.11 2 5.66 2 8.68V20a2 2 0 1 0 4 0Z"/> <path d="M16 17h4"/> <path d="M4 13h4"/>',
+  phone: '<rect width="14" height="20" x="5" y="2" rx="2" ry="2"/> <path d="M12 18h.01"/>',
+  gift: '<rect x="3" y="8" width="18" height="4" rx="1"/> <path d="M12 8v13"/> <path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/> <path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"/>',
+  trophy: '<path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/> <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/> <path d="M4 22h16"/> <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/> <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/> <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>',
+  moon: '<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>',
+  card: '<rect width="20" height="14" x="2" y="5" rx="2"/> <line x1="2" x2="22" y1="10" y2="10"/>',
+  scan: '<path d="M3 7V5a2 2 0 0 1 2-2h2"/> <path d="M17 3h2a2 2 0 0 1 2 2v2"/> <path d="M21 17v2a2 2 0 0 1-2 2h-2"/> <path d="M7 21H5a2 2 0 0 1-2-2v-2"/> <path d="M7 12h10"/>',
+  baby: '<path d="M9 12h.01"/> <path d="M15 12h.01"/> <path d="M10 16c.5.3 1.2.5 2 .5s1.5-.2 2-.5"/> <path d="M19 6.3a9 9 0 0 1 1.8 3.9 2 2 0 0 1 0 3.6 9 9 0 0 1-17.6 0 2 2 0 0 1 0-3.6A9 9 0 0 1 12 3c2 0 3.5 1.1 3.5 2.5s-.9 2.5-2 2.5c-.8 0-1.5-.4-1.5-1"/>',
+  cross: '<path d="M4 9a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h4a1 1 0 0 1 1 1v4a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-4a1 1 0 0 1 1-1h4a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2h-4a1 1 0 0 1-1-1V4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4a1 1 0 0 1-1 1z"/>',
+  elevator: '<path d="m21 16-4 4-4-4"/> <path d="M17 20V4"/> <path d="m3 8 4-4 4 4"/> <path d="M7 4v16"/>',
+  send: '<path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/> <path d="m21.854 2.147-10.94 10.939"/>',
+  clockdur: '<circle cx="12" cy="12" r="10"/> <polyline points="12 6 12 12 16 14"/>'
 };
 const ic = (n, cls = '') => `<svg class="i ${cls}" viewBox="0 0 24 24" aria-hidden="true">${P[n] || ''}</svg>`;
 
@@ -100,6 +105,12 @@ const zone = id => KID_ZONES.find(z => z.id === id);
 const evPlace = e => e.publisher ? `${pub(e.publisher).name} · ${pub(e.publisher).stand}` : e.zone ? `${zone(e.zone).name} · ${org(e.org).name}` : e.place;
 const evStand = e => e.publisher ? pub(e.publisher).stand : e.zone ? e.zone : e.place === 'Söyleşi Salonu' ? 'SOYLESI' : e.place === 'Çocuk Atölyesi' ? 'COCUK' : null;
 const evImg = e => e.author ? A + author(e.author).photo : null;
+function evIcon(e, size = '') {
+  if (e.zone) { const z = zone(e.zone); return `<span class="ev-ico ${size}" style="background:${z.bg};color:${z.color}">${ic(z.icon, 'sm')}</span>`; }
+  const map = { soylesi: ['mic', '#ecebff', '#4542b5'], cocuk: ['smile', '#dcf3ec', '#0b8e78'], atolye: ['brush', '#fde6ee', '#b52b59'], imza: ['pen', '#fff1db', '#a85a00'] };
+  const [n, bg, c] = map[e.kind] || map.imza;
+  return `<span class="ev-ico ${size}" style="background:${bg};color:${c}">${ic(n === 'smile' ? 'kid' : n, 'sm')}</span>`;
+}
 function evStatus(e) {
   if (e.day !== DEMO_NOW.day) return e.day < DEMO_NOW.day ? 'past' : 'future';
   const n = nowMin(); if (n >= tmin(e.end)) return 'past'; if (n >= tmin(e.start)) return 'live'; return 'soon';
@@ -160,25 +171,25 @@ const FACILITIES = [
   { id: 'wc', label: 'WC', x: 52, y: 276, icon: 'wc', name: 'Tuvaletler' },
   { id: 'wc2', label: 'WC', x: 950, y: 610, icon: 'wc', name: 'Tuvaletler' },
   { id: 'kafe', label: '☕', x: 118, y: 350, icon: 'cup', name: 'Kafe' },
-  { id: 'asansor', label: '⇅', x: 206, y: 330, icon: 'layers', name: 'Asansör' },
+  { id: 'asansor', label: '⇅', x: 206, y: 330, icon: 'elevator', name: 'Asansör' },
   { id: 'danisma', label: 'i', x: 372, y: 612, icon: 'info', name: 'Danışma & kayıp eşya' },
-  { id: 'ilkyardim', label: '+', x: 178, y: 560, icon: 'plus', name: 'İlk yardım' },
+  { id: 'ilkyardim', label: '+', x: 178, y: 560, icon: 'cross', name: 'İlk yardım' },
   { id: 'cocukpt', label: '★', x: 430, y: 612, icon: 'shield', name: 'Kayıp çocuk noktası' },
   { id: 'mescit', label: '☾', x: 905, y: 276, icon: 'moon', name: 'Mescit' },
   { id: 'atm', label: '₺', x: 490, y: 612, icon: 'card', name: 'ATM' },
-  { id: 'bebek', label: '♡', x: 550, y: 612, icon: 'kid', name: 'Bebek bakım odası' }
+  { id: 'bebek', label: '♡', x: 550, y: 612, icon: 'baby', name: 'Bebek bakım odası' }
 ];
 // Krokinin altındaki hizmet noktası kartları
 const FAC_CARDS = [
   { id: 'wc', icon: 'wc', name: 'WC', where: 'Sol koridor · 2 nokta', c: '#2f6ee5', bg: '#e6efff' },
   { id: 'kafe', icon: 'cup', name: 'Kafe', where: 'Sol koridor, A-3 yanı', c: '#a0522d', bg: '#f8e9dc' },
   { id: 'danisma', icon: 'info', name: 'Danışma', where: 'Girişin sağı', c: '#0b8e78', bg: '#dcf3ec' },
-  { id: 'ilkyardim', icon: 'plus', name: 'İlk yardım', where: 'Girişin solu', c: '#e2493b', bg: '#fde4e1' },
+  { id: 'ilkyardim', icon: 'cross', name: 'İlk yardım', where: 'Girişin solu', c: '#e2493b', bg: '#fde4e1' },
   { id: 'mescit', icon: 'moon', name: 'Mescit', where: 'Sağ kanat, A-5 sonu', c: '#5a57d6', bg: '#ecebff' },
-  { id: 'asansor', icon: 'layers', name: 'Asansör', where: 'Sol koridor', c: '#4b443a', bg: '#efe8dc' },
+  { id: 'asansor', icon: 'elevator', name: 'Asansör', where: 'Sol koridor', c: '#4b443a', bg: '#efe8dc' },
   { id: 'cocukpt', icon: 'shield', name: 'Kayıp çocuk', where: 'Danışma yanı', c: '#c26f05', bg: '#fff1db' },
   { id: 'atm', icon: 'card', name: 'ATM', where: 'Giriş holü', c: '#1f9d55', bg: '#dff3e6' },
-  { id: 'bebek', icon: 'kid', name: 'Bebek bakım', where: 'Giriş holü, B koridoru', c: '#c2185b', bg: '#fde6ee' }
+  { id: 'bebek', icon: 'baby', name: 'Bebek bakım', where: 'Giriş holü, B koridoru', c: '#c2185b', bg: '#fde6ee' }
 ];
 const facCard = (f, on) => `<button class="fac-card${on ? ' on' : ''}" data-fac="${f.id}" style="--fc:${f.c};--fb:${f.bg}"><span class="fc-ico">${ic(f.icon, 'sm')}</span><span class="fc-txt"><strong>${f.name}</strong><small>${f.where}</small></span></button>`;
 const facSheet = f => `<div class="card map-sheet" id="map-card"><span class="fc-ico sm" style="--fc:${f.c};--fb:${f.bg}">${ic(f.icon, 'sm')}</span><div style="flex:1"><strong style="display:block">${esc(f.name)}</strong><small class="muted">${esc(f.where)} · krokide turuncu ile gösterildi</small></div></div>`;
@@ -395,11 +406,12 @@ function startBanner() {
     document.querySelectorAll('.banner-dots i').forEach((d, k) => d.classList.toggle('on', k === i));
   }, 3500);
 }
-function eventRow(e) {
+function eventRow(e, opt = {}) {
+  if (typeof opt !== 'object') opt = {};
   const d = fair().days.find(x => x.n === e.day);
   return `<button class="row" data-go="#/etkinlik/${e.id}">
-    ${evImg(e) ? `<img class="avatar" src="${evImg(e)}" alt="">` : `<span class="ico-tile" style="color:${KCOL[e.kind]}">${ic(e.kind === 'imza' ? 'pen' : e.kind === 'soylesi' ? 'mic' : 'kid', 'sm')}</span>`}
-    <span class="txt"><strong>${esc(e.title)}</strong><small>${d.label} ${e.start} · ${esc(evPlace(e))}</small></span>${ic('chev', 'sm')}
+    ${evImg(e) && !opt.when ? `<img class="avatar" src="${evImg(e)}" alt="">` : opt.when ? `<span class="date-chip"><b>${d.date.split(' ')[0]}</b><small>${d.date.split(' ')[1]}</small></span>` : evIcon(e)}
+    <span class="txt"><strong>${opt.when ? `${d.label} · ${e.start}–${e.end}` : esc(e.title)}</strong><small>${opt.when ? esc(evPlace(e)) : `${d.label} ${e.start} · ${esc(evPlace(e))}`}</small></span>${ic('chev', 'sm')}
   </button>`;
 }
 
@@ -450,7 +462,7 @@ function programItem(e, st) {
   return `<div class="t-item ${st}">
     <div class="t-time"><b>${e.start}</b><small>${e.end}</small></div>
     <div class="t-card" style="--k:${KCOL[e.kind]}" data-go="#/etkinlik/${e.id}" role="button" tabindex="0">
-      ${evImg(e) ? `<img class="avatar" src="${evImg(e)}" alt="" loading="lazy">` : ''}
+      ${evImg(e) ? `<img class="avatar" src="${evImg(e)}" alt="" loading="lazy">` : evIcon(e, 'lg')}
       <div class="txt"><strong>${esc(e.title)}</strong><small>${esc(evPlace(e))}${e.speakers && !kids() ? ' · ' + esc(e.speakers) : ''}</small><div class="tags">${tags.join('')}</div></div>
       <button class="save-btn ${has('saved', e.id) ? 'on' : ''}" data-save="${e.id}" aria-label="Planıma ekle">${ic('bookmark', 'sm')}</button>
     </div>
@@ -465,7 +477,7 @@ SCREENS.etkinlik = id => {
   const stand = evStand(e);
   const a = e.author && author(e.author), p = e.publisher && pub(e.publisher), o = e.org && org(e.org);
   const books = a ? BOOKS.filter(b => b.author === a.id) : [];
-  const heroImg = a ? A + a.photo : o ? A + (e.zone === 'kitap' ? 'eylul-galeri-2.jpg' : 'children-workshop.jpg') : null;
+  const heroImg = a ? A + a.photo : o ? A + (e.zone === 'kitap' ? 'eylul-galeri-2.jpg' : 'children-workshop.jpg') : A + (e.kind === 'soylesi' ? 'ankara-fuar-banner.jpg' : 'children-workshop.jpg');
   return {
     top: topBack(KIND[e.kind], FAIRS[e.fair].short),
     html: `
@@ -554,7 +566,7 @@ SCREENS.yazar = id => {
       <h1>${esc(a.name)}</h1><p>${esc(p.name)} · Stant ${p.stand}</p>
     </div>
     <p class="prose" style="margin-top:16px;text-align:center">${esc(a.bio)}</p>
-    <div class="section"><div class="section-head"><h2>Fuardaki imzaları</h2></div><div class="list">${evs.map(eventRow).join('')}</div></div>
+    <div class="section"><div class="section-head"><h2>Fuardaki imzaları</h2></div><div class="list">${evs.map(x => eventRow(x, { when: true })).join('')}</div></div>
     <div class="section"><div class="section-head"><h2>Kitapları</h2></div><div class="hscroll">${BOOKS.filter(b => b.author === id).map(bookTile).join('')}</div></div>`
   };
 };
@@ -586,10 +598,9 @@ SCREENS.yayinevi = id => {
       <p class="prose" style="margin:10px 0 0">${esc(info.fair || `Fuar boyunca ${p.stand} numaralı standda yeni çıkan kitaplar ve fuara özel seçkiler sergileniyor. Güncel katalog ve kampanyalar için yayınevinin web sitesine bakabilirsin.`)}</p>
       ${genres.length ? `<div class="tags" style="display:flex;gap:6px;flex-wrap:wrap;margin:12px 18px 0">${genres.map(g => `<span class="tag imza">${esc(g)}</span>`).join('')}</div>` : ''}
     </div>
-    ${evs.length ? `<div class="section"><div class="section-head"><h2>Standdaki imzalar</h2></div><div class="list">${evs.map(eventRow).join('')}</div></div>` : ''}
+    ${evs.length ? `<div class="section"><div class="section-head"><h2>Standdaki imzalar</h2></div><div class="list">${evs.map(x => eventRow(x, { when: true })).join('')}</div></div>` : ''}
     ${auths.length ? `<div class="section"><div class="section-head"><h2>Fuardaki yazarları</h2></div><div class="list">${auths.map(a => authorRow(a)).join('')}</div></div>` : ''}
-    ${books.length ? `<div class="section"><div class="section-head"><h2>Öne çıkan kitaplar</h2></div><div class="hscroll">${books.map(bookTile).join('')}</div></div>` : ''}
-    <div class="section"><button class="mini-map" data-go="#/konum/${p.stand}" style="display:block;width:calc(100% - 36px)">${floorSVG({ sel: p.stand, fac: false })}<div class="cap"><div style="text-align:left"><b>Stant ${p.stand}</b><small>Krokide büyüt</small></div>${ic('chev', 'sm')}</div></button></div>`
+    ${books.length ? `<div class="section"><div class="section-head"><h2>Öne çıkan kitaplar</h2></div><div class="hscroll">${books.map(bookTile).join('')}</div></div>` : ''}`
   };
 };
 
