@@ -216,9 +216,6 @@ let cur = -1, sub = 0;
 const slideActs = () => [...document.querySelectorAll('.slide.on .act')];
 function markActs() {
   slideActs().forEach((a, k) => { a.classList.toggle('done', k < sub); a.classList.toggle('upnext', k === sub); });
-  const s = SLIDES[cur], acts = slideActs(), nx = SLIDES[cur + 1];
-  const nextLabel = sub < acts.length ? acts[sub].querySelector('b').textContent : nx ? nx.label : '';
-  $('#nowbar').innerHTML = `<span>Şimdi: <b>${s.label}</b></span>${nextLabel ? `<button data-next>Sıradaki: ${nextLabel} →</button>` : ''}`;
 }
 function next() {
   const acts = slideActs();
