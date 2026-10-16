@@ -164,20 +164,6 @@ const SLIDES = [
     notes: `<p>Telefon tema değiştirdi: aynı uygulama, Çocuk Şenliği. Bir kez indirilen uygulama Eylül’ün bütün etkinliklerinde kullanılır.</p>`
   },
   {
-    id: 'birlikte', label: 'Önerimiz', theme: 'dark', layout: 'full', plain: true,
-    html: `
-      <span class="kicker">Önerimiz</span>
-      <h1 class="title">Basit bir <em>kazan-kazan.</em></h1>
-      <div class="deal">
-        <div class="side b"><div class="who"><img src="assets/bulbi-logo.png" alt="Bulbi"><span>üstlenir</span></div>
-          <ul><li>Uygulamayı tasarlar ve geliştirir</li><li>iOS, Android ve web’de yayınlar</li><li>Fuar boyunca teknik destek verir</li></ul></div>
-        <div class="side e"><div class="who"><img src="assets/eylul-fuarcilik-logo.png" alt="Eylül Fuarcılık"><span>katkısı</span></div>
-          <ul><li>Program ve katılımcı listesini paylaşır</li><li>Fuarlarda Bulbi’ye tanıtım standı verir</li><li>Uygulamada “Bulbi ile” görünürlüğü sağlar</li></ul></div>
-      </div>
-      <p class="win">İlk adım: <b>4–13 Aralık 2026, 24. Ankara Kitap Fuarı.</b></p>`,
-    notes: `<p>Teklifi sade söyle: <b>“Uygulamayı biz yapıyoruz. Karşılığında fuarlarınızda yer almak ve kendimizi tanıtmak istiyoruz.”</b></p>`
-  },
-  {
     id: 'kapanis', label: 'Teşekkürler', theme: 'dark', phone: go('#/'),
     html: `
       <span class="kicker">Teşekkürler</span>

@@ -4,7 +4,7 @@ Bulbi’nin Eylül Fuarcılık’a sunacağı mobil fuar rehberi konsepti. Klas�
 
 | Dosya | Ne işe yarar |
 | --- | --- |
-| `index.html` | 16 adımlık sunum: uygulamayı baştan sona gezen bir tur. Sağdaki telefon gerçek, tıklanabilir. |
+| `index.html` | 15 slaytlık sunum: uygulamayı baştan sona gezen bir tur. Sağdaki telefon gerçek, tıklanabilir. |
 | `app/` | Mobil uygulama. Telefonda tek başına da açılır. |
 | `panel.html` | Eylül paneli: duyuru gönderme ve canlı yarışmayı başlatma. Sunumun 12. adımında canlı çalışır. |
 
@@ -66,8 +66,7 @@ Her slaytta sol taraf anlatır, telefon o ekrana geçer. Telefona istediğin an 
 12. **Eylül paneli:** “Yarışmayı başlat” ile canlı yarışma, “Gönder” ile duyuru.
 13. **Planım.**
 14. **Çocuk Şenliği 2027.**
-15. **Önerimiz.**
-16. **Teşekkürler.**
+15. **Teşekkürler.**
 
 ## Kapanıştaki QR
 
