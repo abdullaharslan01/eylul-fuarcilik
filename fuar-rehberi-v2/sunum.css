@@ -9,8 +9,8 @@ body { background: var(--night); font-family: var(--sans); color: var(--ink); -w
 body.light { background: #e9e1d3; }
 button { font: inherit; color: inherit; border: 0; background: none; cursor: pointer; padding: 0; }
 
-.viewport { position: fixed; inset: 0; display: grid; place-items: center; }
-.stage { position: relative; width: 1600px; height: 900px; flex: none; overflow: hidden; transform-origin: center; background: var(--paper); border-radius: 0; }
+.viewport { position: fixed; inset: 0; overflow: hidden; }
+.stage { position: absolute; left: 50%; top: 50%; width: 1600px; height: 900px; overflow: hidden; transform-origin: center; background: var(--paper); border-radius: 0; }
 
 /* ---------- Arka plan ---------- */
 .bg { position: absolute; inset: 0; transition: opacity .7s, background .7s; background: var(--paper); }
