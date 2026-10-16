@@ -218,10 +218,11 @@ let lastTab = 'home';
 const TABS = [
   { id: 'home', label: 'Ana sayfa', icon: 'home' },
   { id: 'program', label: 'Program', icon: 'cal' },
+  { id: 'ara', label: 'Ara', icon: 'search' },
   { id: 'harita', label: 'Kroki', icon: 'map' },
   { id: 'planim', label: 'Planım', icon: 'heart' }
 ];
-const TAB_OF = { etkinlik: 'program', yazar: 'home', yayinevi: 'home', ara: 'home', bildirimler: 'home', katilimcilar: 'home' };
+const TAB_OF = { etkinlik: 'program', yazar: 'ara', yayinevi: 'ara', bildirimler: 'home', katilimcilar: 'ara' };
 const isTab = name => TABS.some(t => t.id === name);
 function parse(hash) {
   const h = (hash || '').replace(/^#\/?/, '');
@@ -488,7 +489,7 @@ SCREENS.harita = () => {
   return {
     top: topTitle('Fuar krokisi', 'ATO CONGRESIUM'),
     html: `
-    <button class="search" data-go="#/ara" style="width:calc(100% - 36px);margin-bottom:12px">${ic('search', 'sm')}<span style="flex:1">${p ? esc(p.name) : 'Yayınevi ara…'}</span></button>
+    <button class="search" data-go="#/ara?tur=yayinevi" style="width:calc(100% - 36px);margin-bottom:12px">${ic('search', 'sm')}<span style="flex:1">${p ? esc(p.name) : 'Yayınevi ara…'}</span></button>
     <div class="map-wrap" id="mapwrap">
       <div class="map-tools"><button data-zoom="1" aria-label="Yakınlaş">+</button><button data-zoom="-1" aria-label="Uzaklaş">−</button></div>
       <div class="map-scroll" id="mapscroll"><div class="map-canvas" id="mapcanvas" style="width:${mapW}px">${floorSVG({ sel: stand, facSel: yer })}</div></div>
@@ -522,29 +523,44 @@ function kidsMap() {
 }
 
 /* ---------- Ara ---------- */
-SCREENS.ara = () => ({
-  top: topBack('Ara'),
-  html: `<label class="search">${ic('search', 'sm')}<input id="q" type="search" placeholder="Örn. Menteş, İletişim, Everest…" autocomplete="off" value="${esc(route.q.get('q') || '')}"></label><div id="results"></div>`,
-  after: () => { const i = $('#q'); runSearch(i.value); if (!EMBED) i.focus({ preventScroll: true }); }
-});
+let searchKind = 'tum';
+SCREENS.ara = () => {
+  searchKind = ['yazar', 'yayinevi'].includes(route.q.get('tur')) ? route.q.get('tur') : 'tum';
+  return {
+    top: topTitle('Ara', 'YAZAR · YAYINEVİ'),
+    html: `
+    <label class="search big">${ic('search', 'sm')}<input id="q" type="search" placeholder="Yazar ya da yayınevi adı yaz…" autocomplete="off" value="${esc(route.q.get('q') || '')}"></label>
+    <div class="chips" style="margin-top:12px" id="search-kinds">
+      ${[['tum', 'Tümü'], ['yazar', 'Yazarlar'], ['yayinevi', 'Yayınevleri']].map(([k, l]) => `<button class="chip ${k === searchKind ? 'on' : ''}" data-kind="${k}">${l}</button>`).join('')}
+    </div>
+    <div id="results"></div>`,
+    after: () => { const i = $('#q'); runSearch(i.value); if (!EMBED) i.focus({ preventScroll: true }); }
+  };
+};
+const authorRow = (a, q = '') => `<button class="row" data-go="#/yazar/${a.id}"><img class="avatar" src="${A}${a.photo}" alt=""><span class="txt"><strong>${hl(a.name, q)}</strong><small>${esc(pub(a.publisher).name)}</small></span>${ic('chev', 'sm')}</button>`;
+const pubTile = p => `<button class="pub-tile" data-go="#/yayinevi/${p.id}"><span class="pl">${logoHTML(p)}</span><strong>${esc(p.name)}</strong><small>Stant ${p.stand || '—'}</small></button>`;
 function runSearch(q) {
   const box = $('#results'); if (!box) return;
   q = q.trim();
+  const wantA = searchKind !== 'yayinevi', wantP = searchKind !== 'yazar';
+  const sortedPubs = [...PUBLISHERS].sort((a, b) => a.name.localeCompare(b.name, 'tr'));
   if (!q) {
-    box.innerHTML = `<div class="res-group"><h3>Yazarlar</h3><div class="hscroll">${AUTHORS.map(a => `<button class="author-card" style="width:104px" data-go="#/yazar/${a.id}"><div class="ph" style="width:104px;height:120px"><img src="${A}${a.photo}" alt="" loading="lazy"></div><strong>${esc(a.name)}</strong></button>`).join('')}</div></div>
-      <div class="res-group"><h3>Yayınevleri</h3><div class="list">${PUBLISHERS.map(p => pubRow(p)).join('')}</div></div>`;
+    box.innerHTML = `
+      ${wantA ? `<div class="res-group"><h3>Yazarlar · ${AUTHORS.length}</h3>${searchKind === 'yazar'
+        ? `<div class="list">${AUTHORS.map(a => authorRow(a)).join('')}</div>`
+        : `<div class="hscroll">${AUTHORS.map(a => `<button class="author-card" style="width:104px" data-go="#/yazar/${a.id}"><div class="ph" style="width:104px;height:120px"><img src="${A}${a.photo}" alt="" loading="lazy"></div><strong>${esc(a.name)}</strong></button>`).join('')}</div>`}</div>` : ''}
+      ${wantP ? `<div class="res-group"><h3>Yayınevleri · ${PUBLISHERS.length}</h3><div class="pub-grid" style="padding-top:0">${sortedPubs.map(pubTile).join('')}</div></div>` : ''}`;
     return;
   }
   const n = norm(q), m = s => norm(s).includes(n);
-  const as = AUTHORS.filter(a => m(a.name));
-  const ps = PUBLISHERS.filter(p => m(p.name) || m(p.stand || '') || m((p.stand || '').replace('-', '')));
-  const es = fairEvents().filter(e => m(e.title) || m(e.speakers || '') || m(e.place || ''));
-  const total = as.length + ps.length + es.length;
+  const as = wantA ? AUTHORS.filter(a => m(a.name)) : [];
+  const ps = wantP ? sortedPubs.filter(p => m(p.name) || m(p.short || '')) : [];
+  const total = as.length + ps.length;
   box.innerHTML = total ? `
-    ${as.length ? `<div class="res-group"><h3>Yazarlar</h3><div class="list">${as.map(a => `<button class="row" data-go="#/yazar/${a.id}"><img class="avatar" src="${A}${a.photo}" alt=""><span class="txt"><strong>${hl(a.name, q)}</strong><small>${esc(pub(a.publisher).name)} · ${pub(a.publisher).stand}</small></span>${ic('chev', 'sm')}</button>`).join('')}</div></div>` : ''}
+    <p class="muted" style="margin:14px 22px 0;font-size:12.5px;font-weight:700">${total} sonuç</p>
+    ${as.length ? `<div class="res-group"><h3>Yazarlar</h3><div class="list">${as.map(a => authorRow(a, q)).join('')}</div></div>` : ''}
     ${ps.length ? `<div class="res-group"><h3>Yayınevleri</h3><div class="list">${ps.map(p => pubRow(p, q)).join('')}</div></div>` : ''}
-    ${es.length ? `<div class="res-group"><h3>Etkinlikler</h3><div class="list">${es.map(eventRow).join('')}</div></div>` : ''}
-  ` : `<div class="empty" style="margin-top:20px"><strong>“${esc(q)}” bulunamadı</strong><p>Yazımı kontrol edebilirsin.</p></div>`;
+  ` : `<div class="empty" style="margin-top:20px"><strong>“${esc(q)}” bulunamadı</strong><p>Yazımı kontrol edebilir ya da tüm listeye bakabilirsin.</p></div>`;
 }
 function pubRow(p, q = '') {
   return `<button class="row" data-go="#/yayinevi/${p.id}"><span class="logo-tile">${logoHTML(p)}</span><span class="txt"><strong>${hl(p.name, q)}</strong><small>Stant ${hl(p.stand, q)}</small></span>${ic('chev', 'sm')}</button>`;
@@ -603,12 +619,17 @@ function push(n) {
 
 /* ---------- Etkileşimler ---------- */
 document.addEventListener('click', e => {
-  const el = e.target.closest('[data-go],[data-back],[data-save],[data-sheet],[data-fair],[data-zoom],[data-stand],#push,#backdrop');
+  const el = e.target.closest('[data-go],[data-back],[data-save],[data-kind],[data-sheet],[data-fair],[data-zoom],[data-stand],#push,#backdrop');
   if (!el) return;
   const d = el.dataset;
   if (el.id === 'push') { el.classList.remove('show'); return go(d.link); }
   if (el.id === 'backdrop') return closeSheet();
   if (d.save) { e.stopPropagation(); const on = toggle('saved', d.save); toast(on ? 'Planına eklendi' : 'Plandan çıkarıldı', on ? 'bookmark' : 'x'); return render('none'); }
+  if (d.kind) {
+    searchKind = d.kind;
+    document.querySelectorAll('#search-kinds .chip').forEach(c => c.classList.toggle('on', c.dataset.kind === d.kind));
+    return runSearch($('#q').value);
+  }
   if (d.sheet) return openSheet(SHEETS[d.sheet]());
   if (d.fair) { S.fair = d.fair; save(); closeSheet(); return go('#/'); }
   if (d.zoom) {

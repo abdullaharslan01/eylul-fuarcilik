@@ -628,7 +628,7 @@ mark { background: #ffe3b0; color: inherit; border-radius: 3px; padding: 0 1px; 
 .quick.three { grid-template-columns: repeat(3, 1fr); }
 .quick.three .q-ico { width: 64px; height: 64px; }
 .fac-grid.three { grid-template-columns: repeat(3, 1fr); }
-.tabbar { grid-template-columns: repeat(4, 1fr); }
+.tabbar { grid-template-columns: repeat(5, 1fr); }
 
 /* Logolu kroki */
 .floor .logo-pin { cursor: pointer; }
@@ -680,3 +680,7 @@ mark { background: #ffe3b0; color: inherit; border-radius: 3px; padding: 0 1px; 
 .floor .logo-pin rect { fill: #fff; stroke: #e5dac8; stroke-width: 1.2; filter: drop-shadow(0 3px 4px rgba(40, 28, 10, .16)); }
 .floor .logo-pin.on rect { stroke: var(--brand); stroke-width: 4; }
 .floor .logo-pin:hover rect { stroke: var(--brand); }
+
+/* Arama sekmesi */
+.search.big { height: 54px; box-shadow: var(--shadow-2), inset 0 0 0 1px var(--line-2); }
+.search.big svg { color: var(--brand-deep); }

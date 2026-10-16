@@ -32,7 +32,8 @@ Sunum: http://localhost:4174 · Uygulama tek başına: http://localhost:4174/app
 ## Uygulamada ne var
 
 - **Ana sayfa:** yazar/yayınevi araması, kendi kendine dönen banner, Program · Yazarlar · Yayınevleri · Kroki kısayolları ve sağa doğru kayan “Bugün imzada” şeridi.
-- **Yazarlar / Yayınevleri:** tüm yazarlar ve 27 yayınevi tek ekranda.
+- **Ara (alt menü):** yazar ve yayınevi araması; Tümü / Yazarlar / Yayınevleri filtreleri. Boşken tüm yazarları ve 27 yayınevini listeler.
+- **Yazarlar / Yayınevleri:** ana sayfadaki kısayollardan açılan tam liste.
 - **Program:** gün ve türe göre imzalar ve söyleşiler. “Planıma ekle” ve “Krokide göster”.
 - **Planım:** kaydedilen etkinlikler.
 - **Kroki:** stant numarası yerine yayınevi logoları (logosu olmayanlar renkli adlarıyla). Logoya dokun ya da yayınevi adını ara. WC, kafe ve danışma noktaları.
