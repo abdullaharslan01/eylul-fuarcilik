@@ -143,7 +143,7 @@ const SLIDES = [
     id: 'duyuru', label: 'Eylül paneli', theme: 'light', layout: 'panel', phone: go('#/'), cls: 'panel-slide',
     html: `
       <div class="stepbar"><span class="sb-n">Adım 10<em>/ ${TOUR_TOTAL}</em></span><span class="sb-name">Eylül paneli</span><span class="sb-track"><b style="width:${10 / TOUR_TOTAL * 100}%"></b></span></div>
-      <h1 class="title" style="font-size:52px;margin:14px 0 10px">Eylül yönetir, <em>okurun telefonuna düşer.</em></h1>
+      <h1 class="title" style="font-size:46px;margin:14px 0 10px">Eylül yönetir, <em>okurun telefonuna düşer.</em></h1>
       <p class="lead" style="font-size:20px;max-width:900px">Duyuru gönderir, canlı yarışmayı başlatır. Panelde <b>“Yarışmayı başlat”</b>a basın.</p>`,
     notes: `<p>Önce <b>“Yarışmayı başlat”</b>: telefona bildirim düşer, 3-2-1 sayacından sonra soru gelir; süre bitince doğru cevap ve oyuncuların yüzdeleri görünür. Herkes aynı anda oynadığı için adil.</p><p>Sonra bir duyuru şablonu seçip <b>“Gönder”</b>. Mesaj: <b>“Instagram’a koyup görülmesini ummak yerine, fuardaki herkesin telefonuna doğrudan.”</b></p>`
   },
@@ -168,7 +168,7 @@ const SLIDES = [
     html: `
       <span class="kicker">Teşekkürler</span>
       <h1 class="title">Fuar artık<br><em>cebinizde.</em></h1>
-      <div class="qr-box" id="qr-box"></div>`,
+      <p class="lead">Sorularınızı alalım. Uygulamayı sağ üstteki “Uygulamayı aç” ile kendi ekranınızda da deneyebilirsiniz.</p>`,
     notes: `<p>Sorulara geçerken telefonu bırak; istedikleri ekranı birlikte açabilirsiniz.</p>`
   }
 ];
@@ -178,26 +178,19 @@ const stage = $('#stage'), slidesEl = $('#slides'), phone = $('#phone'), device 
 slidesEl.innerHTML = SLIDES.map((s, i) => `<section class="slide ${s.layout === 'full' ? 'wide' : ''} ${s.cls || ''}" data-i="${i}"><div class="col">${s.html}</div></section>`).join('');
 $('#dots').innerHTML = SLIDES.map((s, i) => `<button data-dot="${i}" aria-label="${i + 1}. ${s.label}" title="${s.label}"></button>`).join('');
 
-// Kapanış QR: sunum herkese açık bir adresteyse o adrese, değilse ?url= ile verilen adrese gider.
-(function closingQR() {
-  const given = new URLSearchParams(location.search).get('url');
-  const local = /^(localhost|127\.|\[::1\]|0\.0\.0\.0)/.test(location.hostname) || location.protocol === 'file:';
-  const target = given || (!local ? new URL('app/', location.href).href : null);
-  const box = $('#qr-box');
-  if (target) {
-    const q = qrcode(0, 'M'); q.addData(target); q.make();
-    box.innerHTML = `<div class="qr">${q.createSvgTag({ cellSize: 6, margin: 0, scalable: true })}</div><p><b>Şimdi telefonunuzda deneyin.</b>Kamerayı QR’a tutun, uygulama tarayıcıda açılır. Kurulum gerekmez.</p>`;
-  } else {
-    box.innerHTML = `<p style="max-width:600px"><b>Sorularınızı alalım.</b>Uygulama sağdaki telefonda çalışıyor; dilediğiniz ekranı birlikte açabiliriz.</p>`;
-  }
-})();
-
 /* ---------- Ölçek ---------- */
 function fit() {
   const s = Math.min(innerWidth / 1600, innerHeight / 900);
   stage.style.transform = `translate(-50%, -50%) scale(${s})`;
 }
-addEventListener('resize', fit); fit();
+addEventListener('resize', fit); addEventListener('orientationchange', () => setTimeout(fit, 200)); fit();
+// Dokunmatik ekranlar: sol taraftaki anlatım alanında yatay kaydırma slayt değiştirir.
+let swipe = null;
+slidesEl.addEventListener('touchstart', e => { const t = e.touches[0]; swipe = { x: t.clientX, y: t.clientY }; }, { passive: true });
+slidesEl.addEventListener('touchend', e => {
+  if (!swipe) return; const t = e.changedTouches[0]; const dx = t.clientX - swipe.x, dy = t.clientY - swipe.y; swipe = null;
+  if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) show(cur + (dx < 0 ? 1 : -1));
+}, { passive: true });
 
 /* ---------- Telefonla konuşma ---------- */
 let phoneReady = false; const queue = [];
@@ -253,7 +246,6 @@ $('#next').onclick = () => show(cur + 1);
 $('#demo-push').onclick = () => { sendPhone({ type: 'push' }); const b = $('#demo-push'); b.classList.remove('sent'); void b.offsetWidth; b.classList.add('sent'); };
 $('#prev').onclick = () => show(cur - 1);
 $('#notes-close').onclick = () => { $('#notes').hidden = true; };
-$('#help-chip').onclick = () => { $('#notes').hidden = false; };
 
 const start = parseInt(location.hash.slice(1), 10);
 show(Number.isFinite(start) ? start - 1 : 0);

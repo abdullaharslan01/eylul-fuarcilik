@@ -2,7 +2,8 @@
 // Yazar, kitap ve yayınevi adları gerçek; 2026 imza saatleri ve stant numaraları
 // sunum için hazırlanmış örneklerdir.
 
-const A = '../assets/';
+// Görsel yolları sayfanın açıldığı adresten bağımsız olsun (/app ya da /app/).
+const A = new URL('../assets/', document.currentScript ? document.currentScript.src : location.href).href;
 
 const FAIRS = {
   ankara: {
