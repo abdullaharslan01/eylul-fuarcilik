@@ -39,7 +39,7 @@ const SLIDES = [
       <h1 class="title">Kim, ne zaman,<br><em>nerede.</em></h1>
       <p class="lead">İmzalar ve söyleşiler gün gün, saat saat. Okur bir imzaya dokunur; yazarı, saati ve standı görür.</p>
       <ul class="points"><li>Gün ve türe göre program</li><li>Şu an süren etkinlik ve “şimdi” çizgisi</li><li>Tek dokunuşla “Krokide göster”</li></ul>
-      <div class="try"><span>Canlı dene</span><button data-msg='{"type":"go","hash":"#/etkinlik/e7"}'><i>▶</i>Bir imzayı aç</button><button class="ghost" data-msg='{"type":"go","hash":"#/program?tur=soylesi"}'><i>♪</i>Söyleşiler</button></div>`,
+      <div class="try"><span>Canlı dene</span><button data-msg='{"type":"go","hash":"#/etkinlik/e7"}'><i>▶</i>Bir imzayı aç</button><button class="ghost" data-msg='{"type":"go","hash":"#/katilimcilar?tab=yazar"}'><i>✎</i>Tüm yazarlar</button></div>`,
     notes: `<p>Kırmızı “şimdi” çizgisini göster. Murat Menteş imzasına dokun, ardından “Krokide göster”e bas: Alfa’nın logosu krokide seçili gelir.</p>`
   },
   {
@@ -48,8 +48,8 @@ const SLIDES = [
       <span class="kicker"><span class="num">02</span>Kroki</span>
       <h1 class="title">Stant numarası değil,<br><em>logo.</em></h1>
       <p class="lead">Ziyaretçi “A-504”ü bilmez, Alfa’yı bilir. Krokide yayınevlerinin logoları görünür; logoya dokunmak ya da adını aramak yeter.</p>
-      <ul class="points"><li>Yayınevi logolarıyla kroki</li><li>Yayınevi adıyla arama</li><li>WC, kafe ve danışma noktaları</li></ul>
-      <div class="try"><span>Canlı dene</span><button data-msg='{"type":"go","hash":"#/harita?stand=A-410"}'><i>▶</i>Everest nerede?</button><button class="ghost" data-msg='{"type":"go","hash":"#/harita?yer=wc"}'><i>i</i>WC nerede?</button></div>`,
+      <ul class="points"><li>Yayınevi logolarıyla kroki</li><li>Yazar ve yayınevi araması</li><li>Tüm yayınevleri tek listede</li></ul>
+      <div class="try"><span>Canlı dene</span><button data-msg='{"type":"go","hash":"#/harita?stand=A-410"}'><i>▶</i>Everest nerede?</button><button class="ghost" data-msg='{"type":"go","hash":"#/ara?q=iletişim"}'><i>⌕</i>“İletişim” ara</button></div>`,
     notes: `<p>Vurgula: <b>“Krokiyi sıfırdan çizmedik, sizin 23. fuar krokinizden yaptık. Okur numara değil logo arar.”</b></p><p>Telefonda bir logoya dokun: yayınevinin kartı açılır.</p>`
   },
   {

@@ -635,3 +635,48 @@ mark { background: #ffe3b0; color: inherit; border-radius: 3px; padding: 0 1px; 
 .floor .logo-pin rect { fill: #fff; stroke: #e2d7c4; stroke-width: 1.5; filter: drop-shadow(0 2px 3px rgba(40, 28, 10, .14)); }
 .floor .logo-pin.on rect { stroke: var(--brand); stroke-width: 4; }
 .floor .stand.has { fill: #fde9c8; stroke: #f0c27c; }
+
+/* Dönen banner */
+.banner { position: relative; margin: 16px 18px 0; border-radius: 24px; overflow: hidden; box-shadow: 0 14px 30px rgba(21, 23, 28, .18); }
+.banner-track { display: flex; transition: transform .7s cubic-bezier(.2, .8, .2, 1); }
+.banner-slide { position: relative; flex: 0 0 100%; height: 200px; display: block; color: #fff; text-align: left; overflow: hidden; }
+.banner-slide img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.banner-slide::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(15, 16, 20, .05) 20%, rgba(15, 16, 20, .85) 100%); }
+.banner-txt { position: absolute; left: 18px; right: 18px; bottom: 26px; z-index: 1; display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
+.banner-txt strong { font-family: var(--serif); font-size: 26px; font-weight: 600; line-height: 1.05; letter-spacing: -.01em; }
+.banner-txt small { font-size: 13px; color: rgba(255, 255, 255, .82); }
+.banner-dots { position: absolute; left: 0; right: 0; bottom: 10px; display: flex; justify-content: center; gap: 5px; z-index: 2; pointer-events: none; }
+.banner-dots i { width: 6px; height: 6px; border-radius: 3px; background: rgba(255, 255, 255, .45); transition: width .3s, background .3s; }
+.banner-dots i.on { width: 18px; background: #fff; }
+
+/* Kendi kendine kayan imza şeridi */
+.marquee { overflow: hidden; padding: 2px 0 8px; -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
+.marquee-track { display: flex; gap: 12px; width: max-content; padding-left: 18px; animation: marqueeRight 28s linear infinite; }
+.marquee:hover .marquee-track, .marquee:active .marquee-track { animation-play-state: paused; }
+@keyframes marqueeRight { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+
+/* Yazı logolu yayınevleri */
+.wordmark { font-family: var(--sans); font-weight: 800; letter-spacing: .04em; font-size: 12px; line-height: 1; text-align: center; white-space: nowrap; }
+.big-logo .wordmark { font-size: 22px; }
+.floor .wm { font-family: var(--sans); font-weight: 800; letter-spacing: .03em; text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+
+/* Yazarlar / yayınevleri */
+.people-grid, .pub-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 16px 18px 0; }
+.person { background: var(--card); border-radius: 20px; box-shadow: var(--shadow-1); padding: 10px 10px 14px; text-align: left; }
+.person img { width: 100%; aspect-ratio: 1 / 1.05; object-fit: cover; border-radius: 14px; }
+.person strong { display: block; font-size: 14.5px; margin-top: 10px; line-height: 1.2; }
+.person small { display: block; font-size: 12px; color: var(--brand-deep); font-weight: 700; margin-top: 3px; }
+.pub-tile { background: var(--card); border-radius: 18px; box-shadow: var(--shadow-1); padding: 12px; text-align: left; }
+.pub-tile .pl { height: 58px; border-radius: 12px; background: var(--paper); display: grid; place-items: center; padding: 8px 10px; }
+.pub-tile .pl img { max-height: 42px; max-width: 100%; object-fit: contain; }
+.pub-tile strong { display: block; font-size: 13.5px; margin-top: 9px; line-height: 1.2; }
+.pub-tile small { display: block; font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+
+/* Daha sakin, daha temiz kroki */
+.map-wrap { background: #efe8dc; }
+.floor .stand { fill: #f8f4ec; stroke: #e1d7c6; }
+.floor .stand.has { fill: #fbe6c2; stroke: #efc884; }
+.floor .stand.sel { fill: var(--brand); }
+.floor .logo-pin rect { fill: #fff; stroke: #e5dac8; stroke-width: 1.2; filter: drop-shadow(0 3px 4px rgba(40, 28, 10, .16)); }
+.floor .logo-pin.on rect { stroke: var(--brand); stroke-width: 4; }
+.floor .logo-pin:hover rect { stroke: var(--brand); }

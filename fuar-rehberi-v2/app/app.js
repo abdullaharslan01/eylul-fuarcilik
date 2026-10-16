@@ -154,6 +154,29 @@ const FACILITIES = [
   { id: 'ilkyardim', label: '+', x: 178, y: 560, icon: 'plus', name: 'İlk yardım' },
   { id: 'cocukpt', label: '★', x: 430, y: 612, icon: 'shield', name: 'Kayıp çocuk noktası' }
 ];
+const BADGE = { w: 78, h: 34 };
+(function placeExtraPublishers() {
+  const boxes = Object.keys(STAND_OWNERS).map(id => badgeBox(STANDS[id]));
+  const free = Object.values(STANDS).filter(st => st.id.startsWith('A-') && !STAND_OWNERS[st.id]);
+  // Satırları dolaşarak, logoları birbirine değmeyecek şekilde yerleştir.
+  const order = free.sort((a, b) => ((a.x * 7 + a.y * 13) % 97) - ((b.x * 7 + b.y * 13) % 97));
+  PUBLISHERS.filter(p => !p.stand).forEach(p => {
+    const st = order.find(c => !STAND_OWNERS[c.id] && boxes.every(b => !overlap(b, badgeBox(c), 10)));
+    if (!st) return;
+    p.stand = st.id; STAND_OWNERS[st.id] = p.id; boxes.push(badgeBox(st));
+  });
+  function overlap(a, b, m) { return a.x < b.x + b.w + m && b.x < a.x + a.w + m && a.y < b.y + b.h + m && b.y < a.y + a.h + m; }
+})();
+function badgeBox(st) { return { x: st.x + st.w / 2 - BADGE.w / 2, y: st.y + st.h / 2 - BADGE.h / 2, w: BADGE.w, h: BADGE.h }; }
+const logoHTML = p => p.logo ? `<img src="${A}${p.logo}" alt="${esc(p.name)}">` : `<span class="wordmark" style="color:${p.color}">${esc(p.short)}</span>`;
+// Krokiyi bir standın, alanın ya da hizmet noktasının üstüne ortalamak için koordinat.
+function targetPoint(id) {
+  if (ZONES[id]) return { end: ZONES[id].door };
+  const f = FACILITIES.find(f => f.id === id);
+  if (f) return { end: { x: f.x, y: f.y } };
+  const st = STANDS[id]; if (!st) return null;
+  return { end: { x: st.x + st.w / 2, y: st.y + st.h / 2 } };
+}
 function floorSVG(o = {}) {
   const sel = o.sel || null;
   let s = `<svg class="floor" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">`;
@@ -173,9 +196,11 @@ function floorSVG(o = {}) {
   // Yayınevi logoları: ziyaretçi stant numarasını değil yayınevini tanır.
   Object.entries(STAND_OWNERS).forEach(([id, pid]) => {
     const st = STANDS[id], p = pub(pid); if (!st || !p) return;
-    const w = 84, h = 40, x = st.x + st.w / 2 - w / 2, y = st.y + st.h / 2 - h / 2;
-    const on = sel === id;
-    s += `<g class="logo-pin${on ? ' on' : ''}" data-stand="${id}"><rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${w}" height="${h}" rx="10"/><image href="${A}${p.logo}" x="${(x + 7).toFixed(1)}" y="${(y + 5).toFixed(1)}" width="${w - 14}" height="${h - 10}" preserveAspectRatio="xMidYMid meet"/></g>`;
+    const { x, y, w, h } = badgeBox(st);
+    const inner = p.logo
+      ? `<image href="${A}${p.logo}" x="${(x + 6).toFixed(1)}" y="${(y + 4).toFixed(1)}" width="${w - 12}" height="${h - 8}" preserveAspectRatio="xMidYMid meet"/>`
+      : `<text class="wm" x="${(x + w / 2).toFixed(1)}" y="${(y + h / 2 + .5).toFixed(1)}" fill="${p.color}" style="font-size:${p.short.length > 7 ? 9.5 : 11.5}px">${esc(p.short)}</text>`;
+    s += `<g class="logo-pin${sel === id ? ' on' : ''}" data-stand="${id}"><rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${w}" height="${h}" rx="9"/>${inner}</g>`;
   });
   return s + '</svg>';
 }
@@ -196,7 +221,7 @@ const TABS = [
   { id: 'harita', label: 'Kroki', icon: 'map' },
   { id: 'planim', label: 'Planım', icon: 'heart' }
 ];
-const TAB_OF = { etkinlik: 'program', yazar: 'program', yayinevi: 'harita', ara: 'home', bildirimler: 'home' };
+const TAB_OF = { etkinlik: 'program', yazar: 'home', yayinevi: 'home', ara: 'home', bildirimler: 'home', katilimcilar: 'home' };
 const isTab = name => TABS.some(t => t.id === name);
 function parse(hash) {
   const h = (hash || '').replace(/^#\/?/, '');
@@ -221,6 +246,7 @@ function back() {
 /* ---------- Render ---------- */
 const SCREENS = {};
 function render(dir = 'fade') {
+  clearInterval(bannerTimer);
   const app = $('#app');
   app.classList.toggle('kids', kids());
   const screen = SCREENS[route.name] || SCREENS.home;
@@ -251,46 +277,67 @@ function topTitle(title, eyebrow) {
 }
 
 /* ---------- Ana sayfa ---------- */
+let bannerTimer = null;
 SCREENS.home = () => {
-  const F = fair();
   const day = kids() ? 1 : DEMO_NOW.day;
   const today = fairEvents().filter(e => e.day === day).sort((a, b) => tmin(a.start) - tmin(b.start));
-  const next = kids() ? today[0] : (today.find(e => evStatus(e) === 'live' && e.kind === 'imza') || today.find(e => evStatus(e) === 'soon'));
-  const nextImg = next && evImg(next);
+  const now = !kids() && (today.find(e => evStatus(e) === 'live' && e.kind === 'imza') || today.find(e => evStatus(e) === 'soon'));
+  const slides = kids() ? [
+    { img: 'children-workshop.jpg', tag: 'ÇOCUK ŞENLİĞİ', title: 'Atölyeler, masallar, oyunlar', sub: 'Nisan 2027 · aileler için', link: '#/program' },
+    { img: 'eylul-galeri-2.jpg', tag: 'KİTAP KÖŞESİ', title: 'Resimli kitaplarla keşif', sub: 'Her gün 11.00’de', link: '#/program' }
+  ] : [
+    { img: 'ankara-fuar-arsiv.jpg', tag: '24. ANKARA KİTAP FUARI', title: 'Kitap fuarı başladı', sub: '4–13 Aralık · ATO Congresium', link: '#/program' },
+    ...(now ? [{ img: author(now.author).photo, tag: (evStatus(now) === 'live' ? 'ŞİMDİ İMZADA' : 'SIRADAKİ İMZA') + ' · ' + now.start, title: now.title, sub: evPlace(now), link: '#/etkinlik/' + now.id, pos: 'center 25%' }] : []),
+    { img: 'eylul-galeri-2.jpg', tag: 'KROKİ', title: `${PUBLISHERS.length} yayınevi, logolarıyla`, sub: 'Aradığın standı krokide bul', link: '#/harita' },
+    { img: 'children-workshop.jpg', tag: 'ÇOCUKLAR İÇİN', title: 'Her gün masal ve atölye', sub: 'Çocuk Atölyesi · ücretsiz', link: '#/program?tur=cocuk' }
+  ];
+  const signers = today.filter(e => e.kind === 'imza');
+  const card = e => {
+    const st = evStatus(e);
+    return `<button class="author-card" data-go="#/etkinlik/${e.id}">
+      <div class="ph"><img src="${evImg(e)}" alt="" loading="lazy"><span class="t ${st === 'live' ? 'live' : ''}">${st === 'live' ? '● ŞİMDİ' : st === 'past' ? 'Bitti' : e.start}</span></div>
+      <strong>${esc(e.title)}</strong><small>${esc(pub(e.publisher).name)}</small>
+    </button>`;
+  };
   return { html: `
     <div class="greet">
       <h1>${kids() ? 'Bugün ne <em>keşfedelim?</em>' : 'Bugün fuarda<br><em>neler</em> var?'}</h1>
     </div>
+    <button class="search" data-go="#/ara" style="width:calc(100% - 36px)">${ic('search', 'sm')}<span style="flex:1">${kids() ? 'Etkinlik ara…' : 'Yazar ya da yayınevi ara…'}</span></button>
 
-    ${next ? `<button class="now-card" data-go="#/etkinlik/${next.id}" style="display:block;width:calc(100% - 36px);text-align:left">
-      <div class="bg" style="background-image:url('${nextImg || A + 'children-workshop.jpg'}')"></div>
-      <div class="inner">
-        <div class="top"><span class="tag dark">${ic(next.kind === 'imza' ? 'pen' : 'mic', 'xs')} ${KIND[next.kind].toLocaleUpperCase('tr-TR')} · ${next.start}</span><span class="timer">${kids() ? '' : untilText(next)}</span></div>
-        <h3>${esc(next.title)}</h3>
-        <div class="meta">${ic('pin', 'xs')} ${esc(evPlace(next))}</div>
-      </div>
-    </button>` : ''}
+    <div class="banner" id="banner">
+      <div class="banner-track" id="banner-track">${slides.map(b => `<button class="banner-slide" data-go="${b.link}">
+        <img src="${A}${b.img}" alt="" style="object-position:${b.pos || 'center'}">
+        <span class="banner-txt"><span class="tag dark">${esc(b.tag)}</span><strong>${esc(b.title)}</strong><small>${esc(b.sub)}</small></span>
+      </button>`).join('')}</div>
+      <div class="banner-dots">${slides.map((_, i) => `<i class="${i ? '' : 'on'}"></i>`).join('')}</div>
+    </div>
 
-    <div class="quick three">
+    <div class="quick">
       <button data-go="#/program"><span class="q-ico brand">${ic('cal')}</span>Program</button>
+      ${kids() ? '' : `<button data-go="#/katilimcilar?tab=yazar"><span class="q-ico">${ic('pen')}</span>Yazarlar</button>
+      <button data-go="#/katilimcilar?tab=yayinevi"><span class="q-ico">${ic('book')}</span>Yayınevleri</button>`}
       <button data-go="#/harita"><span class="q-ico">${ic('map')}</span>Kroki</button>
-      <button data-go="#/bildirimler"><span class="q-ico">${ic('bell')}</span>Duyurular</button>
+      ${kids() ? `<button data-go="#/bildirimler"><span class="q-ico">${ic('bell')}</span>Duyurular</button>` : ''}
     </div>
 
     <div class="section">
       <div class="section-head"><h2>${kids() ? 'Bugünün etkinlikleri' : 'Bugün imzada'}</h2><button class="more" data-go="#/program">Tümü →</button></div>
-      ${kids() ? `<div class="list">${today.map(e => eventRow(e)).join('')}</div>` : `<div class="hscroll">
-        ${today.filter(e => e.kind === 'imza').map(e => {
-          const st = evStatus(e);
-          return `<button class="author-card" data-go="#/etkinlik/${e.id}">
-            <div class="ph"><img src="${evImg(e)}" alt="" loading="lazy"><span class="t ${st === 'live' ? 'live' : ''}">${st === 'live' ? '● ŞİMDİ' : st === 'past' ? 'Bitti' : e.start}</span></div>
-            <strong>${esc(e.title)}</strong><small>${esc(pub(e.publisher).name)} · ${pub(e.publisher).stand}</small>
-          </button>`;
-        }).join('')}
-      </div>`}
+      ${kids() ? `<div class="list">${today.map(e => eventRow(e)).join('')}</div>`
+        : `<div class="marquee"><div class="marquee-track">${signers.map(card).join('')}${signers.map(card).join('')}</div></div>`}
     </div>
-  ` };
+  `, after: startBanner };
 };
+function startBanner() {
+  const track = $('#banner-track'); if (!track) return;
+  const n = track.children.length; let i = 0;
+  bannerTimer = setInterval(() => {
+    if (!document.body.contains(track)) return clearInterval(bannerTimer);
+    i = (i + 1) % n;
+    track.style.transform = `translateX(-${i * 100}%)`;
+    document.querySelectorAll('.banner-dots i').forEach((d, k) => d.classList.toggle('on', k === i));
+  }, 3500);
+}
 function eventRow(e) {
   const d = fair().days.find(x => x.n === e.day);
   return `<button class="row" data-go="#/etkinlik/${e.id}">
@@ -399,12 +446,31 @@ SCREENS.yayinevi = id => {
     top: topBack('Yayınevi'),
     html: `
     <div class="profile-head">
-      <div class="big-logo"><img src="${A}${p.logo}" alt="${esc(p.name)}"></div>
+      <div class="big-logo">${logoHTML(p)}</div>
       <h1>${esc(p.name)}</h1><p>Stant ${p.stand}</p>
     </div>
-    <p class="prose" style="margin-top:12px;text-align:center">${esc(p.about)}</p>
+    <p class="prose" style="margin-top:12px;text-align:center">${esc(p.about || p.name + ', fuarda kendi standında okurlarını bekliyor.')}</p>
     <div class="section"><button class="mini-map" data-go="#/harita?stand=${p.stand}" style="display:block;width:calc(100% - 36px)">${floorSVG({ sel: p.stand, fac: false })}<div class="cap"><div style="text-align:left"><b>Krokide gör</b><small>${esc(p.name)} standı</small></div>${ic('chev', 'sm')}</div></button></div>
     ${evs.length ? `<div class="section"><div class="section-head"><h2>Standdaki imzalar</h2></div><div class="list">${evs.map(eventRow).join('')}</div></div>` : ''}`
+  };
+};
+
+/* ---------- Yazarlar ve yayınevleri ---------- */
+SCREENS.katilimcilar = () => {
+  const tab = route.q.get('tab') === 'yayinevi' ? 'yayinevi' : 'yazar';
+  return {
+    top: topBack(tab === 'yazar' ? 'Yazarlar' : 'Yayınevleri', fair().short),
+    html: `
+    <div class="seg">
+      <button class="${tab === 'yazar' ? 'on' : ''}" data-go="#/katilimcilar?tab=yazar">Yazarlar <span class="c">${AUTHORS.length}</span></button>
+      <button class="${tab === 'yayinevi' ? 'on' : ''}" data-go="#/katilimcilar?tab=yayinevi">Yayınevleri <span class="c">${PUBLISHERS.length}</span></button>
+    </div>
+    ${tab === 'yazar' ? `<div class="people-grid">${AUTHORS.map(a => {
+      const next = EVENTS.filter(e => e.author === a.id && e.day >= DEMO_NOW.day).sort((x, y) => x.day - y.day || tmin(x.start) - tmin(y.start))[0];
+      const d = next && FAIRS.ankara.days.find(x => x.n === next.day);
+      return `<button class="person" data-go="#/yazar/${a.id}"><img src="${A}${a.photo}" alt="" loading="lazy"><strong>${esc(a.name)}</strong><small>${next ? `İmza · ${d.label} ${next.start}` : esc(pub(a.publisher).name)}</small></button>`;
+    }).join('')}</div>`
+    : `<div class="pub-grid">${[...PUBLISHERS].sort((a, b) => a.name.localeCompare(b.name, 'tr')).map(p => `<button class="pub-tile" data-go="#/yayinevi/${p.id}"><span class="pl">${logoHTML(p)}</span><strong>${esc(p.name)}</strong><small>Stant ${p.stand || '—'}</small></button>`).join('')}</div>`}`
   };
 };
 
@@ -414,7 +480,7 @@ SCREENS.harita = () => {
   const stand = route.q.get('stand'), yer = route.q.get('yer');
   const p = stand && STAND_OWNERS[stand] && pub(STAND_OWNERS[stand]);
   const f = yer && FACILITIES.find(x => x.id === yer);
-  const card = p ? `<div class="card map-sheet"><span class="logo-tile" style="width:64px;height:48px">${`<img src="${A}${p.logo}" alt="">`}</span>
+  const card = p ? `<div class="card map-sheet"><span class="logo-tile" style="width:64px;height:48px">${logoHTML(p)}</span>
       <div style="flex:1;min-width:0"><strong style="display:block">${esc(p.name)}</strong><small class="muted">Stant ${stand}</small></div>
       <button class="btn sm dark" data-go="#/yayinevi/${p.id}">Profil</button></div>`
     : f ? `<div class="card map-sheet"><span class="ico-tile">${ic(f.icon, 'sm')}</span><div style="flex:1"><strong style="display:block">${esc(f.name)}</strong><small class="muted">Krokide turuncu ile gösterildi</small></div></div>` : '';
@@ -458,7 +524,7 @@ function kidsMap() {
 /* ---------- Ara ---------- */
 SCREENS.ara = () => ({
   top: topBack('Ara'),
-  html: `<label class="search">${ic('search', 'sm')}<input id="q" type="search" placeholder="Örn. Menteş, Everest…" autocomplete="off" value="${esc(route.q.get('q') || '')}"></label><div id="results"></div>`,
+  html: `<label class="search">${ic('search', 'sm')}<input id="q" type="search" placeholder="Örn. Menteş, İletişim, Everest…" autocomplete="off" value="${esc(route.q.get('q') || '')}"></label><div id="results"></div>`,
   after: () => { const i = $('#q'); runSearch(i.value); if (!EMBED) i.focus({ preventScroll: true }); }
 });
 function runSearch(q) {
@@ -471,7 +537,7 @@ function runSearch(q) {
   }
   const n = norm(q), m = s => norm(s).includes(n);
   const as = AUTHORS.filter(a => m(a.name));
-  const ps = PUBLISHERS.filter(p => m(p.name) || m(p.stand) || m(p.stand.replace('-', '')));
+  const ps = PUBLISHERS.filter(p => m(p.name) || m(p.stand || '') || m((p.stand || '').replace('-', '')));
   const es = fairEvents().filter(e => m(e.title) || m(e.speakers || '') || m(e.place || ''));
   const total = as.length + ps.length + es.length;
   box.innerHTML = total ? `
@@ -481,7 +547,7 @@ function runSearch(q) {
   ` : `<div class="empty" style="margin-top:20px"><strong>“${esc(q)}” bulunamadı</strong><p>Yazımı kontrol edebilirsin.</p></div>`;
 }
 function pubRow(p, q = '') {
-  return `<button class="row" data-go="#/yayinevi/${p.id}"><span class="logo-tile"><img src="${A}${p.logo}" alt=""></span><span class="txt"><strong>${hl(p.name, q)}</strong><small>Stant ${hl(p.stand, q)}</small></span>${ic('chev', 'sm')}</button>`;
+  return `<button class="row" data-go="#/yayinevi/${p.id}"><span class="logo-tile">${logoHTML(p)}</span><span class="txt"><strong>${hl(p.name, q)}</strong><small>Stant ${hl(p.stand, q)}</small></span>${ic('chev', 'sm')}</button>`;
 }
 
 /* ---------- Planım ---------- */

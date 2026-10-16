@@ -48,7 +48,26 @@ const PUBLISHERS = [
   { id: 'can', name: 'Can Çocuk', stand: 'A-104', logo: 'publisher-can.jpg', about: 'Çocuk ve gençlik kitaplarıyla nesillere ulaşan yayınevi.' },
   { id: 'altin', name: 'Altın Kitaplar', stand: 'A-707', logo: 'publisher-altin.jpg', about: 'Edebiyat ve çocuk kitapları alanında köklü yayınevi.' },
   { id: 'otuken', name: 'Ötüken Neşriyat', stand: 'A-811', logo: 'publisher-otuken.webp', about: 'Türk edebiyatı, tarih ve düşünce alanlarında yayınlar sunuyor.' },
-  { id: 'timas', name: 'Timaş Yayınları', stand: 'A-111', logo: 'publisher-timas.png', about: 'Yetişkin ve çocuk okurlara uzanan geniş bir katalog.' }
+  { id: 'timas', name: 'Timaş Yayınları', stand: 'A-111', logo: 'publisher-timas.png', about: 'Yetişkin ve çocuk okurlara uzanan geniş bir katalog.' },
+  // Logosu olmayan yayınevleri krokide adlarıyla görünür; stantları app.js'te boş yerlere dağıtılır.
+  { id: 'iletisim', name: 'İletişim Yayınları', short: 'İLETİŞİM', color: '#d6111b' },
+  { id: 'yky', name: 'Yapı Kredi Yayınları', short: 'YKY', color: '#1d1d1b' },
+  { id: 'iskultur', name: 'İş Bankası Kültür Yayınları', short: 'İŞ KÜLTÜR', color: '#0b4f9c' },
+  { id: 'sel', name: 'Sel Yayıncılık', short: 'SEL', color: '#c8102e' },
+  { id: 'metis', name: 'Metis Yayınları', short: 'METİS', color: '#3a3a3a' },
+  { id: 'kronik', name: 'Kronik Kitap', short: 'KRONİK', color: '#a3162a' },
+  { id: 'epsilon', name: 'Epsilon Yayınevi', short: 'EPSİLON', color: '#e2001a' },
+  { id: 'pegasus', name: 'Pegasus Yayınları', short: 'PEGASUS', color: '#e07b00' },
+  { id: 'ithaki', name: 'İthaki Yayınları', short: 'İTHAKİ', color: '#00808a' },
+  { id: 'tudem', name: 'Tudem Yayınları', short: 'TUDEM', color: '#e94e1b' },
+  { id: 'gunisigi', name: 'Günışığı Kitaplığı', short: 'GÜNIŞIĞI', color: '#e09a00' },
+  { id: 'domingo', name: 'Domingo Yayınevi', short: 'DOMINGO', color: '#6d2077' },
+  { id: 'ayrinti', name: 'Ayrıntı Yayınları', short: 'AYRINTI', color: '#111111' },
+  { id: 'remzi', name: 'Remzi Kitabevi', short: 'REMZİ', color: '#8b1d1d' },
+  { id: 'destek', name: 'Destek Yayınları', short: 'DESTEK', color: '#0072bc' },
+  { id: 'kafka', name: 'Kafka Kitap', short: 'KAFKA', color: '#2f2f2f' },
+  { id: 'profil', name: 'Profil Kitap', short: 'PROFİL', color: '#c2185b' },
+  { id: 'nobel', name: 'Nobel Yayın', short: 'NOBEL', color: '#004b87' }
 ];
 
 const AUTHORS = [
@@ -109,7 +128,7 @@ const EVENTS = [
 ];
 
 // Stand -> kim
-const STAND_OWNERS = Object.fromEntries(PUBLISHERS.map(p => [p.stand, p.id]));
+const STAND_OWNERS = Object.fromEntries(PUBLISHERS.filter(p => p.stand).map(p => [p.stand, p.id]));
 
 const NOTICES = [
   { id: 'n1', type: 'change', time: '13.20', title: 'Söyleşi salonu değişti', body: '“Bir roman nasıl doğar?” söyleşisi 15.00’te Salon B’de yapılacak.', link: '#/etkinlik/e8' },
