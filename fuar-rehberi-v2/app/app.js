@@ -284,6 +284,7 @@ function render(dir = 'fade') {
   app.classList.toggle('no-tabs', !isTab(route.name));
   $('#tabbar').innerHTML = TABS.map(t => `<button type="button" class="${t.id === tab ? 'on' : ''}" data-go="#/${t.id === 'home' ? '' : t.id}">${ic(t.icon)}<span>${t.label}</span>${t.id === 'planim' && savedHere().length ? `<span class="badge">${savedHere().length}</span>` : ''}</button>`).join('');
   out.after && out.after();
+  enhanceScrollers();
 }
 const savedHere = () => EVENTS.filter(e => e.fair === S.fair && has('saved', e.id));
 const fairNotices = () => [...S.extraNotices.filter(n => (n.fair || 'ankara') === S.fair), ...NOTICES.filter(n => n.fair === S.fair)];
@@ -461,6 +462,9 @@ SCREENS.etkinlik = id => {
       <button class="btn ${has('saved', e.id) ? 'done' : 'dark'}" data-save="${e.id}">${has('saved', e.id) ? ic('check', 'sm') + ' Planımda' : ic('plus', 'sm') + ' Planıma ekle'}</button>
       ${p ? `<button class="btn ghost" data-go="#/konum/${stand}">${ic('map', 'sm')} Krokide göster</button>` : e.zone ? `<button class="btn ghost" data-go="#/konum/${e.zone}">${ic('map', 'sm')} Haritada göster</button>` : ''}
     </div>
+    ${e.kind !== 'imza' ? ((S.attended || []).includes(e.id)
+      ? `<div class="attend ok"><span class="at-ico">${ic('check')}</span><div><strong>Katılımın onaylandı</strong><small>+20 puan pasaportuna eklendi</small></div></div>`
+      : `<div class="attend"><span class="at-ico">${ic('qr')}</span><div><strong>Katıldığını onayla</strong><small>${e.place || (e.zone ? zone(e.zone).name : 'Salon')} girişindeki QR’ı okut · +20 puan</small></div><button class="btn sm primary" data-attend="${e.id}">QR okut</button></div>`) : ''}
     <div class="section"><div class="section-head"><h2>Etkinlik hakkında</h2></div><p class="prose" style="margin:0">${esc(eventAbout(e))}</p></div>
     ${speakerAuthors(e).length ? `<div class="section"><div class="section-head"><h2>Konuşmacılar</h2></div><div class="list">${speakerAuthors(e).map(x => `<button class="row" data-go="#/yazar/${x.id}"><img class="avatar" src="${A}${x.photo}" alt=""><span class="txt"><strong>${esc(x.name)}</strong><small>${esc(pub(x.publisher).name)}</small></span>${ic('chev', 'sm')}</button>`).join('')}</div></div>` : ''}
     ${o ? `<div class="section"><div class="section-head"><h2>Düzenleyen</h2></div><div class="list">${orgRow(o)}</div></div>` : ''}
@@ -831,7 +835,9 @@ function giftCard(g) {
 }
 
 // Puan: her QR 20, her quiz doğrusu 10 puan.
-const myPoints = () => stampsMine().length * 20 + (S.quizPts || 0);
+const myPoints = () => stampsMine().length * 20 + (S.attended || []).length * 20 + (S.quizPts || 0);
+const maskName = n => { const [a, b = ''] = n.split(' '); return `${a[0]}*** ${b}`.trim(); };
+const PODIUM_PRIZES = [{ art: 'set', title: 'İmzalı kitap seti' }, { art: 'kitap', title: 'Alfa’dan roman' }, { art: 'canta', title: 'Eylül çanta' }];
 const LEADERS = [['Elif K.', 540], ['Mert A.', 510], ['Zeynep T.', 495], ['Deniz A.', 470], ['Ayşe Y.', 455], ['Can D.', 430], ['Selin E.', 410], ['Burak K.', 390]];
 const myRank = () => Math.max(9, 160 - Math.round(myPoints() / 3));
 
@@ -851,7 +857,7 @@ SCREENS.hediyeler = () => {
       { done: false, title: 'Kitap Köşesi’nde bir kitap oku', sub: 'Okuma saatine katıl', link: '#/konum/kitap' }
     ] : [
       { done: stampsMine().includes('alfa'), title: 'Alfa Yayınları standına uğra', sub: 'A-504 · standdaki QR’ı okut', link: '#/konum/A-504' },
-      { done: false, title: 'Bir söyleşiye katıl', sub: 'Salon girişindeki QR’ı okut', link: '#/program?tur=soylesi' },
+      { done: (S.attended || []).some(id => ev(id) && ev(id).kind === 'soylesi'), title: 'Bir söyleşiye katıl', sub: 'Salon girişindeki QR’ı okut · bugün 15.00', link: '#/etkinlik/e8' },
       { done: (S.quizPts || 0) > 0, title: 'Bir quiz bitir', sub: 'Kitap ayracı kazandırır', link: '#/hediyeler?sekme=quiz' }
     ];
     body = `
@@ -887,11 +893,18 @@ SCREENS.hediyeler = () => {
       <div><span class="eyebrow" style="color:var(--brand)">SENİN SIRAN</span><b>${rank}.</b><small>${(3184).toLocaleString('tr-TR')} oyuncu arasında</small></div>
       <div class="pts"><b>${me}</b><small>puan</small></div>
     </div>
-    <p class="prose" style="margin:12px 0 0;font-size:13px">Her QR 20 puan, her doğru cevap 10 puan. Gün sonunda ilk 10’a imzalı kitap.</p>
-    <div class="section"><div class="section-head"><h2>Bugünün liderleri</h2></div><div class="list">
-      ${LEADERS.map(([n, p], k) => `<div class="lb-row ${k < 3 ? 'top' : ''}"><span class="lb-n">${k + 1}</span><span class="lb-av">${n[0]}</span><strong>${n}</strong><em>${p} puan</em></div>`).join('')}
+    <div class="section"><div class="section-head"><h2>Bugünün liderleri</h2><span class="sponsor-note">Gün sonu ödülleri</span></div>
+      <div class="podium">${[1, 0, 2].map(k => { const [n, p] = LEADERS[k]; const prize = PODIUM_PRIZES[k]; return `<div class="pd pd-${k + 1}">
+        <span class="pd-av">${n[0]}${k === 0 ? '<i class="crown">♛</i>' : ''}</span>
+        <strong>${maskName(n)}</strong><small>${p} puan</small>
+        <div class="pd-step"><span class="pd-n">${k + 1}</span><span class="pd-gift">${giftArt[prize.art]()}</span><em>${esc(prize.title)}</em></div>
+      </div>`; }).join('')}</div>
+    </div>
+    <div class="list" style="margin-top:12px">
+      ${LEADERS.slice(3).map(([n, p], k) => `<div class="lb-row"><span class="lb-n">${k + 4}</span><span class="lb-av">${n[0]}</span><strong>${maskName(n)}</strong><em>${p} puan</em></div>`).join('')}
       <div class="lb-row me"><span class="lb-n">${rank}</span><span class="lb-av">S</span><strong>Sen</strong><em>${me} puan</em></div>
-    </div></div>`;
+    </div>
+    <p class="prose" style="margin:12px 0 0;font-size:13px">Her QR 20, her doğru cevap 10 puan. İsimler gizlilik için kısaltılarak gösterilir.</p>`;
   }
   return {
     top: topTitle('Hediyeler', kids() ? 'ŞENLİK PASAPORTU' : 'FUAR PASAPORTU'),
@@ -900,6 +913,19 @@ SCREENS.hediyeler = () => {
 };
 
 /* QR okuyucu (demo): kamera görünümü, ardından pasaporta eklenir */
+function startAttendScan(id) {
+  const e = ev(id);
+  const el = $('#scanner');
+  el.innerHTML = `<div class="sc-cam"><div class="sc-frame"><i></i><i></i><i></i><i></i><span class="sc-line"></span></div><p>${esc(e.place || zone(e.zone).name)} girişindeki QR’ı hizala</p><button class="btn light" data-scan-close>Vazgeç</button></div>`;
+  el.classList.add('show');
+  clearTimeout(scanT);
+  scanT = setTimeout(() => {
+    S.attended = [...new Set([...(S.attended || []), id])]; save();
+    el.innerHTML = `<div class="sc-ok"><span class="sc-stamp">${ic('check')}</span><h2>Katılım onaylandı!</h2>
+      <p>“${esc(e.title)}” etkinliğine katıldın · +20 puan</p>
+      <button class="btn primary block" data-scan-close>Tamam</button></div>`;
+  }, 1600);
+}
 function startScan() {
   const el = $('#scanner');
   el.innerHTML = `<div class="sc-cam"><div class="sc-frame"><i></i><i></i><i></i><i></i><span class="sc-line"></span></div><p>Stanttaki QR kodu çerçeveye hizala</p><button class="btn light" data-scan-close>Vazgeç</button></div>`;
@@ -1124,6 +1150,26 @@ SCREENS.bildirimler = () => {
   };
 };
 
+/* Yatay şeritler: farede ok butonları + sürükleyerek kaydırma */
+function enhanceScrollers() {
+  document.querySelectorAll('#view .hscroll, #view .fac-scroll').forEach(sc => {
+    if (sc.parentElement.classList.contains('hs-wrap')) return;
+    const wrap = document.createElement('div');
+    wrap.className = 'hs-wrap';
+    sc.before(wrap); wrap.append(sc);
+    const mk = (dir) => { const b = document.createElement('button'); b.type = 'button'; b.className = 'hs-btn ' + dir; b.setAttribute('aria-label', dir === 'next' ? 'İleri' : 'Geri'); b.innerHTML = ic(dir === 'next' ? 'chev' : 'back', 'sm'); b.onclick = evt => { evt.stopPropagation(); const target = Math.max(0, Math.min(sc.scrollWidth - sc.clientWidth, sc.scrollLeft + (dir === 'next' ? 1 : -1) * sc.clientWidth * .8)); sc.scrollTo({ left: target, behavior: 'smooth' }); setTimeout(() => { if (Math.abs(sc.scrollLeft - target) > 4) sc.scrollLeft = target; sync(); }, 450); }; wrap.append(b); return b; };
+    const prev = mk('prev'), next = mk('next');
+    const sync = () => { prev.hidden = sc.scrollLeft < 24; next.hidden = sc.scrollLeft + sc.clientWidth > sc.scrollWidth - 24; };
+    sc.addEventListener('scroll', sync, { passive: true }); requestAnimationFrame(sync); setTimeout(sync, 400);
+    let down = null, moved = false;
+    sc.addEventListener('pointerdown', evt => { if (evt.pointerType !== 'mouse') return; down = { x: evt.clientX, left: sc.scrollLeft }; moved = false; });
+    sc.addEventListener('pointermove', evt => { if (!down) return; const dx = evt.clientX - down.x; if (Math.abs(dx) > 4) { moved = true; sc.classList.add('dragging'); } sc.scrollLeft = down.left - dx; });
+    const end = () => { if (!down) return; down = null; setTimeout(() => sc.classList.remove('dragging'), 0); };
+    sc.addEventListener('pointerup', end); sc.addEventListener('pointerleave', end);
+    sc.addEventListener('click', evt => { if (moved) { evt.stopPropagation(); evt.preventDefault(); moved = false; } }, true);
+  });
+}
+
 /* ---------- Sheet, toast, duyuru ---------- */
 function openSheet(html) { $('#sheet').innerHTML = '<div class="grab"></div>' + html; $('#sheet').classList.add('show'); $('#backdrop').classList.add('show'); }
 function closeSheet() { $('#sheet').classList.remove('show'); $('#backdrop').classList.remove('show'); }
@@ -1147,9 +1193,10 @@ function push(n) {
 
 /* ---------- Etkileşimler ---------- */
 document.addEventListener('click', e => {
-  const el = e.target.closest('[data-solo],[data-solo-answer],[data-scan],[data-scan-close],[data-quiz-live],[data-quiz-remind],[data-answer],[data-zone],[data-close-book],[data-book],[data-go],[data-back],[data-save],[data-kind],[data-sheet],[data-fair],[data-zoom],[data-stand],#push,#backdrop');
+  const el = e.target.closest('[data-attend],[data-solo],[data-solo-answer],[data-scan],[data-scan-close],[data-quiz-live],[data-quiz-remind],[data-answer],[data-zone],[data-close-book],[data-book],[data-go],[data-back],[data-save],[data-kind],[data-sheet],[data-fair],[data-zoom],[data-stand],#push,#backdrop');
   if (!el) return;
   const d = el.dataset;
+  if (d.attend) return startAttendScan(d.attend);
   if (d.solo) return go('#/quiz/' + d.solo);
   if (d.soloAnswer != null) return soloAnswer(Number(d.soloAnswer));
   if (d.scan != null) return startScan();
@@ -1159,7 +1206,7 @@ document.addEventListener('click', e => {
   if (d.answer != null) return quizAnswer(Number(d.answer));
   if (d.book) return openBook(d.book);
   if (d.closeBook != null) { closeBook(); if (!d.go) return; }
-  if (el.id === 'push') { el.classList.remove('show'); return go(d.link); }
+  if (el.id === 'push') { el.classList.remove('show'); if (d.link === location.hash || route.name === 'yarisma' || route.name === 'quiz') return; return go(d.link); }
   if (el.id === 'backdrop') return closeSheet();
   if (d.save) { e.stopPropagation(); const on = toggle('saved', d.save); toast(on ? 'Planına eklendi' : 'Plandan çıkarıldı', on ? 'bookmark' : 'x'); return render('none'); }
   if (d.kind) {
