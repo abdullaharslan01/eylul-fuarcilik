@@ -6,7 +6,6 @@ const SLIDES = [
   {
     id: 'kapak', theme: 'dark', phone: { msg: { type: 'reset', hash: '#/' } },
     html: `
-      <div class="cover-brand"><span class="pill"><img class="e" src="assets/eylul-fuarcilik-logo.png" alt="Eylül Fuarcılık"><span>×</span><img class="b" src="assets/bulbi-logo.png" alt="Bulbi"></span></div>
       <span class="kicker">24. Ankara Kitap Fuarı · 4–13 Aralık 2026</span>
       <h1 class="title">Kitap fuarı<br>artık <em>cebinde.</em></h1>
       <p class="lead">Ziyaretçinin programı, krokiyi ve Eylül’ün duyurularını tek yerde gördüğü sade bir fuar uygulaması.</p>
@@ -87,7 +86,6 @@ const SLIDES = [
   {
     id: 'kapanis', theme: 'dark', phone: { msg: { type: 'go', fair: 'ankara', hash: '#/' } },
     html: `
-      <div class="cover-brand"><span class="pill"><img class="e" src="assets/eylul-fuarcilik-logo.png" alt="Eylül Fuarcılık"><span>×</span><img class="b" src="assets/bulbi-logo.png" alt="Bulbi"></span></div>
       <span class="kicker">Teşekkürler</span>
       <h1 class="title">Fuar artık<br><em>cebinizde.</em></h1>
       <div class="qr-box" id="qr-box"></div>`,
@@ -169,7 +167,7 @@ function key(k) {
 }
 document.addEventListener('keydown', e => { if (e.metaKey || e.ctrlKey || e.altKey) return; if (e.key === ' ') e.preventDefault(); key(e.key); });
 $('#next').onclick = () => show(cur + 1);
-$('#demo-push').onclick = () => sendPhone({ type: 'push' });
+$('#demo-push').onclick = () => { sendPhone({ type: 'push' }); const b = $('#demo-push'); b.classList.remove('sent'); void b.offsetWidth; b.classList.add('sent'); };
 $('#prev').onclick = () => show(cur - 1);
 $('#notes-close').onclick = () => { $('#notes').hidden = true; };
 $('#help-chip').onclick = () => { $('#notes').hidden = false; };

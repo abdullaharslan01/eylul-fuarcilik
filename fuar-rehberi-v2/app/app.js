@@ -233,17 +233,23 @@ function parse(hash) {
   return { name: parts[0] || 'home', args: parts.slice(1).map(decodeURIComponent), q: new URLSearchParams(qs || '') };
 }
 function go(hash) { if (location.hash === hash) render('none'); else location.hash = hash; }
+let navBack = false;
 window.addEventListener('hashchange', () => {
   closeBook();
   const next = parse(location.hash);
-  const isTabRoute = isTab(next.name);
-  const dir = isTabRoute ? 'fade' : (history_.length && history_[history_.length - 1] === location.hash) ? 'back' : 'fwd';
-  if (dir === 'back') history_.pop(); else if (!isTabRoute) history_.push(currentHash); else history_ = [];
-  route = next; currentHash = location.hash; render(dir);
+  const top = history_[history_.length - 1];
+  // Geri: uygulamanın geri tuşu ya da tarayıcının geri hareketi (yığının tepesine dönüş).
+  const isBack = navBack || (history_.length && (top === location.hash || (top === '#/' && !location.hash)));
+  navBack = false;
+  if (isBack) history_.pop();
+  else if (isTab(next.name)) history_ = [];
+  else history_.push(currentHash);
+  route = next; currentHash = location.hash || '#/';
+  render(isBack ? 'back' : isTab(next.name) ? 'fade' : 'fwd');
 });
 let currentHash = location.hash || '#/';
 function back() {
-  if (history_.length) { const h = history_.pop(); location.hash = h; }
+  if (history_.length) { navBack = true; location.hash = history_[history_.length - 1]; }
   else location.hash = '#/' + (TAB_OF[route.name] === 'home' ? '' : TAB_OF[route.name] || '');
 }
 

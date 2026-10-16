@@ -7,7 +7,7 @@
   <meta name="description" content="Eylül Fuarcılık için Bulbi'nin hazırladığı mobil fuar rehberi konsept sunumu.">
   <link rel="icon" type="image/png" href="assets/eylul-fuarcilik-logo.png">
   <link rel="stylesheet" href="assets/fonts/fonts.css">
-  <link rel="stylesheet" href="sunum.css?v=13">
+  <link rel="stylesheet" href="sunum.css?v=15">
 </head>
 <body>
   <div class="viewport" id="viewport">
@@ -15,12 +15,18 @@
       <div class="bg" id="bg"></div>
       <div class="slides" id="slides"></div>
 
-      <button class="demo-push" id="demo-push" type="button"><span>🔔</span>Bildirim gönder</button>
+      <div class="topbrand"><img class="eylul" src="assets/eylul-fuarcilik-logo.png" alt="Eylül Fuarcılık"><i></i><img class="bulbi" src="assets/bulbi-logo.png" alt="Bulbi"></div>
+
+      <button class="demo-push" id="demo-push" type="button" aria-label="Telefona örnek bildirim gönder">
+        <span class="dp-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 6.5-2.5 8-2.5 8h17S18 15.5 18 9M10 20.5a2.2 2.2 0 0 0 4 0"/></svg></span>
+        <span class="dp-txt"><b>Bildirim gönder</b><small>Telefona örnek bildirim</small></span>
+        <span class="dp-go"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 3 3 10.5l7 3 3 7z"/><path d="m10 13.5 4-4"/></svg></span>
+      </button>
 
       <div class="device" id="device" aria-label="Canlı uygulama">
         <span class="btn-l1"></span><span class="btn-l2"></span><span class="btn-r"></span>
         <div class="screen">
-          <iframe id="phone" title="Eylül Fuar Rehberi uygulaması" src="app/?v=13&embed=1&reset=1#/"></iframe>
+          <iframe id="phone" title="Eylül Fuar Rehberi uygulaması" src="app/?v=15&embed=1&reset=1#/"></iframe>
           <div class="island"></div>
           <div class="home-ind"></div>
         </div>
@@ -33,7 +39,6 @@
       </div>
 
       <footer class="foot">
-        <div class="brand"><img class="eylul" src="assets/eylul-fuarcilik-logo.png" alt="Eylül Fuarcılık"><span>×</span><img class="bulbi" src="assets/bulbi-logo.png" alt="Bulbi"></div>
         <div class="nav">
           <button id="prev" aria-label="Önceki slayt">←</button>
           <button id="next" aria-label="Sonraki slayt">→</button>
@@ -53,6 +58,6 @@
   <button class="help-chip" id="help-chip" type="button">N · notlar</button>
 
   <script src="assets/qrcode.min.js"></script>
-  <script src="sunum.js?v=13"></script>
+  <script src="sunum.js?v=15"></script>
 </body>
 </html>
