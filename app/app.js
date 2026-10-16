@@ -168,6 +168,31 @@ const FACILITIES = [
   { id: 'atm', label: '₺', x: 490, y: 612, icon: 'card', name: 'ATM' },
   { id: 'bebek', label: '♡', x: 550, y: 612, icon: 'kid', name: 'Bebek bakım odası' }
 ];
+// Krokinin altındaki hizmet noktası kartları
+const FAC_CARDS = [
+  { id: 'wc', icon: 'wc', name: 'WC', where: 'Sol koridor · 2 nokta', c: '#2f6ee5', bg: '#e6efff' },
+  { id: 'kafe', icon: 'cup', name: 'Kafe', where: 'Sol koridor, A-3 yanı', c: '#a0522d', bg: '#f8e9dc' },
+  { id: 'danisma', icon: 'info', name: 'Danışma', where: 'Girişin sağı', c: '#0b8e78', bg: '#dcf3ec' },
+  { id: 'ilkyardim', icon: 'plus', name: 'İlk yardım', where: 'Girişin solu', c: '#e2493b', bg: '#fde4e1' },
+  { id: 'mescit', icon: 'moon', name: 'Mescit', where: 'Sağ kanat, A-5 sonu', c: '#5a57d6', bg: '#ecebff' },
+  { id: 'asansor', icon: 'layers', name: 'Asansör', where: 'Sol koridor', c: '#4b443a', bg: '#efe8dc' },
+  { id: 'cocukpt', icon: 'shield', name: 'Kayıp çocuk', where: 'Danışma yanı', c: '#c26f05', bg: '#fff1db' },
+  { id: 'atm', icon: 'card', name: 'ATM', where: 'Giriş holü', c: '#1f9d55', bg: '#dff3e6' },
+  { id: 'bebek', icon: 'kid', name: 'Bebek bakım', where: 'Giriş holü, B koridoru', c: '#c2185b', bg: '#fde6ee' }
+];
+const facCard = (f, on) => `<button class="fac-card${on ? ' on' : ''}" data-fac="${f.id}" style="--fc:${f.c};--fb:${f.bg}"><span class="fc-ico">${ic(f.icon)}</span><strong>${f.name}</strong><small>${f.where}</small></button>`;
+const facSheet = f => `<div class="card map-sheet" id="map-card"><span class="fc-ico sm" style="--fc:${f.c};--fb:${f.bg}">${ic(f.icon, 'sm')}</span><div style="flex:1"><strong style="display:block">${esc(f.name)}</strong><small class="muted">${esc(f.where)} · krokide turuncu ile gösterildi</small></div></div>`;
+// Hizmet noktası seçimi: ekranı yeniden çizmeden krokiyi günceller, kaydırma yerinde kalır.
+function selectFacility(id) {
+  const f = FAC_CARDS.find(x => x.id === id); if (!f) return;
+  history.replaceState(null, '', '#/harita?yer=' + id);
+  route.q = new URLSearchParams('yer=' + id); currentHash = location.hash;
+  $('#mapcanvas').innerHTML = floorSVG({ facSel: id });
+  const card = $('#map-card');
+  if (card) card.outerHTML = facSheet(f);
+  document.querySelectorAll('.fac-card').forEach(b => b.classList.toggle('on', b.dataset.fac === id));
+  centerMap(id, true);
+}
 const BADGE = { w: 78, h: 34 };
 (function placeExtraPublishers() {
   const boxes = Object.keys(STAND_OWNERS).map(id => badgeBox(STANDS[id]));
@@ -632,11 +657,10 @@ SCREENS.harita = () => {
   const stand = route.q.get('stand'), yer = route.q.get('yer');
   const p = stand && STAND_OWNERS[stand] && pub(STAND_OWNERS[stand]);
   const f = yer && FACILITIES.find(x => x.id === yer);
-  const card = p ? `<div class="card map-sheet"><span class="logo-tile" style="width:64px;height:48px">${logoHTML(p)}</span>
+  const card = p ? `<div class="card map-sheet" id="map-card"><span class="logo-tile" style="width:64px;height:48px">${logoHTML(p)}</span>
       <div style="flex:1;min-width:0"><strong style="display:block">${esc(p.name)}</strong><small class="muted">Stant ${stand}</small></div>
       <button class="btn sm dark" data-go="#/yayinevi/${p.id}">Profil</button></div>`
-    : f ? `<div class="card map-sheet"><span class="ico-tile">${ic(f.icon, 'sm')}</span><div style="flex:1"><strong style="display:block">${esc(f.name)}</strong><small class="muted">Krokide turuncu ile gösterildi</small></div></div>` : '';
-  const facs = [['wc', 'wc', 'WC'], ['kafe', 'cup', 'Kafe'], ['danisma', 'info', 'Danışma'], ['ilkyardim', 'plus', 'İlk yardım'], ['mescit', 'moon', 'Mescit'], ['asansor', 'layers', 'Asansör'], ['cocukpt', 'shield', 'Kayıp çocuk'], ['atm', 'card', 'ATM'], ['bebek', 'kid', 'Bebek bakım']];
+    : f ? facSheet(FAC_CARDS.find(x => x.id === yer) || { ...f, where: '', c: 'var(--brand-deep)', bg: 'var(--brand-soft)' }) : '';
   return {
     top: topTitle('Fuar krokisi', 'ATO CONGRESIUM'),
     html: `
@@ -645,15 +669,15 @@ SCREENS.harita = () => {
       <div class="map-tools"><button data-zoom="1" aria-label="Yakınlaş">+</button><button data-zoom="-1" aria-label="Uzaklaş">−</button></div>
       <div class="map-scroll" id="mapscroll"><div class="map-canvas" id="mapcanvas" style="width:${mapW}px">${floorSVG({ sel: stand, facSel: yer })}</div></div>
     </div>
-    ${card || `<p class="muted" style="font-size:13px;margin:12px 22px 0">Bir yayınevi logosuna dokun ya da yukarıdan ara.</p>`}
-    <div class="section" style="margin-top:16px"><div class="section-head"><h2 style="font-size:18px">Hizmet noktaları</h2></div><div class="fac-scroll">${facs.map(([fid, icn, l]) => `<button class="${yer === fid ? 'on' : ''}" data-go="#/harita?yer=${fid}">${ic(icn, 'sm')}<span>${l}</span></button>`).join('')}</div></div>`,
+    ${card || `<p class="muted" id="map-card" style="font-size:13px;margin:12px 22px 0">Bir yayınevi logosuna dokun ya da yukarıdan ara.</p>`}
+    <div class="section" style="margin-top:16px"><div class="section-head"><h2 style="font-size:18px">Hizmet noktaları</h2><span class="sponsor-note">${FAC_CARDS.length} nokta</span></div><div class="fac-scroll">${FAC_CARDS.map(x => facCard(x, yer === x.id)).join('')}</div></div>`,
     after: () => requestAnimationFrame(() => centerMap(stand || yer || 'A-404'))
   };
 };
 let mapW = 640;
-function centerMap(id) {
+function centerMap(id, smooth = false) {
   const sc = $('#mapscroll'), t = targetPoint(id); if (!sc || !t) return;
-  sc.scrollTo({ left: t.end.x / 1000 * mapW - sc.clientWidth / 2, top: t.end.y / 640 * mapW * .64 - sc.clientHeight / 2, behavior: 'instant' });
+  sc.scrollTo({ left: t.end.x / 1000 * mapW - sc.clientWidth / 2, top: t.end.y / 640 * mapW * .64 - sc.clientHeight / 2, behavior: smooth ? 'smooth' : 'instant' });
 }
 function kidsFloor(sel) {
   let s = `<svg class="floor kids-floor" viewBox="0 0 400 320">
@@ -1193,9 +1217,10 @@ function push(n) {
 
 /* ---------- Etkileşimler ---------- */
 document.addEventListener('click', e => {
-  const el = e.target.closest('[data-attend],[data-solo],[data-solo-answer],[data-scan],[data-scan-close],[data-quiz-live],[data-quiz-remind],[data-answer],[data-zone],[data-close-book],[data-book],[data-go],[data-back],[data-save],[data-kind],[data-sheet],[data-fair],[data-zoom],[data-stand],#push,#backdrop');
+  const el = e.target.closest('[data-fac],[data-attend],[data-solo],[data-solo-answer],[data-scan],[data-scan-close],[data-quiz-live],[data-quiz-remind],[data-answer],[data-zone],[data-close-book],[data-book],[data-go],[data-back],[data-save],[data-kind],[data-sheet],[data-fair],[data-zoom],[data-stand],#push,#backdrop');
   if (!el) return;
   const d = el.dataset;
+  if (d.fac) return selectFacility(d.fac);
   if (d.attend) return startAttendScan(d.attend);
   if (d.solo) return go('#/quiz/' + d.solo);
   if (d.soloAnswer != null) return soloAnswer(Number(d.soloAnswer));
