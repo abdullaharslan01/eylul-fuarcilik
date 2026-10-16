@@ -31,28 +31,31 @@ Sunum: http://localhost:4174 · Uygulama tek başına: http://localhost:4174/app
 
 ## Uygulamada ne var
 
-- **Ana sayfa:** yazar/yayınevi araması, kendi kendine dönen banner, Program · Yazarlar · Yayınevleri · Kroki kısayolları ve sağa doğru kayan “Bugün imzada” şeridi.
-- **Ara (alt menü):** yazar ve yayınevi araması; Tümü / Yazarlar / Yayınevleri filtreleri. Boşken tüm yazarları ve 27 yayınevini listeler.
-- **Yazarlar / Yayınevleri:** ana sayfadaki kısayollardan açılan tam liste.
-- **Program:** 5 günün tamamı dolu; imzalar, söyleşiler ve çocuk etkinlikleri. “Planıma ekle” ve “Krokide göster” (kroki, sayfanın üstüne ayrı bir ekran olarak açılır).
-- **Yazar sayfası:** kitap kapağına dokununca tam ekran kitap sayfası açılır: büyük kapak, tanıtım yazısı, yazarın diğer kitapları.
+Alt menü: **Ana sayfa · Program · Hediyeler · Kroki · Planım**
+
+- **Ana sayfa:** yazar/yayınevi araması, dönen banner, Program · Kroki · Hediyeler · Duyurular kısayolları, pasaport ilerlemesi, kendi kendine kayan “Bugün imzada” şeridi, popüler yayınevleri.
+- **Program:** 5 günün tamamı dolu; program içinde arama. Etkinlik detayında süre, giriş, etkinlik hakkında yazı, konuşmacılar, “Planıma ekle” ve “Krokide göster”.
+- **Hediyeler:**
+  - **QR pasaportu:** stant QR’ları okutulur, damga toplanır. 3 damgada bez çanta, 6 damgada kitap, tüm görevlerde çekiliş.
+  - **Görevler.**
+  - **Canlı bilgi yarışması:** 12.00 · 15.00 · 18.00’de herkese aynı anda 5 soru, her soruya 10 saniye. Süre bitince doğru cevap ve oyuncuların yüzde dağılımı gösterilir.
+- **Kroki:** yayınevi logoları; yana kayan hizmet noktaları (WC, kafe, danışma, ilk yardım, mescit, asansör, kayıp çocuk, ATM, bebek bakım).
+- **Planım:** kayıtlı etkinlik özeti, sıradaki etkinlik, pasaport ilerlemesi, gün gün plan.
+- **Yazar sayfası:** kitap kapağına dokununca tam ekran kitap sayfası.
 - **Detay ekranları:** iOS’taki gibi geri butonuyla açılır, alt menü gizlenir.
-- **Planım:** kaydedilen etkinlikler.
-- **Kroki:** stant numarası yerine yayınevi logoları (logosu olmayanlar renkli adlarıyla). Logoya dokun ya da yayınevi adını ara. WC, kafe ve danışma noktaları.
-- **Duyurular:** Eylül’ün gönderdiği bildirimler (sağ üstteki zil).
-- **Bildirim gönder:** uygulamanın parçası değil; sunumda telefonun üstündeki turuncu buton. Her basışta telefona farklı bir örnek bildirim düşer.
-- **Çocuk Şenliği modu (fuar seçiciden):** tema değişir; 2 günlük 15 etkinlik, 11 katılımcı (atölye, tiyatro, yayınevi, marka), 6 alanlı şenlik haritası, katılımcı ve etkinlik araması, şenliğe özel duyurular.
+- **Çocuk Şenliği modu (fuar seçiciden):** kendi programı, 11 katılımcı, 6 alanlı harita, katılımcı araması, alan pasaportu ve şenlik duyuruları.
 
-## Akış (yaklaşık 5 dakika)
+## Akış (yaklaşık 6 dakika)
 
-1. **Kapak.** Yılda iki kez yarım milyon okur.
-2. **Okurun üç sorusu:** kim ne zaman nerede, stant nerede, değişiklikten nasıl haberim olur.
-3. **Program.** Murat Menteş imzasını aç, “Krokide göster”.
-4. **Kroki.** “Everest nerede?” ya da bir logoya dokun.
-5. **Duyurular.** Paneldeki “Gönder”e ya da telefondaki “Bildirim gönder”e bas.
-6. **Çocuk Şenliği 2027.** Aynı uygulama, fuar değişir.
-7. **Önerimiz.** Bulbi geliştirir; Eylül stant ve görünürlük verir.
-8. **Teşekkürler.**
+1. **Kapak.**
+2. **Okurun üç sorusu.**
+3. **Program.** Bir imzayı aç; “Programda ara”.
+4. **Kroki.** “Everest nerede?”, “İletişim ara”.
+5. **Duyurular.** Paneldeki “Gönder” ya da telefonun üstündeki “Bildirim gönder”.
+6. **Hediyeler.** “QR okut” → damga ve ödül; “Canlı yarışmayı başlat” → bildirim, 3-2-1, soru, sonuç.
+7. **Çocuk Şenliği 2027.**
+8. **Önerimiz.**
+9. **Teşekkürler.**
 
 ## Kapanıştaki QR
 

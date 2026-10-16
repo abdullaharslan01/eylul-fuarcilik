@@ -37,8 +37,8 @@ const SLIDES = [
       <span class="kicker"><span class="num">01</span>Program</span>
       <h1 class="title">Kim, ne zaman,<br><em>nerede.</em></h1>
       <p class="lead">İmzalar ve söyleşiler gün gün, saat saat. Okur bir imzaya dokunur; yazarı, saati ve standı görür.</p>
-      <ul class="points"><li>Gün ve türe göre program</li><li>Şu an süren etkinlik ve “şimdi” çizgisi</li><li>Tek dokunuşla “Krokide göster”</li></ul>
-      <div class="try"><span>Canlı dene</span><button data-msg='{"type":"go","hash":"#/etkinlik/e7"}'><i>▶</i>Bir imzayı aç</button><button class="ghost" data-msg='{"type":"go","hash":"#/katilimcilar?tab=yazar"}'><i>✎</i>Tüm yazarlar</button></div>`,
+      <ul class="points"><li>Gün ve türe göre program, program içinde arama</li><li>Etkinlik detayı: süre, giriş, konuşmacılar</li><li>Tek dokunuşla “Planıma ekle” ve “Krokide göster”</li></ul>
+      <div class="try"><span>Canlı dene</span><button data-msg='{"type":"go","hash":"#/etkinlik/e7"}'><i>▶</i>Bir imzayı aç</button><button class="ghost" data-msg='{"type":"go","hash":"#/program?q=Menteş"}'><i>⌕</i>Programda ara</button></div>`,
     notes: `<p>Kırmızı “şimdi” çizgisini göster. Murat Menteş imzasına dokun, ardından “Krokide göster”e bas: Alfa’nın logosu krokide seçili gelir.</p>`
   },
   {
@@ -59,6 +59,16 @@ const SLIDES = [
       <h1 class="title" style="font-size:52px;margin:16px 0 12px">Eylül yazar, <em>okurun telefonuna düşer.</em></h1>
       <p class="lead" style="font-size:20px;max-width:900px">Saat değişikliği, kayıp eşya, genel duyuru. Aşağıdaki panelde <b>“Gönder”</b>e ya da telefonun üstündeki <b>“Bildirim gönder”</b>e basın.</p>`,
     notes: `<p>Panelde “Gönder”e bas: sağdaki telefona bildirim düşer. Telefonun üstündeki turuncu <b>“Bildirim gönder”</b> de her basışta farklı bir örnek bildirim gösterir.</p><p><b>“Instagram’a koyup görülmesini ummak yerine, fuardaki herkesin telefonuna doğrudan.”</b></p>`
+  },
+  {
+    id: 'hediyeler', theme: 'light', phone: { msg: { type: 'go', fair: 'ankara', hash: '#/hediyeler' } },
+    html: `
+      <span class="kicker"><span class="num">04</span>Hediyeler</span>
+      <h1 class="title">Okur stant stant gezer,<br><em>hediye kazanır.</em></h1>
+      <p class="lead">Standlardaki QR’ları okutan okur pasaportuna damga toplar; belirli sayıda damgada yayınevlerinin hediyelerini alır. Gün içinde belirli saatlerde canlı bilgi yarışması açılır.</p>
+      <ul class="points"><li>QR pasaportu: 3 damgada bez çanta, 6 damgada kitap</li><li>Görevler: “Alfa standına uğra”, “Bir söyleşiye katıl”</li><li>Canlı yarışma 12.00 · 15.00 · 18.00’de: herkese aynı anda, aynı soru</li></ul>
+      <div class="try"><span>Canlı dene</span><button class="pulse" data-msg='{"type":"scan"}'><i>▦</i>QR okut</button><button class="ghost" data-msg='{"type":"quiz-live"}'><i>★</i>Canlı yarışmayı başlat</button></div>`,
+    notes: `<p>“QR okut”a bas: telefonda kamera açılır, bir saniye sonra damga eklenir ve 3. damgada <b>“Ödül kazandın: Eylül bez çanta”</b> çıkar.</p><p>Sonra “Canlı yarışmayı başlat”a bas: telefona “Canlı yarışma başladı” bildirimi düşer, sorular herkese aynı anda gelir, süre bitince doğru cevap ve oyuncuların yüzde kaçının neyi seçtiği görünür. Bunu Eylül panelden belirli saatlerde başlatır; herkes için adil olur. Eylül için mesaj: <b>“Okuru bütün stantları gezmeye teşvik eder; yayınevleri ve sponsorlar hediye vererek görünür olur.”</b></p>`
   },
   {
     id: 'cocuk', theme: 'light', extra: 'teal', phone: { msg: { type: 'go', fair: 'cocuk', hash: '#/' } },

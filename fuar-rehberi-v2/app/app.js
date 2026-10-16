@@ -51,14 +51,21 @@ const P = {
   play: '<circle cx="12" cy="12" r="9"/><path d="m10 8.5 5.5 3.5-5.5 3.5z"/>',
   flame: '<path d="M12 21c-4 0-7-2.7-7-6.5 0-4 3.5-6 3.5-10 2.5 1.5 4 3.5 4.5 6 1-1 1.5-2 1.5-3.5C17 9 19 11.5 19 14.5c0 3.8-3 6.5-7 6.5z"/>',
   walk: '<circle cx="13" cy="4" r="2"/><path d="M9 21l2-6 3 3v3M7.5 12.5 10 8.5l4 1 2 3.5h3M10 8.5 9 14"/>',
-  phone: '<rect x="6" y="2.5" width="12" height="19" rx="3"/><path d="M11 18.5h2"/>'
+  phone: '<rect x="6" y="2.5" width="12" height="19" rx="3"/><path d="M11 18.5h2"/>',
+  gift: '<rect x="3.5" y="8.5" width="17" height="12" rx="2"/><path d="M3.5 12.5h17M12 8.5v12M12 8.5S10.8 4 8 4.6c-2.2.5-1.6 3.9 4 3.9zM12 8.5s1.2-4.5 4-3.9c2.2.5 1.6 3.9-4 3.9z"/>',
+  trophy: '<path d="M7 4h10v5a5 5 0 0 1-10 0zM7 6H4a3 3 0 0 0 3 4M17 6h3a3 3 0 0 1-3 4M12 14v4M8 21h8M9.5 18h5"/>',
+  moon: '<path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/>',
+  card: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M7 15h4"/>',
+  scan: '<path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3M4 12h16"/>'
 };
 const ic = (n, cls = '') => `<svg class="i ${cls}" viewBox="0 0 24 24" aria-hidden="true">${P[n] || ''}</svg>`;
 
 /* ---------- Durum ---------- */
 const DEFAULT = {
   fair: 'ankara',
-  saved: ['e7', 'e8', 'e11'],
+  saved: ['e2', 'e20', 'e22', 'e7', 'e8', 'e11', 'e23', 'e25', 'e28', 'e31', 'k3', 'k5', 'k8', 'k12'],
+  stamps: { ankara: ['alfa', 'everest'], cocuk: ['masal'] },
+  quizBest: null,
   read: [],
   extraNotices: []
 };
@@ -154,7 +161,10 @@ const FACILITIES = [
   { id: 'asansor', label: '⇅', x: 206, y: 330, icon: 'layers', name: 'Asansör' },
   { id: 'danisma', label: 'i', x: 372, y: 612, icon: 'info', name: 'Danışma & kayıp eşya' },
   { id: 'ilkyardim', label: '+', x: 178, y: 560, icon: 'plus', name: 'İlk yardım' },
-  { id: 'cocukpt', label: '★', x: 430, y: 612, icon: 'shield', name: 'Kayıp çocuk noktası' }
+  { id: 'cocukpt', label: '★', x: 430, y: 612, icon: 'shield', name: 'Kayıp çocuk noktası' },
+  { id: 'mescit', label: '☾', x: 905, y: 276, icon: 'moon', name: 'Mescit' },
+  { id: 'atm', label: '₺', x: 490, y: 612, icon: 'card', name: 'ATM' },
+  { id: 'bebek', label: '♡', x: 550, y: 612, icon: 'kid', name: 'Bebek bakım odası' }
 ];
 const BADGE = { w: 78, h: 34 };
 (function placeExtraPublishers() {
@@ -220,11 +230,11 @@ let lastTab = 'home';
 const TABS = [
   { id: 'home', label: 'Ana sayfa', icon: 'home' },
   { id: 'program', label: 'Program', icon: 'cal' },
-  { id: 'ara', label: 'Ara', icon: 'search' },
+  { id: 'hediyeler', label: 'Hediyeler', icon: 'gift' },
   { id: 'harita', label: 'Kroki', icon: 'map' },
   { id: 'planim', label: 'Planım', icon: 'heart' }
 ];
-const TAB_OF = { etkinlik: 'program', yazar: 'ara', yayinevi: 'ara', firma: 'ara', bildirimler: 'home', katilimcilar: 'ara', konum: 'harita' };
+const TAB_OF = { etkinlik: 'program', ara: 'home', yazar: 'home', yayinevi: 'home', firma: 'home', bildirimler: 'home', katilimcilar: 'home', konum: 'harita', yarisma: 'hediyeler' };
 const isTab = name => TABS.some(t => t.id === name);
 function parse(hash) {
   const h = (hash || '').replace(/^#\/?/, '');
@@ -257,6 +267,7 @@ function back() {
 const SCREENS = {};
 function render(dir = 'fade') {
   clearInterval(bannerTimer);
+  if (route.name !== 'yarisma') clearInterval(quizTimer);
   const app = $('#app');
   app.classList.toggle('kids', kids());
   const screen = SCREENS[route.name] || SCREENS.home;
@@ -329,17 +340,21 @@ SCREENS.home = () => {
 
     <div class="quick">
       <button data-go="#/program"><span class="q-ico brand">${ic('cal')}</span>Program</button>
-      ${kids() ? `<button data-go="#/katilimcilar"><span class="q-ico">${ic('users')}</span>Katılımcılar</button>` : `<button data-go="#/katilimcilar?tab=yazar"><span class="q-ico">${ic('pen')}</span>Yazarlar</button>
-      <button data-go="#/katilimcilar?tab=yayinevi"><span class="q-ico">${ic('book')}</span>Yayınevleri</button>`}
       <button data-go="#/harita"><span class="q-ico">${ic('map')}</span>Kroki</button>
-      ${kids() ? `<button data-go="#/bildirimler"><span class="q-ico">${ic('bell')}</span>Duyurular</button>` : ''}
+      <button data-go="#/hediyeler"><span class="q-ico">${ic('gift')}</span>Hediyeler</button>
+      ${kids() ? `<button data-go="#/katilimcilar"><span class="q-ico">${ic('users')}</span>Katılımcılar</button>` : `<button data-go="#/bildirimler"><span class="q-ico">${ic('bell')}</span>Duyurular</button>`}
     </div>
+    ${passportCard()}
 
     <div class="section">
       <div class="section-head"><h2>${kids() ? 'Bugünün etkinlikleri' : 'Bugün imzada'}</h2><button class="more" data-go="#/program">Tümü →</button></div>
       ${kids() ? `<div class="list">${today.map(e => eventRow(e)).join('')}</div>`
         : `<div class="marquee"><div class="marquee-track">${signers.map(card).join('')}${signers.map(card).join('')}</div></div>`}
     </div>
+    ${kids() ? '' : `<div class="section">
+      <div class="section-head"><h2>Popüler yayınevleri</h2><button class="more" data-go="#/ara?tur=yayinevi">Tümü →</button></div>
+      <div class="hscroll">${['alfa', 'everest', 'can', 'iletisim', 'dogan', 'yky', 'bilgi', 'kirmizi', 'iskultur', 'timas'].map(pub).filter(Boolean).map(p => `<button class="pop-pub" data-go="#/yayinevi/${p.id}"><span class="pl">${logoHTML(p)}</span><strong>${esc(p.name)}</strong><small>Stant ${p.stand || '—'}</small></button>`).join('')}</div>
+    </div>`}
   `, after: startBanner };
 };
 function startBanner() {
@@ -365,8 +380,29 @@ SCREENS.program = () => {
   const F = fair();
   const day = Number(route.q.get('gun') || (kids() ? 1 : DEMO_NOW.day));
   const kind = route.q.get('tur') || 'tum';
-  const list = fairEvents().filter(e => e.day === day && (kind === 'tum' || e.kind === kind)).sort((a, b) => tmin(a.start) - tmin(b.start));
+  const q = route.q.get('q') || '';
   const kinds = kids() ? [['tum', 'Tümü'], ['cocuk', 'Sahne'], ['atolye', 'Atölye']] : [['tum', 'Tümü'], ['imza', 'İmza'], ['soylesi', 'Söyleşi'], ['cocuk', 'Çocuk']];
+  return {
+    top: topTitle('Program', F.name),
+    html: `
+    <label class="search" style="margin-bottom:14px">${ic('search', 'sm')}<input id="pq" type="search" placeholder="${kids() ? 'Etkinlik ara…' : 'Programda yazar ya da etkinlik ara…'}" autocomplete="off" value="${esc(q)}"></label>
+    <div id="prog-filters" ${q ? 'hidden' : ''}>
+      <div class="days">${F.days.map(d => `<button class="day ${d.n === day ? 'on' : ''} ${!kids() && d.n === DEMO_NOW.day ? 'today' : ''}" data-go="#/program?gun=${d.n}&tur=${kind}"><small>${d.label.slice(0, 3)}</small><b>${d.date.split(' ')[0]}</b></button>`).join('')}</div>
+      <div class="chips" style="margin-top:16px">${kinds.map(([k, l]) => `<button class="chip ${k === kind ? 'on' : ''}" data-go="#/program?gun=${day}&tur=${k}">${k !== 'tum' ? `<span class="sw" style="background:${KCOL[k]}"></span>` : ''}${l}</button>`).join('')}</div>
+    </div>
+    <div id="prog-list">${programBody(day, kind, q)}</div>`
+  };
+};
+function programBody(day, kind, q) {
+  q = (q || '').trim();
+  if (q) {
+    const n = norm(q), m = s => norm(s || '').includes(n);
+    const hits = fairEvents().filter(e => m(e.title) || m(e.speakers) || m(e.publisher && pub(e.publisher).name) || m(e.org && org(e.org).name))
+      .sort((a, b) => a.day - b.day || tmin(a.start) - tmin(b.start));
+    return hits.length ? `<p class="muted" style="margin:0 22px 10px;font-size:12.5px;font-weight:700">${hits.length} etkinlik</p><div class="list">${hits.map(eventRow).join('')}</div>`
+      : `<div class="empty"><strong>“${esc(q)}” programda yok</strong><p>Başka bir isim deneyebilirsin.</p></div>`;
+  }
+  const list = fairEvents().filter(e => e.day === day && (kind === 'tum' || e.kind === kind)).sort((a, b) => tmin(a.start) - tmin(b.start));
   const isToday = !kids() && day === DEMO_NOW.day;
   let nowShown = false;
   const items = list.map(e => {
@@ -375,15 +411,9 @@ SCREENS.program = () => {
     if (isToday && !nowShown && tmin(e.start) > nowMin()) { nowShown = true; line = `<div class="now-line"><span>${fmtNow()}</span><i></i></div>`; }
     return line + programItem(e, st);
   }).join('');
-  return {
-    top: topTitle('Program', F.name),
-    html: `
-    <div class="days">${F.days.map(d => `<button class="day ${d.n === day ? 'on' : ''} ${!kids() && d.n === DEMO_NOW.day ? 'today' : ''}" data-go="#/program?gun=${d.n}&tur=${kind}"><small>${d.label.slice(0, 3)}</small><b>${d.date.split(' ')[0]}</b></button>`).join('')}</div>
-    <div class="chips" style="margin-top:16px">${kinds.map(([k, l]) => `<button class="chip ${k === kind ? 'on' : ''}" data-go="#/program?gun=${day}&tur=${k}">${k !== 'tum' ? `<span class="sw" style="background:${KCOL[k]}"></span>` : ''}${l}</button>`).join('')}</div>
-    <div class="timeline" style="margin-top:14px">${items || `<div class="empty"><strong>Bu günde etkinlik yok</strong><p>Başka bir gün seçebilirsin.</p></div>`}
-    ${isToday && !nowShown && list.length ? `<div class="now-line"><span>${fmtNow()}</span><i></i></div>` : ''}</div>`
-  };
-};
+  return `<div class="timeline" style="margin-top:14px">${items || `<div class="empty"><strong>Bu günde etkinlik yok</strong><p>Başka bir gün seçebilirsin.</p></div>`}
+    ${isToday && !nowShown && list.length ? `<div class="now-line"><span>${fmtNow()}</span><i></i></div>` : ''}</div>`;
+}
 function fmtNow() { const n = nowMin(); return `${String(Math.floor(n / 60)).padStart(2, '0')}.${String(n % 60).padStart(2, '0')}`; }
 function programItem(e, st) {
   const tags = [`<span class="tag ${e.kind}">${KIND[e.kind]}</span>`];
@@ -422,11 +452,15 @@ SCREENS.etkinlik = id => {
     <div class="facts">
       <div class="fact">${ic('clock', 'sm')}<div><small>Saat</small><b>${e.start} – ${e.end}</b></div></div>
       <div class="fact">${ic('pin', 'sm')}<div><small>${p ? 'Stant' : 'Yer'}</small><b>${esc(p ? p.stand + ' · ' + p.name.split(' ')[0] : e.zone ? zone(e.zone).name : e.place)}</b></div></div>
+      <div class="fact">${ic('layers', 'sm')}<div><small>Süre</small><b>${tmin(e.end) - tmin(e.start)} dakika</b></div></div>
+      <div class="fact">${ic('ticket', 'sm')}<div><small>Giriş</small><b>${e.kind === 'imza' ? 'Kitapla imza' : 'Ücretsiz'}</b></div></div>
     </div>
     <div class="cta-bar">
       <button class="btn ${has('saved', e.id) ? 'done' : 'dark'}" data-save="${e.id}">${has('saved', e.id) ? ic('check', 'sm') + ' Planımda' : ic('plus', 'sm') + ' Planıma ekle'}</button>
       ${p ? `<button class="btn ghost" data-go="#/konum/${stand}">${ic('map', 'sm')} Krokide göster</button>` : e.zone ? `<button class="btn ghost" data-go="#/konum/${e.zone}">${ic('map', 'sm')} Haritada göster</button>` : ''}
     </div>
+    <div class="section"><div class="section-head"><h2>Etkinlik hakkında</h2></div><p class="prose" style="margin:0">${esc(eventAbout(e))}</p></div>
+    ${speakerAuthors(e).length ? `<div class="section"><div class="section-head"><h2>Konuşmacılar</h2></div><div class="list">${speakerAuthors(e).map(x => `<button class="row" data-go="#/yazar/${x.id}"><img class="avatar" src="${A}${x.photo}" alt=""><span class="txt"><strong>${esc(x.name)}</strong><small>${esc(pub(x.publisher).name)}</small></span>${ic('chev', 'sm')}</button>`).join('')}</div></div>` : ''}
     ${o ? `<div class="section"><div class="section-head"><h2>Düzenleyen</h2></div><div class="list">${orgRow(o)}</div></div>` : ''}
     ${books.length ? `<div class="section">
       <div class="section-head"><h2>Yazarın kitapları</h2><button class="more" data-go="#/yazar/${a.id}">Profil →</button></div>
@@ -434,6 +468,17 @@ SCREENS.etkinlik = id => {
     </div>` : ''}`
   };
 };
+const atLoc = name => name + (/[uıoa]$/i.test(name) ? '’nda' : '’nde');
+const speakerAuthors = e => e.kind === 'imza' ? [] : AUTHORS.filter(a => (e.speakers || '').includes(a.name));
+function eventAbout(e) {
+  if (e.kind === 'imza') {
+    const a = author(e.author), p = pub(e.publisher);
+    return `${a.name}, ${p.name} standında okurlarıyla buluşuyor ve kitaplarını imzalayacak. Kitabını stanttan alabilir ya da yanında getirebilirsin. İmza süresince stant önünde sıra oluşturulur; özellikle hafta sonu biraz erken gelmeni öneririz.`;
+  }
+  if (e.org) return `${org(e.org).name} tarafından düzenlenen bu etkinlik ${atLoc(zone(e.zone).name)} yapılıyor ve ${e.speakers.toLocaleLowerCase('tr-TR')} çocuklar için uygun. Malzemeler ücretsiz sağlanır. Yer sınırlı olduğu için 10 dakika önce alanda olmanızı öneririz; veliler alanın yanındaki oturma bölümünde bekleyebilir.`;
+  if (e.kind === 'soylesi') return `“${e.title}” başlıklı söyleşi ${atLoc(e.place)} yapılacak. Konuşmacılar: ${e.speakers}. Söyleşi ücretsizdir; salon kapasitesi sınırlı olduğu için 10 dakika önce gelmeni öneririz. Söyleşinin sonunda kısa bir soru-cevap bölümü var.`;
+  return `${e.title}, ${atLoc(e.place)} ${e.speakers ? e.speakers.split('·')[0].trim() + ' çocuklar için' : 'çocuklar için'} düzenleniyor. Çocuklar etkinlik boyunca görevlilerle birlikte olur; veliler alanın yanında bekleyebilir. Malzemeler Eylül Fuarcılık tarafından sağlanır.`;
+}
 function bookTile(b) {
   return `<button class="book-tile" data-book="${b.id}"><div class="cv"><img src="${A}${b.cover}" alt="${esc(b.title)}" loading="lazy"></div><strong>${esc(b.title)}</strong></button>`;
 }
@@ -566,7 +611,7 @@ SCREENS.harita = () => {
       <div style="flex:1;min-width:0"><strong style="display:block">${esc(p.name)}</strong><small class="muted">Stant ${stand}</small></div>
       <button class="btn sm dark" data-go="#/yayinevi/${p.id}">Profil</button></div>`
     : f ? `<div class="card map-sheet"><span class="ico-tile">${ic(f.icon, 'sm')}</span><div style="flex:1"><strong style="display:block">${esc(f.name)}</strong><small class="muted">Krokide turuncu ile gösterildi</small></div></div>` : '';
-  const facs = [['wc', 'wc', 'WC'], ['kafe', 'cup', 'Kafe'], ['danisma', 'info', 'Danışma']];
+  const facs = [['wc', 'wc', 'WC'], ['kafe', 'cup', 'Kafe'], ['danisma', 'info', 'Danışma'], ['ilkyardim', 'plus', 'İlk yardım'], ['mescit', 'moon', 'Mescit'], ['asansor', 'layers', 'Asansör'], ['cocukpt', 'shield', 'Kayıp çocuk'], ['atm', 'card', 'ATM'], ['bebek', 'kid', 'Bebek bakım']];
   return {
     top: topTitle('Fuar krokisi', 'ATO CONGRESIUM'),
     html: `
@@ -576,7 +621,7 @@ SCREENS.harita = () => {
       <div class="map-scroll" id="mapscroll"><div class="map-canvas" id="mapcanvas" style="width:${mapW}px">${floorSVG({ sel: stand, facSel: yer })}</div></div>
     </div>
     ${card || `<p class="muted" style="font-size:13px;margin:12px 22px 0">Bir yayınevi logosuna dokun ya da yukarıdan ara.</p>`}
-    <div class="section" style="margin-top:16px"><div class="fac-grid three">${facs.map(([fid, icn, l]) => `<button class="${yer === fid ? 'on' : ''}" data-go="#/harita?yer=${fid}">${ic(icn, 'sm')}${l}</button>`).join('')}</div></div>`,
+    <div class="section" style="margin-top:16px"><div class="section-head"><h2 style="font-size:18px">Hizmet noktaları</h2></div><div class="fac-scroll">${facs.map(([fid, icn, l]) => `<button class="${yer === fid ? 'on' : ''}" data-go="#/harita?yer=${fid}">${ic(icn, 'sm')}<span>${l}</span></button>`).join('')}</div></div>`,
     after: () => requestAnimationFrame(() => centerMap(stand || yer || 'A-404'))
   };
 };
@@ -627,7 +672,7 @@ SCREENS.ara = () => {
   const kinds = kids() ? [['tum', 'Tümü'], ['etkinlik', 'Etkinlikler'], ['firma', 'Katılımcılar']] : [['tum', 'Tümü'], ['yazar', 'Yazarlar'], ['yayinevi', 'Yayınevleri']];
   searchKind = kinds.some(([k]) => k === route.q.get('tur')) ? route.q.get('tur') : 'tum';
   return {
-    top: topTitle('Ara', kids() ? 'ETKİNLİK · KATILIMCI' : 'YAZAR · YAYINEVİ'),
+    top: topBack('Ara', kids() ? 'ETKİNLİK · KATILIMCI' : 'YAZAR · YAYINEVİ'),
     html: `
     <label class="search big">${ic('search', 'sm')}<input id="q" type="search" placeholder="${kids() ? 'Etkinlik ya da katılımcı ara…' : 'Yazar ya da yayınevi adı yaz…'}" autocomplete="off" value="${esc(route.q.get('q') || '')}"></label>
     <div class="chips" style="margin-top:12px" id="search-kinds">
@@ -686,15 +731,220 @@ SCREENS.planim = () => {
   saved.forEach(e => (byDay[e.fair + '-' + e.day] = byDay[e.fair + '-' + e.day] || []).push(e));
   return {
     top: topTitle('Planım', 'KAYDETTİĞİN ETKİNLİKLER'),
-    html: saved.length ? Object.values(byDay).map(list => {
+    html: planSummary(saved) + passportCard() + (saved.length ? Object.values(byDay).map(list => {
       const e0 = list[0], d = FAIRS[e0.fair].days.find(x => x.n === e0.day);
       const today = e0.fair === 'ankara' && e0.day === DEMO_NOW.day;
       return `<div class="section" style="margin-top:8px"><div class="section-head"><h2 style="font-size:18px">${d.label}, ${d.date}${today ? ' <span class="tag imza" style="vertical-align:middle">Bugün</span>' : ''}</h2></div>
         <div class="timeline" style="padding-top:0">${list.map(e => programItem(e, today ? evStatus(e) : 'future')).join('')}</div></div>`;
     }).join('') + `<p class="muted" style="font-size:12.5px;margin:6px 22px 0">Kaydettiğin etkinlikler başlamadan 15 dakika önce hatırlatılır.</p>`
-      : `<div class="empty"><strong>Planın boş</strong><p>Programda beğendiğin etkinliği kaydet.</p><button class="btn sm dark" data-go="#/program">Programa git</button></div>`
+      : `<div class="empty"><strong>Planın boş</strong><p>Programda beğendiğin etkinliği kaydet.</p><button class="btn sm dark" data-go="#/program">Programa git</button></div>`)
   };
 };
+function planSummary(saved) {
+  if (!saved.length) return '';
+  const day = kids() ? 1 : DEMO_NOW.day;
+  const today = saved.filter(e => e.day === day);
+  const next = today.find(e => kids() || evStatus(e) !== 'past');
+  return `<div class="plan-sum">
+    <div><b>${saved.length}</b><small>kayıtlı etkinlik</small></div>
+    <div><b>${today.length}</b><small>bugün</small></div>
+    <div><b>${new Set(saved.map(e => e.day)).size}</b><small>gün</small></div>
+  </div>
+  ${next ? `<button class="next-strip" data-go="#/etkinlik/${next.id}"><span class="eyebrow">SIRADAKİ</span><strong>${next.start} · ${esc(next.title)}</strong><small>${esc(evPlace(next))}</small></button>` : ''}`;
+}
+
+/* ---------- Hediyeler: QR pasaportu, görevler, bilgi yarışması ---------- */
+const STAMP_PUBS = ['alfa', 'everest', 'bilgi', 'can', 'dogan', 'kirmizi'];
+const stampsAll = () => kids() ? KID_ZONES.map(z => z.id) : STAMP_PUBS;
+const stampsMine = () => (S.stamps[S.fair] || []).filter(x => stampsAll().includes(x));
+const REWARDS = {
+  ankara: [
+    { need: 3, title: 'Eylül bez çanta', where: 'Danışma noktasından alınır' },
+    { need: 6, title: 'Alfa Yayınları’ndan kitap hediye', where: 'A-504 standından seçeceğin bir roman' },
+    { need: 99, title: 'İmzalı kitap seti çekilişi', where: 'Tüm görevleri tamamlayanlar arasında · 13 Aralık' }
+  ],
+  cocuk: [
+    { need: 3, title: 'Çıkartma seti', where: 'Danışma noktasından alınır' },
+    { need: 6, title: 'Can Çocuk’tan boyama kitabı', where: 'Kitap Köşesi’nden alınır' }
+  ]
+};
+function passportCard() {
+  const mine = stampsMine().length, all = stampsAll().length;
+  const next = REWARDS[S.fair].find(r => r.need > mine && r.need <= all);
+  return `<button class="passport-mini" data-go="#/hediyeler">
+    <span class="pm-ico">${ic('gift', 'sm')}</span>
+    <span class="pm-txt"><strong>${kids() ? 'Şenlik pasaportu' : 'Fuar pasaportu'} · ${mine}/${all} damga</strong><small>${next ? `${next.need - mine} damga sonra: ${next.title}` : 'Tüm damgaları topladın!'}</small><i><b style="width:${Math.round(mine / all * 100)}%"></b></i></span>
+    ${ic('chev', 'sm')}
+  </button>`;
+}
+function stampItem(id) {
+  const got = stampsMine().includes(id);
+  if (kids()) {
+    const z = zone(id);
+    return `<div class="stamp ${got ? 'got' : ''}" style="--c:${z.color}"><span class="st-face" style="background:${got ? z.bg : ''}">${ic(z.icon)}</span><small>${z.name}</small></div>`;
+  }
+  const p = pub(id);
+  return `<div class="stamp ${got ? 'got' : ''}"><span class="st-face">${logoHTML(p)}</span><small>${got ? 'Damgalandı' : 'Stant ' + p.stand}</small></div>`;
+}
+SCREENS.hediyeler = () => {
+  const mine = stampsMine().length, all = stampsAll().length;
+  const rewards = REWARDS[S.fair];
+  const missions = kids() ? [
+    { done: stampsMine().includes('masal'), title: 'Masal Sahnesi’ne uğra', sub: 'Sahne girişindeki QR’ı okut', link: '#/konum/masal' },
+    { done: stampsMine().includes('bilim'), title: 'Bir bilim deneyine katıl', sub: 'Bilim Alanı · Minik Mucitler', link: '#/konum/bilim' },
+    { done: false, title: 'Kitap Köşesi’nde bir kitap oku', sub: 'Okuma saatine katıl', link: '#/konum/kitap' }
+  ] : [
+    { done: stampsMine().includes('alfa'), title: 'Alfa Yayınları standına uğra', sub: 'A-504 · standdaki QR’ı okut', link: '#/konum/A-504' },
+    { done: false, title: 'Bir söyleşiye katıl', sub: 'Salon girişindeki QR’ı okut', link: '#/program?tur=soylesi' },
+    { done: false, title: 'Murat Menteş imzasına git', sub: 'Bugün 14.00 · A-504', link: '#/etkinlik/e7' },
+    { done: S.quizBest != null, title: 'Canlı yarışmaya katıl', sub: S.quizBest != null ? `Skorun ${S.quizBest}/5` : 'Turlar 12.00 · 15.00 · 18.00', link: '#/yarisma' }
+  ];
+  return {
+    top: topTitle('Hediyeler', kids() ? 'ŞENLİK PASAPORTU' : 'FUAR PASAPORTU'),
+    html: `
+    <div class="passport">
+      <div class="pp-top"><span class="eyebrow" style="color:var(--brand)">${kids() ? 'ŞENLİK PASAPORTU' : 'FUAR PASAPORTU'}</span><span class="pp-count"><b>${mine}</b>/${all}</span></div>
+      <h3>${kids() ? 'Alanları gez,<br>damgaları topla.' : 'Stantları gez,<br>hediyeleri topla.'}</h3>
+      <div class="pp-bar"><b style="width:${Math.round(mine / all * 100)}%"></b></div>
+      <button class="btn primary block" data-scan>${ic('scan', 'sm')} QR okut</button>
+    </div>
+    <div class="stamps">${stampsAll().map(stampItem).join('')}</div>
+
+    <div class="section"><div class="section-head"><h2>Ödüller</h2></div><div class="list">
+      ${rewards.map(r => { const ok = r.need <= mine; const left = r.need > all ? null : r.need - mine; return `<div class="reward ${ok ? 'ok' : ''}"><span class="rw-ico">${ic(ok ? 'check' : r.need > all ? 'trophy' : 'gift', 'sm')}</span><span class="txt"><strong>${esc(r.title)}</strong><small>${r.need > all ? 'Çekiliş' : r.need + ' damga'} · ${esc(r.where)}</small></span><span class="tag ${ok ? 'ok' : 'imza'}">${ok ? 'Kazandın' : left ? left + ' damga' : 'Görevler'}</span></div>`; }).join('')}
+    </div></div>
+
+    ${kids() ? '' : `<div class="section"><button class="quiz-card" data-go="#/yarisma">
+      <span class="qc-ico">${ic('trophy')}</span>
+      <span class="txt"><span class="eyebrow" style="color:#ffcf7a">● CANLI BİLGİ YARIŞMASI</span><strong>Sıradaki tur 15.00</strong><small>${untilClock('15.00')} sonra · herkese aynı anda 5 soru</small></span>
+      ${ic('chev')}
+    </button></div>`}
+
+    <div class="section"><div class="section-head"><h2>Görevler</h2></div><div class="list">
+      ${missions.map(m => `<button class="row mission ${m.done ? 'done' : ''}" data-go="${m.link}"><span class="check ${m.done ? 'on' : ''}">${ic('check', 'xs')}</span><span class="txt"><strong>${esc(m.title)}</strong><small>${esc(m.sub)}</small></span>${ic('chev', 'sm')}</button>`).join('')}
+    </div></div>
+    <p class="muted" style="font-size:11.5px;margin:14px 22px 0">Ödüller ve görevler örnektir; yayınevleri ve sponsorlarla birlikte belirlenir.</p>`
+  };
+};
+
+/* QR okuyucu (demo): kamera görünümü, ardından damga */
+function startScan() {
+  const el = $('#scanner');
+  el.innerHTML = `<div class="sc-cam"><div class="sc-frame"><i></i><i></i><i></i><i></i><span class="sc-line"></span></div><p>QR kodu çerçeveye hizala</p><button class="btn light" data-scan-close>Vazgeç</button></div>`;
+  el.classList.add('show');
+  clearTimeout(scanT);
+  scanT = setTimeout(() => {
+    const left = stampsAll().filter(x => !stampsMine().includes(x));
+    const id = left[0];
+    if (id) { S.stamps[S.fair] = [...stampsMine(), id]; save(); }
+    const mine = stampsMine().length, all = stampsAll().length;
+    const won = REWARDS[S.fair].find(r => r.need === mine);
+    const face = !id ? ic('trophy') : kids() ? ic(zone(id).icon) : logoHTML(pub(id));
+    el.innerHTML = `<div class="sc-ok">
+      <span class="sc-stamp">${face}</span>
+      <h2>${id ? 'Damga eklendi!' : 'Hepsi tamam!'}</h2>
+      <p>${id ? `${kids() ? zone(id).name : pub(id).name} damgası pasaportuna eklendi. ${mine}/${all}` : 'Tüm damgaları zaten topladın.'}</p>
+      ${won ? `<div class="sc-won">${ic('gift', 'sm')} Ödül kazandın: <b>${esc(won.title)}</b></div>` : ''}
+      <button class="btn primary block" data-scan-close>Tamam</button>
+    </div>`;
+  }, 1800);
+}
+let scanT = null;
+function closeScan() { clearTimeout(scanT); $('#scanner').classList.remove('show'); render('none'); }
+
+/* Canlı bilgi yarışması: belirli saatlerde herkese aynı anda açılır */
+const QUIZ = [
+  { q: '“Bozkırdaki Işıklar” kitabının yazarı kim?', a: ['Mustafa Gazalcı', 'Timur Soykan', 'Murat Menteş', 'Saygı Öztürk'], c: 0, pct: [71, 9, 12, 8] },
+  { q: '“İki Yeşil Susamuru” hangi yazarın romanı?', a: ['Nehir Yarar', 'Buket Uzuner', 'Mustafa Balbay', 'Murat Menteş'], c: 1, pct: [14, 64, 7, 15] },
+  { q: '24. Ankara Kitap Fuarı nerede yapılıyor?', a: ['CerModern', 'Atakule', 'ATO Congresium', 'Kızılay Meydanı'], c: 2, pct: [6, 4, 86, 4] },
+  { q: '“Dublörün Dilemması” kimin kitabı?', a: ['Timur Soykan', 'Saygı Öztürk', 'Buket Uzuner', 'Murat Menteş'], c: 3, pct: [11, 9, 18, 62] },
+  { q: '“Veda Turtası”nın yazarı kim?', a: ['Nehir Yarar', 'Buket Uzuner', 'Mustafa Gazalcı', 'Mustafa Balbay'], c: 0, pct: [48, 27, 13, 12] }
+];
+const QUIZ_SEC = 10;
+const QUIZ_SESSIONS = [{ t: '12.00', done: true, players: 942 }, { t: '15.00', next: true }, { t: '18.00' }];
+let quiz = null, quizTimer = null;
+SCREENS.yarisma = () => ({
+  top: topBack('Canlı yarışma', 'HEDİYELER'),
+  html: `<div id="quiz">${quizLobby()}</div>`,
+  after: () => { if (quiz && quiz.autostart) { quiz.autostart = false; quizCountdown(); } }
+});
+function untilClock(t) { const d = tmin(t) - nowMin(); return d <= 0 ? 'şimdi' : d < 60 ? `${d} dk` : `${Math.floor(d / 60)} sa ${d % 60} dk`; }
+function quizLobby() {
+  return `<div class="quiz-hero">
+    <span class="live-pill">● CANLI YARIŞMA</span>
+    <h2>Herkese aynı anda,<br>aynı soru.</h2>
+    <p>Yarışma her gün belirli saatlerde açılır. Sorular tüm oyunculara aynı anda gelir; her soru için 10 saniye. 5/5 yapanlar arasından imzalı kitap çekilişi.</p>
+    <div class="sessions">${QUIZ_SESSIONS.map(x => `<div class="sess ${x.done ? 'done' : ''} ${x.next ? 'next' : ''}"><b>${x.t}</b><small>${x.done ? `Bitti · ${x.players} kişi` : x.next ? `${untilClock(x.t)} sonra` : 'Akşam turu'}</small></div>`).join('')}</div>
+    <button class="btn primary block" data-quiz-remind>${ic('bell', 'sm')} 15.00 için hatırlat</button>
+    <button class="btn light block" style="margin-top:10px" data-quiz-live>Demo: yarışmayı şimdi başlat</button>
+  </div>
+  ${S.quizBest != null ? `<p class="muted" style="text-align:center;font-size:13px;margin:14px 0 0">Önceki turdaki skorun: ${S.quizBest}/5</p>` : ''}`;
+}
+function quizLive() {
+  quiz = { i: 0, score: 0, players: 1284, autostart: true };
+  push({ type: 'eylul', title: 'Canlı yarışma başladı! 🏆', body: '1.284 kişi bekliyor. İlk soru 3 saniye içinde geliyor.', link: '#/yarisma' });
+  if (route.name === 'yarisma') { quiz.autostart = false; quizCountdown(); } else go('#/yarisma');
+}
+function quizCountdown() {
+  clearInterval(quizTimer);
+  let n = 3;
+  const draw = () => { const box = $('#quiz'); if (box) box.innerHTML = `<div class="qz-count"><span class="live-pill">● CANLI · ${quiz.players.toLocaleString('tr-TR')} oyuncu</span><b>${n}</b><p>İlk soru geliyor…</p></div>`; };
+  draw();
+  quizTimer = setInterval(() => { n--; if (n <= 0) { clearInterval(quizTimer); quizQuestion(); } else draw(); }, 900);
+}
+function quizQuestion() {
+  clearInterval(quizTimer);
+  const box = $('#quiz'); if (!box) return;
+  const item = QUIZ[quiz.i];
+  quiz.pick = null; quiz.left = QUIZ_SEC;
+  box.innerHTML = `<div class="qz">
+    <div class="qz-head"><span class="live-pill">● CANLI · ${quiz.players.toLocaleString('tr-TR')}</span><span>Soru ${quiz.i + 1}/${QUIZ.length}</span><span class="qz-sec" id="qz-sec">${quiz.left}</span></div>
+    <div class="qz-bar"><b id="qz-bar" style="width:100%"></b></div>
+    <h2>${esc(item.q)}</h2>
+    <div class="qz-opts">${item.a.map((t, k) => `<button class="qz-opt" data-answer="${k}"><span>${'ABCD'[k]}</span><em>${esc(t)}</em><i class="pct"></i></button>`).join('')}</div>
+    <p class="qz-score" id="qz-note">Süre bitince doğru cevap herkese aynı anda gösterilir.</p>
+  </div>`;
+  quizTimer = setInterval(() => {
+    quiz.left -= 1;
+    const sec = $('#qz-sec'), bar = $('#qz-bar'); if (!sec) return clearInterval(quizTimer);
+    sec.textContent = Math.max(0, quiz.left); bar.style.width = (Math.max(0, quiz.left) / QUIZ_SEC * 100) + '%';
+    sec.classList.toggle('hot', quiz.left <= 3);
+    if (quiz.left <= 0) quizReveal();
+  }, 1000);
+}
+function quizAnswer(k) {
+  if (!quiz || quiz.pick != null || quiz.left <= 0) return;
+  quiz.pick = k;
+  document.querySelectorAll('.qz-opt').forEach((b, idx) => b.classList.toggle('picked', idx === k));
+  const note = $('#qz-note'); if (note) note.textContent = 'Cevabın kilitlendi. Diğer oyuncular bekleniyor…';
+  // Demo: herkes cevap verdi varsayımıyla kalan süre kısalır.
+  quiz.left = Math.min(quiz.left, 2);
+}
+function quizReveal() {
+  clearInterval(quizTimer);
+  const item = QUIZ[quiz.i];
+  const ok = quiz.pick === item.c;
+  if (ok) quiz.score++;
+  document.querySelectorAll('.qz-opt').forEach((b, idx) => {
+    b.classList.add(idx === item.c ? 'right' : idx === quiz.pick ? 'wrong' : 'dim');
+    b.style.setProperty('--p', item.pct[idx] + '%');
+    b.querySelector('.pct').textContent = '%' + item.pct[idx];
+  });
+  const note = $('#qz-note');
+  if (note) note.innerHTML = quiz.pick == null ? 'Süre doldu, bu soruyu kaçırdın.' : ok ? `<b style="color:var(--ok)">Doğru!</b> Oyuncuların %${item.pct[item.c]}’i bildi.` : `<b style="color:var(--hot)">Yanlış.</b> Doğru cevap: ${esc(item.a[item.c])}`;
+  setTimeout(() => {
+    quiz.i++;
+    if (quiz.i < QUIZ.length) return quizQuestion();
+    S.quizBest = quiz.score; save();
+    const perfect = quiz.score === QUIZ.length, won = quiz.score >= 3;
+    $('#quiz').innerHTML = `<div class="quiz-hero">${ic(won ? 'trophy' : 'book')}<h2>${quiz.score}/${QUIZ.length} doğru!</h2>
+      <p>${perfect ? '5/5 yapan 86 oyuncu arasındasın. İmzalı kitap seti çekilişi 18.30’da; kazananlara bildirimle haber vereceğiz.' : won ? 'Tebrikler! Kitap ayracın Danışma noktasında seni bekliyor. Bu kodu görevliye göster.' : 'Bu tur olmadı. 18.00’deki turda yeniden şansını dene!'}</p>
+      ${won ? `<div class="coupon">AKF24-${perfect ? 'CEKILIS' : 'AYRAC'}-${4800 + quiz.score * 37}</div>` : ''}
+      <div class="qz-rank"><b>${quiz.players.toLocaleString('tr-TR')}</b> oyuncu katıldı · bir sonraki tur 18.00</div>
+      <button class="btn primary block" data-go="#/hediyeler">Hediyelere dön</button></div>`;
+    quiz = null;
+  }, 2600);
+}
 
 /* ---------- Duyurular ---------- */
 SCREENS.bildirimler = () => {
@@ -727,14 +977,19 @@ function push(n) {
   el.dataset.link = n.link || '#/bildirimler';
   el.classList.remove('show'); void el.offsetWidth; el.classList.add('show');
   clearTimeout(pushT); pushT = setTimeout(() => el.classList.remove('show'), 6500);
-  if (route.name !== 'ara') render('none');
+  if (!['ara', 'yarisma'].includes(route.name)) render('none');
 }
 
 /* ---------- Etkileşimler ---------- */
 document.addEventListener('click', e => {
-  const el = e.target.closest('[data-zone],[data-close-book],[data-book],[data-go],[data-back],[data-save],[data-kind],[data-sheet],[data-fair],[data-zoom],[data-stand],#push,#backdrop');
+  const el = e.target.closest('[data-scan],[data-scan-close],[data-quiz-live],[data-quiz-remind],[data-answer],[data-zone],[data-close-book],[data-book],[data-go],[data-back],[data-save],[data-kind],[data-sheet],[data-fair],[data-zoom],[data-stand],#push,#backdrop');
   if (!el) return;
   const d = el.dataset;
+  if (d.scan != null) return startScan();
+  if (d.scanClose != null) return closeScan();
+  if (d.quizLive != null) return quizLive();
+  if (d.quizRemind != null) return toast('15.00’te yarışma başlarken bildirim göndereceğiz', 'bell');
+  if (d.answer != null) return quizAnswer(Number(d.answer));
   if (d.book) return openBook(d.book);
   if (d.closeBook != null) { closeBook(); if (!d.go) return; }
   if (el.id === 'push') { el.classList.remove('show'); return go(d.link); }
@@ -761,7 +1016,14 @@ document.addEventListener('click', e => {
   if (d.back != null) { closeSheet(); return back(); }
   if (d.go) { closeSheet(); return go(d.go); }
 });
-document.addEventListener('input', e => { if (e.target.id === 'q') runSearch(e.target.value); });
+document.addEventListener('input', e => {
+  if (e.target.id === 'q') runSearch(e.target.value);
+  if (e.target.id === 'pq') {
+    const v = e.target.value;
+    $('#prog-filters').hidden = !!v.trim();
+    $('#prog-list').innerHTML = programBody(Number(route.q.get('gun') || (kids() ? 1 : DEMO_NOW.day)), route.q.get('tur') || 'tum', v);
+  }
+});
 $('#view').addEventListener('scroll', () => $('#topbar').classList.toggle('scrolled', $('#view').scrollTop > 6), { passive: true });
 
 /* ---------- Sunum / panel bağlantısı ---------- */
@@ -774,6 +1036,8 @@ function onDemoMessage(m) {
     const pool = kids() ? KID_PUSHES : LIVE_PUSHES;
     push(m.notice || pool[(pushCursor++) % pool.length]);
   }
+  if (m.type === 'quiz-live') { closeSheet(); if (S.fair !== 'ankara') { S.fair = 'ankara'; save(); } quizLive(); }
+  if (m.type === 'scan') { if (route.name !== 'hediyeler') go('#/hediyeler'); setTimeout(startScan, 350); }
   if (m.type === 'reset') { resetState(); history_ = []; go(m.hash || '#/'); }
 }
 window.addEventListener('message', e => { if (e.source === parent || e.source === window) onDemoMessage(e.data); });
