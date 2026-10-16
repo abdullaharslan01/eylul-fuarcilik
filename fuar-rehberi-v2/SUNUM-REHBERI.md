@@ -31,11 +31,12 @@ Sunum: http://localhost:4174 · Uygulama tek başına: http://localhost:4174/app
 
 ## Uygulamada ne var
 
-- **Ana sayfa:** şu anki imza, Program · Kroki · Duyurular kısayolları, son Eylül duyurusu, bugün imzada olan yazarlar.
-- **Program:** gün ve türe göre imzalar ve söyleşiler. Bir imzadan “Krokide göster” ile standa gidilir.
+- **Ana sayfa:** şu anki imza, Program · Kroki · Duyurular kısayolları ve bugün imzada olan yazarlar.
+- **Program:** gün ve türe göre imzalar ve söyleşiler. “Planıma ekle” ve “Krokide göster”.
+- **Planım:** kaydedilen etkinlikler.
 - **Kroki:** stant numarası yerine yayınevi logoları. Logoya dokun ya da yayınevi adını ara. WC, kafe ve danışma noktaları.
 - **Duyurular:** Eylül’ün gönderdiği bildirimler (sağ üstteki zil).
-- **Bildirim gönder (alt menüdeki turuncu buton):** sunumda göstermek için. Her basışta telefona farklı bir örnek bildirim düşer.
+- **Bildirim gönder:** uygulamanın parçası değil; sunumda telefonun üstündeki turuncu buton. Her basışta telefona farklı bir örnek bildirim düşer.
 - Fuar seçici: aynı uygulama Çocuk Şenliği’ne geçer.
 
 ## Akış (yaklaşık 5 dakika)

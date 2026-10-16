@@ -635,8 +635,3 @@ mark { background: #ffe3b0; color: inherit; border-radius: 3px; padding: 0 1px; 
 .floor .logo-pin rect { fill: #fff; stroke: #e2d7c4; stroke-width: 1.5; filter: drop-shadow(0 2px 3px rgba(40, 28, 10, .14)); }
 .floor .logo-pin.on rect { stroke: var(--brand); stroke-width: 4; }
 .floor .stand.has { fill: #fde9c8; stroke: #f0c27c; }
-
-/* Bildirim gönder sekmesi */
-.tabbar .send-tab { color: var(--brand-deep); }
-.tabbar .send-tab svg { width: 34px; height: 34px; padding: 6px; border-radius: 12px; background: var(--brand); color: #1a1100; }
-.tabbar .send-tab span { white-space: nowrap; font-size: 10px; }

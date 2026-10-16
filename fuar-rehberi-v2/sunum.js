@@ -16,7 +16,7 @@ const SLIDES = [
         <div><b>850</b><small>yazar ve çizer</small></div>
       </div>
       <p class="src">Kaynak: Anadolu Ajansı, Yeni Ankara, TRT Avaz haberleri (2025–2026 fuarları).</p>`,
-    notes: `<p>Açılış: <b>“Fuarınız yılda iki kez yarım milyon okuru ağırlıyor. Bu okurlar için basit bir uygulama hazırladık.”</b></p><p>Sağdaki telefon gerçek, tıklanabilir. Alt menüdeki turuncu <b>“Bildirim gönder”</b> ile istediğin an örnek bildirim gösterebilirsin.</p>`
+    notes: `<p>Açılış: <b>“Fuarınız yılda iki kez yarım milyon okuru ağırlıyor. Bu okurlar için basit bir uygulama hazırladık.”</b></p><p>Sağdaki telefon gerçek, tıklanabilir. Telefonun üstündeki turuncu <b>“Bildirim gönder”</b> ile istediğin an telefona örnek bildirim düşürebilirsin.</p>`
   },
   {
     id: 'sorun', theme: 'dark', layout: 'full',
@@ -58,8 +58,8 @@ const SLIDES = [
     html: `
       <span class="kicker"><span class="num">03</span>Duyurular</span>
       <h1 class="title" style="font-size:52px;margin:16px 0 12px">Eylül yazar, <em>okurun telefonuna düşer.</em></h1>
-      <p class="lead" style="font-size:20px;max-width:900px">Saat değişikliği, kayıp eşya, genel duyuru. Aşağıdaki panelde <b>“Gönder”</b>e ya da telefondaki <b>“Bildirim gönder”</b>e basın.</p>`,
-    notes: `<p>Panelde “Gönder”e bas: sağdaki telefona bildirim düşer. Telefonun alt menüsündeki turuncu <b>“Bildirim gönder”</b> de her basışta farklı bir örnek bildirim gösterir.</p><p><b>“Instagram’a koyup görülmesini ummak yerine, fuardaki herkesin telefonuna doğrudan.”</b></p>`
+      <p class="lead" style="font-size:20px;max-width:900px">Saat değişikliği, kayıp eşya, genel duyuru. Aşağıdaki panelde <b>“Gönder”</b>e ya da telefonun üstündeki <b>“Bildirim gönder”</b>e basın.</p>`,
+    notes: `<p>Panelde “Gönder”e bas: sağdaki telefona bildirim düşer. Telefonun üstündeki turuncu <b>“Bildirim gönder”</b> de her basışta farklı bir örnek bildirim gösterir.</p><p><b>“Instagram’a koyup görülmesini ummak yerine, fuardaki herkesin telefonuna doğrudan.”</b></p>`
   },
   {
     id: 'cocuk', theme: 'light', extra: 'teal', phone: { msg: { type: 'go', fair: 'cocuk', hash: '#/' } },
@@ -169,6 +169,7 @@ function key(k) {
 }
 document.addEventListener('keydown', e => { if (e.metaKey || e.ctrlKey || e.altKey) return; if (e.key === ' ') e.preventDefault(); key(e.key); });
 $('#next').onclick = () => show(cur + 1);
+$('#demo-push').onclick = () => sendPhone({ type: 'push' });
 $('#prev').onclick = () => show(cur - 1);
 $('#notes-close').onclick = () => { $('#notes').hidden = true; };
 $('#help-chip').onclick = () => { $('#notes').hidden = false; };

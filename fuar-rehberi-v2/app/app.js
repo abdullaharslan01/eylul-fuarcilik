@@ -58,6 +58,7 @@ const ic = (n, cls = '') => `<svg class="i ${cls}" viewBox="0 0 24 24" aria-hidd
 /* ---------- Durum ---------- */
 const DEFAULT = {
   fair: 'ankara',
+  saved: ['e7', 'e8', 'e11'],
   read: [],
   extraNotices: []
 };
@@ -193,10 +194,10 @@ const TABS = [
   { id: 'home', label: 'Ana sayfa', icon: 'home' },
   { id: 'program', label: 'Program', icon: 'cal' },
   { id: 'harita', label: 'Kroki', icon: 'map' },
-  { id: 'bildir', label: 'Bildirim gönder', icon: 'bell', action: true }
+  { id: 'planim', label: 'Planım', icon: 'heart' }
 ];
 const TAB_OF = { etkinlik: 'program', yazar: 'program', yayinevi: 'harita', ara: 'home', bildirimler: 'home' };
-const isTab = name => TABS.some(t => t.id === name && !t.action);
+const isTab = name => TABS.some(t => t.id === name);
 function parse(hash) {
   const h = (hash || '').replace(/^#\/?/, '');
   const [path, qs] = h.split('?');
@@ -231,9 +232,7 @@ function render(dir = 'fade') {
   if (dir !== 'none') view.scrollTop = 0;
   const tab = isTab(route.name) ? route.name : (TAB_OF[route.name] || lastTab);
   lastTab = tab;
-  $('#tabbar').innerHTML = TABS.map(t => t.action
-    ? `<button type="button" class="send-tab" data-demo-push>${ic(t.icon)}<span>${t.label}</span></button>`
-    : `<button type="button" class="${t.id === tab ? 'on' : ''}" data-go="#/${t.id === 'home' ? '' : t.id}">${ic(t.icon)}<span>${t.label}</span></button>`).join('');
+  $('#tabbar').innerHTML = TABS.map(t => `<button type="button" class="${t.id === tab ? 'on' : ''}" data-go="#/${t.id === 'home' ? '' : t.id}">${ic(t.icon)}<span>${t.label}</span>${t.id === 'planim' && S.saved.length ? `<span class="badge">${S.saved.length}</span>` : ''}</button>`).join('');
   out.after && out.after();
 }
 const unread = () => [...S.extraNotices, ...NOTICES].filter(n => !S.read.includes(n.id)).length;
@@ -257,14 +256,11 @@ SCREENS.home = () => {
   const day = kids() ? 1 : DEMO_NOW.day;
   const today = fairEvents().filter(e => e.day === day).sort((a, b) => tmin(a.start) - tmin(b.start));
   const next = kids() ? today[0] : (today.find(e => evStatus(e) === 'live' && e.kind === 'imza') || today.find(e => evStatus(e) === 'soon'));
-  const notice = kids() ? null : [...S.extraNotices, ...NOTICES][0];
   const nextImg = next && evImg(next);
   return { html: `
     <div class="greet">
-      <div class="date"><span>${kids() ? F.dates : DEMO_NOW.label + ' · ' + DEMO_NOW.day + '. gün'}</span><span class="open">${kids() ? 'Aileler için' : 'Açık · 20.00’ye kadar'}</span></div>
       <h1>${kids() ? 'Bugün ne <em>keşfedelim?</em>' : 'Bugün fuarda<br><em>neler</em> var?'}</h1>
     </div>
-    <button class="search" data-go="#/ara" style="width:calc(100% - 36px)">${ic('search', 'sm')}<span style="flex:1">${kids() ? 'Etkinlik ya da alan ara…' : 'Yazar ya da yayınevi ara…'}</span></button>
 
     ${next ? `<button class="now-card" data-go="#/etkinlik/${next.id}" style="display:block;width:calc(100% - 36px);text-align:left">
       <div class="bg" style="background-image:url('${nextImg || A + 'children-workshop.jpg'}')"></div>
@@ -281,13 +277,6 @@ SCREENS.home = () => {
       <button data-go="#/bildirimler"><span class="q-ico">${ic('bell')}</span>Duyurular</button>
     </div>
 
-    ${notice ? `<div class="section">
-      <button class="notice-card" data-go="${notice.link}" style="width:calc(100% - 36px);text-align:left">
-        <span class="ico-tile">${ic('alert', 'sm')}</span>
-        <span style="flex:1"><span class="eyebrow" style="color:#a85a00">EYLÜL DUYURUSU · ${notice.time}</span><strong>${esc(notice.title)}</strong><p>${esc(notice.body)}</p></span>
-      </button>
-    </div>` : ''}
-
     <div class="section">
       <div class="section-head"><h2>${kids() ? 'Bugünün etkinlikleri' : 'Bugün imzada'}</h2><button class="more" data-go="#/program">Tümü →</button></div>
       ${kids() ? `<div class="list">${today.map(e => eventRow(e)).join('')}</div>` : `<div class="hscroll">
@@ -300,7 +289,6 @@ SCREENS.home = () => {
         }).join('')}
       </div>`}
     </div>
-    <div class="footer-credit">Eylül Fuarcılık için <img src="${A}bulbi-logo.png" alt="Bulbi"> tarafından geliştirildi</div>
   ` };
 };
 function eventRow(e) {
@@ -345,6 +333,7 @@ function programItem(e, st) {
     <div class="t-card" style="--k:${KCOL[e.kind]}" data-go="#/etkinlik/${e.id}" role="button" tabindex="0">
       ${evImg(e) ? `<img class="avatar" src="${evImg(e)}" alt="" loading="lazy">` : ''}
       <div class="txt"><strong>${esc(e.title)}</strong><small>${esc(evPlace(e))}${e.speakers && !kids() ? ' · ' + esc(e.speakers) : ''}</small><div class="tags">${tags.join('')}</div></div>
+      <button class="save-btn ${has('saved', e.id) ? 'on' : ''}" data-save="${e.id}" aria-label="Planıma ekle">${ic('bookmark', 'sm')}</button>
     </div>
   </div>`;
 }
@@ -373,7 +362,8 @@ SCREENS.etkinlik = id => {
       <div class="fact">${ic('pin', 'sm')}<div><small>${p ? 'Stant' : 'Yer'}</small><b>${esc(p ? p.stand + ' · ' + p.name.split(' ')[0] : e.place)}</b></div></div>
     </div>
     <div class="cta-bar">
-      ${p ? `<button class="btn dark" data-go="#/harita?stand=${stand}">${ic('map', 'sm')} Krokide göster</button>` : ''}
+      <button class="btn ${has('saved', e.id) ? 'done' : 'dark'}" data-save="${e.id}">${has('saved', e.id) ? ic('check', 'sm') + ' Planımda' : ic('plus', 'sm') + ' Planıma ekle'}</button>
+      ${p ? `<button class="btn ghost" data-go="#/harita?stand=${stand}">${ic('map', 'sm')} Krokide göster</button>` : ''}
     </div>
     ${books.length ? `<div class="section">
       <div class="section-head"><h2>Yazarın kitapları</h2><button class="more" data-go="#/yazar/${a.id}">Profil →</button></div>
@@ -494,6 +484,23 @@ function pubRow(p, q = '') {
   return `<button class="row" data-go="#/yayinevi/${p.id}"><span class="logo-tile"><img src="${A}${p.logo}" alt=""></span><span class="txt"><strong>${hl(p.name, q)}</strong><small>Stant ${hl(p.stand, q)}</small></span>${ic('chev', 'sm')}</button>`;
 }
 
+/* ---------- Planım ---------- */
+SCREENS.planim = () => {
+  const saved = EVENTS.filter(e => has('saved', e.id)).sort((a, b) => a.fair.localeCompare(b.fair) || a.day - b.day || tmin(a.start) - tmin(b.start));
+  const byDay = {};
+  saved.forEach(e => (byDay[e.fair + '-' + e.day] = byDay[e.fair + '-' + e.day] || []).push(e));
+  return {
+    top: topTitle('Planım', 'KAYDETTİĞİN ETKİNLİKLER'),
+    html: saved.length ? Object.values(byDay).map(list => {
+      const e0 = list[0], d = FAIRS[e0.fair].days.find(x => x.n === e0.day);
+      const today = e0.fair === 'ankara' && e0.day === DEMO_NOW.day;
+      return `<div class="section" style="margin-top:8px"><div class="section-head"><h2 style="font-size:18px">${d.label}, ${d.date}${today ? ' <span class="tag imza" style="vertical-align:middle">Bugün</span>' : ''}</h2></div>
+        <div class="timeline" style="padding-top:0">${list.map(e => programItem(e, today ? evStatus(e) : 'future')).join('')}</div></div>`;
+    }).join('') + `<p class="muted" style="font-size:12.5px;margin:6px 22px 0">Kaydettiğin etkinlikler başlamadan 15 dakika önce hatırlatılır.</p>`
+      : `<div class="empty"><strong>Planın boş</strong><p>Programda beğendiğin etkinliği kaydet.</p><button class="btn sm dark" data-go="#/program">Programa git</button></div>`
+  };
+};
+
 /* ---------- Duyurular ---------- */
 SCREENS.bildirimler = () => {
   const all = [...S.extraNotices, ...NOTICES];
@@ -530,12 +537,12 @@ function push(n) {
 
 /* ---------- Etkileşimler ---------- */
 document.addEventListener('click', e => {
-  const el = e.target.closest('[data-go],[data-back],[data-demo-push],[data-sheet],[data-fair],[data-zoom],[data-stand],#push,#backdrop');
+  const el = e.target.closest('[data-go],[data-back],[data-save],[data-sheet],[data-fair],[data-zoom],[data-stand],#push,#backdrop');
   if (!el) return;
   const d = el.dataset;
   if (el.id === 'push') { el.classList.remove('show'); return go(d.link); }
   if (el.id === 'backdrop') return closeSheet();
-  if (d.demoPush != null) return push(LIVE_PUSHES[(pushCursor++) % LIVE_PUSHES.length]);
+  if (d.save) { e.stopPropagation(); const on = toggle('saved', d.save); toast(on ? 'Planına eklendi' : 'Plandan çıkarıldı', on ? 'bookmark' : 'x'); return render('none'); }
   if (d.sheet) return openSheet(SHEETS[d.sheet]());
   if (d.fair) { S.fair = d.fair; save(); closeSheet(); return go('#/'); }
   if (d.zoom) {
