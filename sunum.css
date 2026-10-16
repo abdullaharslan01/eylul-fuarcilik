@@ -164,7 +164,7 @@ h1.title em { font-style: italic; font-weight: 500; color: var(--brand-deep); }
 .browser iframe { width: 1440px; height: 854px; border: 0; display: block; }
 
 /* ---------- Alt bilgi ---------- */
-.foot { position: absolute; left: 120px; bottom: 26px; display: flex; align-items: center; gap: 34px; z-index: 6; }
+.foot { position: absolute; left: 120px; bottom: 26px; display: flex; align-items: center; gap: 22px; z-index: 6; }
 .foot .brand { display: flex; align-items: center; gap: 12px; padding: 8px 14px; border-radius: 12px; background: rgba(255, 255, 255, .85); }
 .foot .brand img.eylul { height: 22px; }
 .foot .brand img.bulbi { height: 15px; }
@@ -292,7 +292,7 @@ h1.title em { font-weight: 600; }
 
 /* Sağ altta ilerleme noktaları */
 .foot { right: auto; }
-.stage > .dots { position: absolute; left: 700px; bottom: 44px; z-index: 6; display: flex; }
+.foot .dots { display: flex; margin-left: 4px; }
 .dots button { width: 10px; height: 10px; }
 .dots button.on { width: 30px; }
 .dots button:hover { background: rgba(26, 23, 18, .35); }
@@ -312,3 +312,10 @@ h1.title em { font-weight: 600; }
 
 /* Sahne dışında kalan boşluk sahneyle aynı renkte olsun (tablet, dikey ekran) */
 body.light { background: var(--paper); }
+
+/* → ile sıradaki buton vurgulanır, oynatılanlar işaretlenir */
+.act.upnext { box-shadow: 0 0 0 3px var(--brand), 0 12px 26px rgba(26, 23, 18, .18); }
+.act.done .a-go { background: var(--ok); color: #fff; }
+.act.done .a-go svg { display: none; }
+.act.done .a-go::after { content: '✓'; font-weight: 900; font-size: 14px; }
+.nowbar button { max-width: 300px; overflow: hidden; text-overflow: ellipsis; }

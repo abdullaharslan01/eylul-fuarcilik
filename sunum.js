@@ -189,7 +189,7 @@ let swipe = null;
 slidesEl.addEventListener('touchstart', e => { const t = e.touches[0]; swipe = { x: t.clientX, y: t.clientY }; }, { passive: true });
 slidesEl.addEventListener('touchend', e => {
   if (!swipe) return; const t = e.changedTouches[0]; const dx = t.clientX - swipe.x, dy = t.clientY - swipe.y; swipe = null;
-  if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) show(cur + (dx < 0 ? 1 : -1));
+  if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) (dx < 0 ? next : prev)();
 }, { passive: true });
 
 /* ---------- Telefonla konuşma ---------- */
@@ -204,13 +204,36 @@ addEventListener('message', e => {
 });
 document.addEventListener('click', e => {
   const b = e.target.closest('[data-msg]');
-  if (b) { sendPhone(JSON.parse(b.dataset.msg)); b.classList.remove('pulse'); }
+  if (b) { sendPhone(JSON.parse(b.dataset.msg)); b.classList.remove('pulse'); const acts = slideActs(); const k = acts.indexOf(b); if (k >= 0) { sub = k + 1; markActs(); } }
+  if (e.target.closest('[data-next]')) return next();
   const d = e.target.closest('[data-dot]');
   if (d) show(Number(d.dataset.dot));
 });
 
 /* ---------- Gezinme ---------- */
-let cur = -1;
+let cur = -1, sub = 0;
+// Her slayttaki "canlı göster" butonları → tuşuyla sırayla oynatılır.
+const slideActs = () => [...document.querySelectorAll('.slide.on .act')];
+function markActs() {
+  slideActs().forEach((a, k) => { a.classList.toggle('done', k < sub); a.classList.toggle('upnext', k === sub); });
+  const s = SLIDES[cur], acts = slideActs(), nx = SLIDES[cur + 1];
+  const nextLabel = sub < acts.length ? acts[sub].querySelector('b').textContent : nx ? nx.label : '';
+  $('#nowbar').innerHTML = `<span>Şimdi: <b>${s.label}</b></span>${nextLabel ? `<button data-next>Sıradaki: ${nextLabel} →</button>` : ''}`;
+}
+function next() {
+  const acts = slideActs();
+  if (sub < acts.length) { const a = acts[sub]; sendPhone(JSON.parse(a.dataset.msg)); sub++; markActs(); return; }
+  show(cur + 1);
+}
+function prev() {
+  if (sub > 0) {
+    sub--;
+    const acts = slideActs(), s = SLIDES[cur];
+    if (sub > 0) sendPhone(JSON.parse(acts[sub - 1].dataset.msg)); else if (s.phone && s.phone.msg) sendPhone(s.phone.msg);
+    markActs(); return;
+  }
+  show(cur - 1);
+}
 function show(i) {
   i = Math.max(0, Math.min(SLIDES.length - 1, i));
   if (i === cur) return;
@@ -224,27 +247,25 @@ function show(i) {
   if (s.layout === 'panel') { const p = $('#panel'); if (!p.src) p.src = p.dataset.src; }
   if (s.phone && s.phone.msg) sendPhone(s.phone.msg);
   document.querySelectorAll('[data-dot]').forEach((d, k) => d.classList.toggle('on', k === i));
-  const nx = SLIDES[i + 1];
-  $('#nowbar').innerHTML = `<span>Şimdi: <b>${s.label}</b></span>${nx ? `<button data-dot="${i + 1}">Sıradaki: ${nx.label} →</button>` : ''}`;
   $('#count').textContent = String(i + 1).padStart(2, '0') + ' / ' + SLIDES.length;
   $('#bar').style.width = ((i + 1) / SLIDES.length * 100) + '%';
   $('#notes-body').innerHTML = s.notes || '';
   $('#notes-step').textContent = (i + 1) + '. slayt';
-  cur = i;
+  cur = i; sub = 0; markActs();
   history.replaceState(null, '', '#' + (i + 1));
 }
 function key(k) {
-  if (['ArrowRight', 'PageDown', ' '].includes(k)) show(cur + 1);
-  if (['ArrowLeft', 'PageUp'].includes(k)) show(cur - 1);
+  if (['ArrowRight', 'PageDown', ' '].includes(k)) next();
+  if (['ArrowLeft', 'PageUp'].includes(k)) prev();
   if (k === 'Home') show(0);
   if (k === 'End') show(SLIDES.length - 1);
   if (k === 'n' || k === 'N') $('#notes').hidden = !$('#notes').hidden;
   if (k === 'f' || k === 'F') { if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen?.(); }
 }
 document.addEventListener('keydown', e => { if (e.metaKey || e.ctrlKey || e.altKey) return; if (e.key === ' ') e.preventDefault(); key(e.key); });
-$('#next').onclick = () => show(cur + 1);
+$('#next').onclick = next;
 $('#demo-push').onclick = () => { sendPhone({ type: 'push' }); const b = $('#demo-push'); b.classList.remove('sent'); void b.offsetWidth; b.classList.add('sent'); };
-$('#prev').onclick = () => show(cur - 1);
+$('#prev').onclick = prev;
 $('#notes-close').onclick = () => { $('#notes').hidden = true; };
 
 const start = parseInt(location.hash.slice(1), 10);

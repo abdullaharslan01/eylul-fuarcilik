@@ -25,7 +25,7 @@ Canlı: https://eylul-fuarcilik.vercel.app (sunum) · https://eylul-fuarcilik.ve
 
 ## Kısayollar
 
-- `→` / `←` ya da boşluk: slayt değiştir
+- `→` / boşluk: önce o slayttaki “canlı göster” butonlarını sırayla oynatır (telefon kendiliğinden ilgili ekrana geçer), hepsi bitince sonraki slayta geçer. `←` bir adım geri alır. Butonlara elle de tıklayabilirsin.
 - `N`: konuşmacı notları
 - `F`: tam ekran
 - 1. slayta dönünce telefon sıfırlanır, demo baştan oynatılabilir.
