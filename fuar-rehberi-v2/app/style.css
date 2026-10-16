@@ -623,3 +623,9 @@ mark { background: #ffe3b0; color: inherit; border-radius: 3px; padding: 0 1px; 
 }
 
 .still *, .still *::before, .still *::after { animation: none !important; transition: none !important; }
+
+/* Sade sürüm */
+.quick.three { grid-template-columns: repeat(3, 1fr); }
+.quick.three .q-ico { width: 64px; height: 64px; }
+.fac-grid.three { grid-template-columns: repeat(3, 1fr); }
+.tabbar { grid-template-columns: repeat(4, 1fr); }

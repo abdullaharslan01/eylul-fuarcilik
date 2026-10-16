@@ -4,9 +4,9 @@ Bulbi’nin Eylül Fuarcılık’a sunacağı mobil fuar rehberi konsepti. Klas�
 
 | Dosya | Ne işe yarar |
 | --- | --- |
-| `index.html` | 14 slaytlık tanıtım sunumu. Sağdaki telefon gerçek, tıklanabilir uygulama. |
+| `index.html` | 8 slaytlık tanıtım sunumu. Sağdaki telefon gerçek, tıklanabilir uygulama. |
 | `app/` | Mobil uygulama. Telefonda tek başına da açılır. |
-| `panel.html` | Eylül ekibinin göreceği organizatör paneli. Sunumun 8. slaytında canlı çalışır. |
+| `panel.html` | Eylül ekibinin duyuru gönderdiği basit panel. Sunumun 5. slaytında canlı çalışır. |
 
 Eski prototip `../fuar-rehberi-prototip/` klasöründe olduğu gibi duruyor.
 
@@ -20,31 +20,34 @@ cd ~/Documents/Bulbi/Eylul/fuar-rehberi-v2 && python3 -m http.server 4174
 
 Sunum: http://localhost:4174 · Uygulama tek başına: http://localhost:4174/app/ · Panel: http://localhost:4174/panel.html
 
-İnternet gerekmez; fontlar ve QR kütüphanesi klasörün içinde.
+İnternet gerekmez; fontlar klasörün içinde.
 
 ## Kısayollar
 
 - `→` / `←` ya da boşluk: slayt değiştir
-- `N`: konuşmacı notlarını aç/kapat (sol altta açılır, her slaytta ne söyleyeceğin yazar)
+- `N`: konuşmacı notları
 - `F`: tam ekran
-- `index.html#4` gibi bir adresle doğrudan o slayttan başlanır. 1. slayta dönünce telefon sıfırlanır, demo baştan oynatılabilir.
+- 1. slayta dönünce telefon sıfırlanır, demo baştan oynatılabilir.
 
-## Akış (yaklaşık 10 dakika)
+## Uygulamada ne var (sade sürüm)
 
-1. **Kapak.** Yılda iki kez yarım milyon okur. Telefonda ilgi alanı seç, “Fuara başla”.
-2. **Sorunlar.** Ziyaretçi şikâyetleri, kaynaklarıyla. İmza kuyruğu, kroki ve programı vurgula.
-3. **Bugün ekranı.** Canlı ana ekran, Eylül duyurusu, yoğunluk eğrisi.
-4. **Dijital imza sırası. En etkili an.** “Sıra al” → #47. “Sırayı ilerlet”e 3–4 kez bas: 5 kişi kala “Sıran yaklaşıyor”, sonra “Sıra sende!” bildirimi gelir.
-5. **Aranabilir kroki.** A-504’e rota, yoğunluk katmanı, “susamuru” araması.
-6. **Program & Planım.** “Şimdi” çizgisi, yazar takibi.
-7. **Alınacaklar listesi.** Fuar fiyatı ve “Rotamı çiz”.
-8. **Eylül paneli.** Panelde “Şimdi gönder”e bas, bildirim sağdaki telefona düşer.
-9. **Giriş, ulaşım, okullar.**
-10. **Çocuk Şenliği 2027.** Atölye rezervasyonu ve “Görevli bilekliği okuttu” → velinin telefonuna bildirim.
-11. **Eylül için değer.** Sponsor geliri, veri, doğrudan iletişim, yıl boyu bağ.
-12. **Yol haritası** ve Eylül’den ihtiyacımız olan veri.
-13. **İş birliği önerisi.** Bulbi geliştirir ve işletir; Eylül fuarlarda stant ve görünürlük verir.
-14. **Kapanış.**
+- **Ana sayfa:** şu anki/sıradaki imza, Program · Kroki · Duyurular kısayolları, son Eylül duyurusu, bugün imzada olan yazarlar.
+- **Program:** gün ve türe göre imza ve söyleşiler, “Planıma ekle”.
+- **Kroki:** yayınevi/stant araması, girişten standa yol, WC · kafe · danışma.
+- **Planım:** kaydedilen etkinlikler.
+- **Duyurular:** Eylül’ün panelden gönderdiği bildirimler.
+- Fuar seçici: aynı uygulama Çocuk Şenliği’ne geçer.
+
+## Akış (yaklaşık 5–6 dakika)
+
+1. **Kapak.** Yılda iki kez yarım milyon okur.
+2. **Okurun üç sorusu:** kim ne zaman nerede, stant nerede, değişiklikten nasıl haberim olur.
+3. **Program.** Bir imzayı aç, “Planıma ekle”.
+4. **Kroki.** “Everest” ara, WC’yi göster.
+5. **Duyurular.** Paneldeki “Gönder”e bas, bildirim telefona düşer.
+6. **Çocuk Şenliği 2027.** Aynı uygulama, fuar değişir.
+7. **Önerimiz.** Bulbi geliştirir; Eylül stant ve görünürlük verir.
+8. **Teşekkürler.**
 
 ## Kapanıştaki QR
 
@@ -60,4 +63,4 @@ Sunum `localhost` üzerinden açıldığında QR gösterilmez (o adres başkası
 
 ## Örnek olan içerikler
 
-Yazar, kitap ve yayınevi adları gerçek. Şunlar sunum için uydurulmuş örnek: 2026 imza saatleri, stant numaraları, sıra uzunlukları, yoğunluk ve panel sayıları, fiyatlar, kampanyalar, Çocuk Şenliği programı. Kroki, Eylül’ün 23. fuar (Nisan 2026) krokisinden sadeleştirildi. Görsel kaynakları: `assets/IMAGE_SOURCES.md`.
+Yazar, kitap ve yayınevi adları gerçek. Şunlar sunum için uydurulmuş örnek: 2026 imza saatleri, stant numaraları, duyurular ve Çocuk Şenliği programı. Kroki, Eylül’ün 23. fuar (Nisan 2026) krokisinden sadeleştirildi. Görsel kaynakları: `assets/IMAGE_SOURCES.md`.
