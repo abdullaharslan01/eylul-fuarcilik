@@ -180,7 +180,7 @@ const FAC_CARDS = [
   { id: 'atm', icon: 'card', name: 'ATM', where: 'Giriş holü', c: '#1f9d55', bg: '#dff3e6' },
   { id: 'bebek', icon: 'kid', name: 'Bebek bakım', where: 'Giriş holü, B koridoru', c: '#c2185b', bg: '#fde6ee' }
 ];
-const facCard = (f, on) => `<button class="fac-card${on ? ' on' : ''}" data-fac="${f.id}" style="--fc:${f.c};--fb:${f.bg}"><span class="fc-ico">${ic(f.icon)}</span><strong>${f.name}</strong><small>${f.where}</small></button>`;
+const facCard = (f, on) => `<button class="fac-card${on ? ' on' : ''}" data-fac="${f.id}" style="--fc:${f.c};--fb:${f.bg}"><span class="fc-ico">${ic(f.icon, 'sm')}</span><span class="fc-txt"><strong>${f.name}</strong><small>${f.where}</small></span></button>`;
 const facSheet = f => `<div class="card map-sheet" id="map-card"><span class="fc-ico sm" style="--fc:${f.c};--fb:${f.bg}">${ic(f.icon, 'sm')}</span><div style="flex:1"><strong style="display:block">${esc(f.name)}</strong><small class="muted">${esc(f.where)} · krokide turuncu ile gösterildi</small></div></div>`;
 // Hizmet noktası seçimi: ekranı yeniden çizmeden krokiyi günceller, kaydırma yerinde kalır.
 function selectFacility(id) {
@@ -670,7 +670,7 @@ SCREENS.harita = () => {
       <div class="map-scroll" id="mapscroll"><div class="map-canvas" id="mapcanvas" style="width:${mapW}px">${floorSVG({ sel: stand, facSel: yer })}</div></div>
     </div>
     ${card || `<p class="muted" id="map-card" style="font-size:13px;margin:12px 22px 0">Bir yayınevi logosuna dokun ya da yukarıdan ara.</p>`}
-    <div class="section" style="margin-top:16px"><div class="section-head"><h2 style="font-size:18px">Hizmet noktaları</h2><span class="sponsor-note">${FAC_CARDS.length} nokta</span></div><div class="fac-scroll">${FAC_CARDS.map(x => facCard(x, yer === x.id)).join('')}</div></div>`,
+    <div class="section" style="margin-top:16px"><div class="section-head"><h2 style="font-size:18px">Hizmet noktaları</h2><span class="sponsor-note">${FAC_CARDS.length} nokta</span></div><div class="fac-grid2">${FAC_CARDS.map(x => facCard(x, yer === x.id)).join('')}</div></div>`,
     after: () => requestAnimationFrame(() => centerMap(stand || yer || 'A-404'))
   };
 };

@@ -990,3 +990,11 @@ mark { background: #ffe3b0; color: inherit; border-radius: 3px; padding: 0 1px; 
 .fac-card small { font-size: 11.5px; color: var(--muted); line-height: 1.3; }
 .fac-card.on { box-shadow: 0 0 0 2px var(--fc), var(--shadow-1); }
 .fac-card.on .fc-ico { background: var(--fc); color: #fff; }
+
+/* Hizmet noktaları: iki sütunlu geniş kartlar */
+.fac-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 0 18px; }
+.fac-grid2 .fac-card { width: auto; flex-direction: row; align-items: center; gap: 10px; padding: 12px; border-radius: 16px; }
+.fac-grid2 .fac-card .fc-ico { width: 40px; height: 40px; border-radius: 12px; margin: 0; }
+.fac-grid2 .fc-txt { min-width: 0; display: flex; flex-direction: column; }
+.fac-grid2 .fac-card strong { font-size: 14px; line-height: 1.2; }
+.fac-grid2 .fac-card small { font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
