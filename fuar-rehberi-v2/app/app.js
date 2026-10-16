@@ -58,7 +58,6 @@ const ic = (n, cls = '') => `<svg class="i ${cls}" viewBox="0 0 24 24" aria-hidd
 /* ---------- Durum ---------- */
 const DEFAULT = {
   fair: 'ankara',
-  saved: ['e7', 'e8', 'e11'],
   read: [],
   extraNotices: []
 };
@@ -110,7 +109,6 @@ function hl(text, q) {
 /* ---------- Kroki geometrisi (resmî ATO Congresium krokisinden sadeleştirildi) ---------- */
 const STANDS = {};
 const ENTRANCE = { x: 296, y: 628 };
-const SPINE = 250;
 (function buildFloor() {
   const rows = [
     { p: 'C-', from: 21, to: 33, y: 10, h: 16, blocks: [[30, 590]], aisle: 35, small: true },
@@ -155,75 +153,35 @@ const FACILITIES = [
   { id: 'ilkyardim', label: '+', x: 178, y: 560, icon: 'plus', name: 'İlk yardım' },
   { id: 'cocukpt', label: '★', x: 430, y: 612, icon: 'shield', name: 'Kayıp çocuk noktası' }
 ];
-const M_PER_UNIT = 0.14;
-function targetPoint(id) {
-  if (ZONES[id]) return { x: ZONES[id].door.x, y: ZONES[id].aisle, end: ZONES[id].door, aisle: ZONES[id].aisle };
-  const f = FACILITIES.find(f => f.id === id);
-  if (f) return { x: f.x, y: f.y > 560 ? 553 : f.y, end: { x: f.x, y: f.y }, aisle: f.y > 560 ? 553 : 304 };
-  const s = STANDS[id]; if (!s) return null;
-  const cx = s.x + s.w / 2;
-  return { x: cx, y: s.aisle, end: { x: cx, y: s.above ? s.y : s.y + s.h }, aisle: s.aisle };
-}
-function routeTo(ids) {
-  let pts = [ENTRANCE, { x: ENTRANCE.x, y: 553 }];
-  let cur = { x: ENTRANCE.x, y: 553 };
-  ids.forEach(id => {
-    const t = targetPoint(id); if (!t) return;
-    if (t.aisle !== cur.y) { pts.push({ x: SPINE, y: cur.y }, { x: SPINE, y: t.aisle }); }
-    pts.push({ x: t.x, y: t.aisle }, t.end, { x: t.x, y: t.aisle });
-    cur = { x: t.x, y: t.aisle };
-  });
-  pts.pop();
-  let len = 0; for (let i = 1; i < pts.length; i++) len += Math.abs(pts[i].x - pts[i - 1].x) + Math.abs(pts[i].y - pts[i - 1].y);
-  const m = Math.round(len * M_PER_UNIT);
-  return { pts, meters: m, minutes: Math.max(1, Math.round(m / 70)) };
-}
-function orderStops(ids) {
-  return [...ids].sort((a, b) => (targetPoint(b).aisle - targetPoint(a).aisle) || (targetPoint(a).x - targetPoint(b).x));
-}
-
 function floorSVG(o = {}) {
-  const sel = o.sel ? [].concat(o.sel) : [];
-  const list = o.list || [];
-  const owned = new Set(Object.keys(STAND_OWNERS));
-  let s = `<svg class="floor" viewBox="${o.viewBox || '0 0 1000 640'}" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">`;
+  const sel = o.sel || null;
+  let s = `<svg class="floor" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">`;
   s += `<path class="wall" d="M4 4H996V636H340M250 636H4z"/>`;
   Object.values(ZONES).forEach(z => {
-    s += `<rect class="zone ${z.cls}${sel.includes(z.id) ? ' sel' : ''}" x="${z.x}" y="${z.y}" width="${z.w}" height="${z.h}" rx="8" data-stand="${z.id}"/>`;
+    s += `<rect class="zone ${z.cls}" x="${z.x}" y="${z.y}" width="${z.w}" height="${z.h}" rx="8"/>`;
     s += `<text class="zlabel ${z.cls}" x="${z.x + z.w / 2}" y="${z.y + z.h / 2 + 4}">${z.name.toLocaleUpperCase('tr-TR')}</text>`;
   });
   Object.values(STANDS).forEach(st => {
-    const cls = ['stand', owned.has(st.id) ? 'has' : '', sel.includes(st.id) ? 'sel' : '', list.includes(st.id) ? 'list' : '', (o.dim && !sel.includes(st.id) && !list.includes(st.id)) ? 'dim' : ''].join(' ');
-    s += `<rect class="${cls}" x="${st.x.toFixed(1)}" y="${st.y}" width="${st.w.toFixed(1)}" height="${st.h}" rx="3" data-stand="${st.id}"/>`;
-    if (!st.small || sel.includes(st.id)) {
-      const lab = st.id.replace('A-', '');
-      const big = owned.has(st.id);
-      s += `<text class="slabel${big ? ' big' : ''}${sel.includes(st.id) ? ' sel' : ''}" x="${(st.x + st.w / 2).toFixed(1)}" y="${st.y + st.h / 2}">${lab}</text>`;
-    }
+    s += `<rect class="stand${STAND_OWNERS[st.id] ? ' has' : ''}${sel === st.id ? ' sel' : ''}" x="${st.x.toFixed(1)}" y="${st.y}" width="${st.w.toFixed(1)}" height="${st.h}" rx="3"/>`;
   });
   if (o.fac !== false) FACILITIES.forEach(f => {
     const on = o.facSel === f.id;
-    s += `<g class="fac"><circle cx="${f.x}" cy="${f.y}" r="${on ? 15 : 11}" ${on ? 'style="fill:var(--brand);stroke:#fff;stroke-width:2"' : ''}/><text x="${f.x}" y="${f.y + .5}">${f.label}</text></g>`;
+    s += `<g class="fac"><circle cx="${f.x}" cy="${f.y}" r="${on ? 16 : 11}" ${on ? 'style="fill:var(--brand);stroke:#fff;stroke-width:2"' : ''}/><text x="${f.x}" y="${f.y + .5}">${f.label}</text></g>`;
   });
-  s += `<text class="zlabel" x="295" y="${ENTRANCE.y - 4}" style="font-size:10px">GİRİŞ</text>`;
-  if (o.route) {
-    const d = 'M' + o.route.pts.map(p => `${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' L');
-    s += `<path class="route-glow" d="${d}"/><path class="route draw" d="${d}"/>`;
-  }
-  if (o.pins) o.pins.forEach((id, i) => {
-    const t = targetPoint(id); if (!t) return;
-    const { x, y } = t.end;
-    s += `<g class="pin" transform="translate(${x} ${y - 4})"><path d="M0 0c-8-10-14-14-14-21a14 14 0 0 1 28 0c0 7-6 11-14 21z"/><text y="-21">${o.numbered ? i + 1 : '★'}</text></g>`;
+  s += `<text class="zlabel" x="295" y="${ENTRANCE.y - 4}" style="font-size:11px">GİRİŞ</text>`;
+  // Yayınevi logoları: ziyaretçi stant numarasını değil yayınevini tanır.
+  Object.entries(STAND_OWNERS).forEach(([id, pid]) => {
+    const st = STANDS[id], p = pub(pid); if (!st || !p) return;
+    const w = 84, h = 40, x = st.x + st.w / 2 - w / 2, y = st.y + st.h / 2 - h / 2;
+    const on = sel === id;
+    s += `<g class="logo-pin${on ? ' on' : ''}" data-stand="${id}"><rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${w}" height="${h}" rx="10"/><image href="${A}${p.logo}" x="${(x + 7).toFixed(1)}" y="${(y + 5).toFixed(1)}" width="${w - 14}" height="${h - 10}" preserveAspectRatio="xMidYMid meet"/></g>`;
   });
-  if (o.you !== false) s += `<g class="you"><circle class="halo" cx="${ENTRANCE.x}" cy="${ENTRANCE.y - 8}" r="22"/><circle class="p" cx="${ENTRANCE.x}" cy="${ENTRANCE.y - 8}" r="8"/></g>`;
   return s + '</svg>';
 }
 function standName(id) {
   if (ZONES[id]) return ZONES[id].name;
   const f = FACILITIES.find(f => f.id === id); if (f) return f.name;
   const o = STAND_OWNERS[id];
-  if (o === 'iletisim') return 'İletişim Yayınları';
-  if (o === 'cumhuriyet') return 'Cumhuriyet Kitapları';
   return o ? pub(o).name : 'Katılımcı standı';
 }
 
@@ -235,9 +193,10 @@ const TABS = [
   { id: 'home', label: 'Ana sayfa', icon: 'home' },
   { id: 'program', label: 'Program', icon: 'cal' },
   { id: 'harita', label: 'Kroki', icon: 'map' },
-  { id: 'planim', label: 'Planım', icon: 'heart' }
+  { id: 'bildir', label: 'Bildirim gönder', icon: 'bell', action: true }
 ];
 const TAB_OF = { etkinlik: 'program', yazar: 'program', yayinevi: 'harita', ara: 'home', bildirimler: 'home' };
+const isTab = name => TABS.some(t => t.id === name && !t.action);
 function parse(hash) {
   const h = (hash || '').replace(/^#\/?/, '');
   const [path, qs] = h.split('?');
@@ -247,9 +206,9 @@ function parse(hash) {
 function go(hash) { if (location.hash === hash) render('none'); else location.hash = hash; }
 window.addEventListener('hashchange', () => {
   const next = parse(location.hash);
-  const isTab = TABS.some(t => t.id === next.name);
-  const dir = isTab ? 'fade' : (history_.length && history_[history_.length - 1] === location.hash) ? 'back' : 'fwd';
-  if (dir === 'back') history_.pop(); else if (!isTab) history_.push(currentHash); else history_ = [];
+  const isTabRoute = isTab(next.name);
+  const dir = isTabRoute ? 'fade' : (history_.length && history_[history_.length - 1] === location.hash) ? 'back' : 'fwd';
+  if (dir === 'back') history_.pop(); else if (!isTabRoute) history_.push(currentHash); else history_ = [];
   route = next; currentHash = location.hash; render(dir);
 });
 let currentHash = location.hash || '#/';
@@ -270,9 +229,11 @@ function render(dir = 'fade') {
   view.innerHTML = out.html;
   view.className = 'view ' + (dir === 'fwd' ? 'enter' : dir === 'back' ? 'enter-back' : dir === 'none' ? '' : 'fade');
   if (dir !== 'none') view.scrollTop = 0;
-  const tab = TABS.some(t => t.id === route.name) ? route.name : (TAB_OF[route.name] || lastTab);
+  const tab = isTab(route.name) ? route.name : (TAB_OF[route.name] || lastTab);
   lastTab = tab;
-  $('#tabbar').innerHTML = TABS.map(t => `<button type="button" class="${t.id === tab ? 'on' : ''}" data-go="#/${t.id === 'home' ? '' : t.id}">${ic(t.icon)}<span>${t.label}</span>${t.id === 'planim' && S.saved.length ? `<span class="badge">${S.saved.length}</span>` : ''}</button>`).join('');
+  $('#tabbar').innerHTML = TABS.map(t => t.action
+    ? `<button type="button" class="send-tab" data-demo-push>${ic(t.icon)}<span>${t.label}</span></button>`
+    : `<button type="button" class="${t.id === tab ? 'on' : ''}" data-go="#/${t.id === 'home' ? '' : t.id}">${ic(t.icon)}<span>${t.label}</span></button>`).join('');
   out.after && out.after();
 }
 const unread = () => [...S.extraNotices, ...NOTICES].filter(n => !S.read.includes(n.id)).length;
@@ -303,7 +264,7 @@ SCREENS.home = () => {
       <div class="date"><span>${kids() ? F.dates : DEMO_NOW.label + ' · ' + DEMO_NOW.day + '. gün'}</span><span class="open">${kids() ? 'Aileler için' : 'Açık · 20.00’ye kadar'}</span></div>
       <h1>${kids() ? 'Bugün ne <em>keşfedelim?</em>' : 'Bugün fuarda<br><em>neler</em> var?'}</h1>
     </div>
-    <button class="search" data-go="#/ara" style="width:calc(100% - 36px)">${ic('search', 'sm')}<span style="flex:1">${kids() ? 'Etkinlik ya da alan ara…' : 'Yazar, yayınevi ya da stant ara…'}</span></button>
+    <button class="search" data-go="#/ara" style="width:calc(100% - 36px)">${ic('search', 'sm')}<span style="flex:1">${kids() ? 'Etkinlik ya da alan ara…' : 'Yazar ya da yayınevi ara…'}</span></button>
 
     ${next ? `<button class="now-card" data-go="#/etkinlik/${next.id}" style="display:block;width:calc(100% - 36px);text-align:left">
       <div class="bg" style="background-image:url('${nextImg || A + 'children-workshop.jpg'}')"></div>
@@ -384,7 +345,6 @@ function programItem(e, st) {
     <div class="t-card" style="--k:${KCOL[e.kind]}" data-go="#/etkinlik/${e.id}" role="button" tabindex="0">
       ${evImg(e) ? `<img class="avatar" src="${evImg(e)}" alt="" loading="lazy">` : ''}
       <div class="txt"><strong>${esc(e.title)}</strong><small>${esc(evPlace(e))}${e.speakers && !kids() ? ' · ' + esc(e.speakers) : ''}</small><div class="tags">${tags.join('')}</div></div>
-      <button class="save-btn ${has('saved', e.id) ? 'on' : ''}" data-save="${e.id}" aria-label="Planıma ekle">${ic('bookmark', 'sm')}</button>
     </div>
   </div>`;
 }
@@ -393,7 +353,6 @@ function programItem(e, st) {
 SCREENS.etkinlik = id => {
   const e = ev(id); if (!e) return SCREENS.program();
   const st = evStatus(e);
-  const saved = has('saved', e.id);
   const d = FAIRS[e.fair].days.find(d => d.n === e.day);
   const stand = evStand(e);
   const a = e.author && author(e.author), p = e.publisher && pub(e.publisher);
@@ -414,8 +373,7 @@ SCREENS.etkinlik = id => {
       <div class="fact">${ic('pin', 'sm')}<div><small>${p ? 'Stant' : 'Yer'}</small><b>${esc(p ? p.stand + ' · ' + p.name.split(' ')[0] : e.place)}</b></div></div>
     </div>
     <div class="cta-bar">
-      <button class="btn ${saved ? 'done' : 'dark'}" data-save="${e.id}">${saved ? ic('check', 'sm') + ' Planımda' : ic('plus', 'sm') + ' Planıma ekle'}</button>
-      ${stand && e.fair === 'ankara' ? `<button class="btn ghost" data-go="#/harita?stand=${stand}">${ic('map', 'sm')} Krokide göster</button>` : ''}
+      ${p ? `<button class="btn dark" data-go="#/harita?stand=${stand}">${ic('map', 'sm')} Krokide göster</button>` : ''}
     </div>
     ${books.length ? `<div class="section">
       <div class="section-head"><h2>Yazarın kitapları</h2><button class="more" data-go="#/yazar/${a.id}">Profil →</button></div>
@@ -447,7 +405,6 @@ SCREENS.yazar = id => {
 SCREENS.yayinevi = id => {
   const p = pub(id); if (!p) return SCREENS.harita();
   const evs = EVENTS.filter(e => e.publisher === id);
-  const r = routeTo([p.stand]);
   return {
     top: topBack('Yayınevi'),
     html: `
@@ -456,7 +413,7 @@ SCREENS.yayinevi = id => {
       <h1>${esc(p.name)}</h1><p>Stant ${p.stand}</p>
     </div>
     <p class="prose" style="margin-top:12px;text-align:center">${esc(p.about)}</p>
-    <div class="section"><button class="mini-map" data-go="#/harita?stand=${p.stand}" style="display:block;width:calc(100% - 36px)">${floorSVG({ sel: p.stand, route: r, fac: false })}<div class="cap"><div style="text-align:left"><b>Stant ${p.stand}</b><small>Girişten ${r.minutes} dk yürüme</small></div>${ic('chev', 'sm')}</div></button></div>
+    <div class="section"><button class="mini-map" data-go="#/harita?stand=${p.stand}" style="display:block;width:calc(100% - 36px)">${floorSVG({ sel: p.stand, fac: false })}<div class="cap"><div style="text-align:left"><b>Krokide gör</b><small>${esc(p.name)} standı</small></div>${ic('chev', 'sm')}</div></button></div>
     ${evs.length ? `<div class="section"><div class="section-head"><h2>Standdaki imzalar</h2></div><div class="list">${evs.map(eventRow).join('')}</div></div>` : ''}`
   };
 };
@@ -464,33 +421,28 @@ SCREENS.yayinevi = id => {
 /* ---------- Kroki ---------- */
 SCREENS.harita = () => {
   if (kids()) return kidsMap();
-  const id = route.q.get('stand') || route.q.get('yer');
-  let svg, card = '';
-  if (id) {
-    const r = routeTo([id]);
-    svg = floorSVG({ sel: id, route: r, pins: [id], facSel: route.q.get('yer') });
-    const owner = STAND_OWNERS[id];
-    const p = owner && pub(owner);
-    card = `<div class="card map-sheet"><div class="walk"><b>${r.minutes}</b><small>dk yürüme</small></div>
-      <div style="flex:1;min-width:0"><strong style="display:block">${esc(standName(id))}</strong><small class="muted">${STANDS[id] ? 'Stant ' + id + ' · ' : ''}Girişten itibaren</small></div>
-      ${p ? `<button class="btn sm dark" data-go="#/yayinevi/${p.id}">Profil</button>` : ''}</div>`;
-  } else svg = floorSVG({});
+  const stand = route.q.get('stand'), yer = route.q.get('yer');
+  const p = stand && STAND_OWNERS[stand] && pub(STAND_OWNERS[stand]);
+  const f = yer && FACILITIES.find(x => x.id === yer);
+  const card = p ? `<div class="card map-sheet"><span class="logo-tile" style="width:64px;height:48px">${`<img src="${A}${p.logo}" alt="">`}</span>
+      <div style="flex:1;min-width:0"><strong style="display:block">${esc(p.name)}</strong><small class="muted">Stant ${stand}</small></div>
+      <button class="btn sm dark" data-go="#/yayinevi/${p.id}">Profil</button></div>`
+    : f ? `<div class="card map-sheet"><span class="ico-tile">${ic(f.icon, 'sm')}</span><div style="flex:1"><strong style="display:block">${esc(f.name)}</strong><small class="muted">Krokide turuncu ile gösterildi</small></div></div>` : '';
   const facs = [['wc', 'wc', 'WC'], ['kafe', 'cup', 'Kafe'], ['danisma', 'info', 'Danışma']];
   return {
     top: topTitle('Fuar krokisi', 'ATO CONGRESIUM'),
     html: `
-    <button class="search" data-go="#/ara" style="width:calc(100% - 36px);margin-bottom:12px">${ic('search', 'sm')}<span style="flex:1">${id ? esc(standName(id)) : 'Yayınevi ya da stant ara…'}</span></button>
+    <button class="search" data-go="#/ara" style="width:calc(100% - 36px);margin-bottom:12px">${ic('search', 'sm')}<span style="flex:1">${p ? esc(p.name) : 'Yayınevi ara…'}</span></button>
     <div class="map-wrap" id="mapwrap">
       <div class="map-tools"><button data-zoom="1" aria-label="Yakınlaş">+</button><button data-zoom="-1" aria-label="Uzaklaş">−</button></div>
-      <div class="map-scroll" id="mapscroll"><div class="map-canvas" id="mapcanvas" style="width:${mapW}px">${svg}</div></div>
+      <div class="map-scroll" id="mapscroll"><div class="map-canvas" id="mapcanvas" style="width:${mapW}px">${floorSVG({ sel: stand, facSel: yer })}</div></div>
     </div>
-    ${card}
-    <div class="section" style="margin-top:16px"><div class="fac-grid three">${facs.map(([f, icn, l]) => `<button class="${route.q.get('yer') === f ? 'on' : ''}" data-go="#/harita?yer=${f}">${ic(icn, 'sm')}${l}</button>`).join('')}</div></div>
-    <p class="muted" style="font-size:11.5px;margin:14px 22px 0">Stant yerleşimi Eylül’ün 23. fuar krokisinden sadeleştirilmiştir.</p>`,
-    after: () => requestAnimationFrame(() => centerMap(id || 'A-404'))
+    ${card || `<p class="muted" style="font-size:13px;margin:12px 22px 0">Bir yayınevi logosuna dokun ya da yukarıdan ara.</p>`}
+    <div class="section" style="margin-top:16px"><div class="fac-grid three">${facs.map(([fid, icn, l]) => `<button class="${yer === fid ? 'on' : ''}" data-go="#/harita?yer=${fid}">${ic(icn, 'sm')}${l}</button>`).join('')}</div></div>`,
+    after: () => requestAnimationFrame(() => centerMap(stand || yer || 'A-404'))
   };
 };
-let mapW = 820;
+let mapW = 640;
 function centerMap(id) {
   const sc = $('#mapscroll'), t = targetPoint(id); if (!sc || !t) return;
   sc.scrollTo({ left: t.end.x / 1000 * mapW - sc.clientWidth / 2, top: t.end.y / 640 * mapW * .64 - sc.clientHeight / 2, behavior: 'instant' });
@@ -516,7 +468,7 @@ function kidsMap() {
 /* ---------- Ara ---------- */
 SCREENS.ara = () => ({
   top: topBack('Ara'),
-  html: `<label class="search">${ic('search', 'sm')}<input id="q" type="search" placeholder="Örn. Menteş, Everest, A-305…" autocomplete="off" value="${esc(route.q.get('q') || '')}"></label><div id="results"></div>`,
+  html: `<label class="search">${ic('search', 'sm')}<input id="q" type="search" placeholder="Örn. Menteş, Everest…" autocomplete="off" value="${esc(route.q.get('q') || '')}"></label><div id="results"></div>`,
   after: () => { const i = $('#q'); runSearch(i.value); if (!EMBED) i.focus({ preventScroll: true }); }
 });
 function runSearch(q) {
@@ -541,23 +493,6 @@ function runSearch(q) {
 function pubRow(p, q = '') {
   return `<button class="row" data-go="#/yayinevi/${p.id}"><span class="logo-tile"><img src="${A}${p.logo}" alt=""></span><span class="txt"><strong>${hl(p.name, q)}</strong><small>Stant ${hl(p.stand, q)}</small></span>${ic('chev', 'sm')}</button>`;
 }
-
-/* ---------- Planım ---------- */
-SCREENS.planim = () => {
-  const saved = EVENTS.filter(e => has('saved', e.id)).sort((a, b) => a.fair.localeCompare(b.fair) || a.day - b.day || tmin(a.start) - tmin(b.start));
-  const byDay = {};
-  saved.forEach(e => (byDay[e.fair + '-' + e.day] = byDay[e.fair + '-' + e.day] || []).push(e));
-  return {
-    top: topTitle('Planım', 'KAYDETTİĞİN ETKİNLİKLER'),
-    html: saved.length ? Object.values(byDay).map(list => {
-      const e0 = list[0], d = FAIRS[e0.fair].days.find(x => x.n === e0.day);
-      const today = e0.fair === 'ankara' && e0.day === DEMO_NOW.day;
-      return `<div class="section" style="margin-top:8px"><div class="section-head"><h2 style="font-size:18px">${d.label}, ${d.date}${today ? ' <span class="tag imza" style="vertical-align:middle">Bugün</span>' : ''}</h2></div>
-        <div class="timeline" style="padding-top:0">${list.map(e => programItem(e, today ? evStatus(e) : 'future')).join('')}</div></div>`;
-    }).join('') + `<p class="muted" style="font-size:12.5px;margin:6px 22px 0">Kaydettiğin etkinlikler başlamadan 15 dakika önce hatırlatılır.</p>`
-      : `<div class="empty"><strong>Planın boş</strong><p>Programda beğendiğin etkinliği kaydet.</p><button class="btn sm dark" data-go="#/program">Programa git</button></div>`
-  };
-};
 
 /* ---------- Duyurular ---------- */
 SCREENS.bildirimler = () => {
@@ -595,12 +530,12 @@ function push(n) {
 
 /* ---------- Etkileşimler ---------- */
 document.addEventListener('click', e => {
-  const el = e.target.closest('[data-go],[data-back],[data-save],[data-sheet],[data-fair],[data-zoom],[data-stand],#push,#backdrop');
+  const el = e.target.closest('[data-go],[data-back],[data-demo-push],[data-sheet],[data-fair],[data-zoom],[data-stand],#push,#backdrop');
   if (!el) return;
   const d = el.dataset;
   if (el.id === 'push') { el.classList.remove('show'); return go(d.link); }
   if (el.id === 'backdrop') return closeSheet();
-  if (d.save) { e.stopPropagation(); const on = toggle('saved', d.save); toast(on ? 'Planına eklendi' : 'Plandan çıkarıldı', on ? 'bookmark' : 'x'); return render('none'); }
+  if (d.demoPush != null) return push(LIVE_PUSHES[(pushCursor++) % LIVE_PUSHES.length]);
   if (d.sheet) return openSheet(SHEETS[d.sheet]());
   if (d.fair) { S.fair = d.fair; save(); closeSheet(); return go('#/'); }
   if (d.zoom) {
@@ -611,7 +546,7 @@ document.addEventListener('click', e => {
     sc.scrollTo({ left: cx * mapW - sc.clientWidth / 2, top: cy * mapW * .64 - sc.clientHeight / 2 });
     return;
   }
-  if (d.stand && e.target.closest('.floor') && route.name === 'harita') return go('#/harita?stand=' + d.stand);
+  if (d.stand && route.name === 'harita') return go('#/harita?stand=' + d.stand);
   if (d.back != null) { closeSheet(); return back(); }
   if (d.go) { closeSheet(); return go(d.go); }
 });

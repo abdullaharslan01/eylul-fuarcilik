@@ -426,7 +426,7 @@ svg.i.xs { width: 15px; height: 15px; stroke-width: 2; }
 /* ---------- Map ---------- */
 .map-wrap { position: relative; margin: 0 12px; border-radius: 24px; overflow: hidden; background: #f3eee4; box-shadow: var(--shadow-1), inset 0 0 0 1px var(--line); }
 .map-wrap svg.floor { display: block; width: 100%; height: auto; }
-.map-scroll { height: 400px; overflow: auto; scrollbar-width: none; touch-action: pan-x pan-y; overscroll-behavior: contain; }
+.map-scroll { height: 410px; overflow: auto; scrollbar-width: none; touch-action: pan-x pan-y; overscroll-behavior: contain; }
 .map-scroll::-webkit-scrollbar { display: none; }
 .map-canvas { transition: width .25s; padding: 0; }
 .map-wrap.tall { height: 420px; }
@@ -629,3 +629,14 @@ mark { background: #ffe3b0; color: inherit; border-radius: 3px; padding: 0 1px; 
 .quick.three .q-ico { width: 64px; height: 64px; }
 .fac-grid.three { grid-template-columns: repeat(3, 1fr); }
 .tabbar { grid-template-columns: repeat(4, 1fr); }
+
+/* Logolu kroki */
+.floor .logo-pin { cursor: pointer; }
+.floor .logo-pin rect { fill: #fff; stroke: #e2d7c4; stroke-width: 1.5; filter: drop-shadow(0 2px 3px rgba(40, 28, 10, .14)); }
+.floor .logo-pin.on rect { stroke: var(--brand); stroke-width: 4; }
+.floor .stand.has { fill: #fde9c8; stroke: #f0c27c; }
+
+/* Bildirim gönder sekmesi */
+.tabbar .send-tab { color: var(--brand-deep); }
+.tabbar .send-tab svg { width: 34px; height: 34px; padding: 6px; border-radius: 12px; background: var(--brand); color: #1a1100; }
+.tabbar .send-tab span { white-space: nowrap; font-size: 10px; }

@@ -16,7 +16,7 @@ const SLIDES = [
         <div><b>850</b><small>yazar ve çizer</small></div>
       </div>
       <p class="src">Kaynak: Anadolu Ajansı, Yeni Ankara, TRT Avaz haberleri (2025–2026 fuarları).</p>`,
-    notes: `<p>Açılış: <b>“Fuarınız yılda iki kez yarım milyon okuru ağırlıyor. Bu okurlar için basit bir uygulama hazırladık.”</b></p><p>Sağdaki telefon gerçek, tıklanabilir.</p>`
+    notes: `<p>Açılış: <b>“Fuarınız yılda iki kez yarım milyon okuru ağırlıyor. Bu okurlar için basit bir uygulama hazırladık.”</b></p><p>Sağdaki telefon gerçek, tıklanabilir. Alt menüdeki turuncu <b>“Bildirim gönder”</b> ile istediğin an örnek bildirim gösterebilirsin.</p>`
   },
   {
     id: 'sorun', theme: 'dark', layout: 'full',
@@ -37,20 +37,20 @@ const SLIDES = [
     html: `
       <span class="kicker"><span class="num">01</span>Program</span>
       <h1 class="title">Kim, ne zaman,<br><em>nerede.</em></h1>
-      <p class="lead">İmzalar ve söyleşiler gün gün. Okur beğendiğini kaydeder, başlamadan önce hatırlatma alır.</p>
-      <ul class="points"><li>Gün ve türe göre program</li><li>Tek dokunuşla “Planıma ekle”</li><li>Yazar ve yayınevi sayfaları</li></ul>
-      <div class="try"><span>Canlı dene</span><button data-msg='{"type":"go","hash":"#/etkinlik/e7"}'><i>▶</i>Bir imzayı aç</button><button class="ghost" data-msg='{"type":"go","hash":"#/planim"}'><i>♥</i>Planım</button></div>`,
-    notes: `<p>Kırmızı “şimdi” çizgisini göster. Bir imzaya dokun, “Planıma ekle”yi ve “Krokide göster”i göster.</p>`
+      <p class="lead">İmzalar ve söyleşiler gün gün, saat saat. Okur bir imzaya dokunur; yazarı, saati ve standı görür.</p>
+      <ul class="points"><li>Gün ve türe göre program</li><li>Şu an süren etkinlik ve “şimdi” çizgisi</li><li>Tek dokunuşla “Krokide göster”</li></ul>
+      <div class="try"><span>Canlı dene</span><button data-msg='{"type":"go","hash":"#/etkinlik/e7"}'><i>▶</i>Bir imzayı aç</button><button class="ghost" data-msg='{"type":"go","hash":"#/program?tur=soylesi"}'><i>♪</i>Söyleşiler</button></div>`,
+    notes: `<p>Kırmızı “şimdi” çizgisini göster. Murat Menteş imzasına dokun, ardından “Krokide göster”e bas: Alfa’nın logosu krokide seçili gelir.</p>`
   },
   {
     id: 'kroki', theme: 'light', phone: { msg: { type: 'go', fair: 'ankara', hash: '#/harita?stand=A-504' } },
     html: `
       <span class="kicker"><span class="num">02</span>Kroki</span>
-      <h1 class="title">Stant nerede?<br><em>Haritada.</em></h1>
-      <p class="lead">Eylül’ün krokisi aranabilir hâle gelir. Yayınevi ya da stant numarası yazılır, harita yolu gösterir.</p>
-      <ul class="points"><li>Yayınevi ve stant araması</li><li>Girişten standa yol</li><li>WC, kafe ve danışma noktaları</li></ul>
-      <div class="try"><span>Canlı dene</span><button data-msg='{"type":"go","hash":"#/ara?q=everest"}'><i>⌕</i>“Everest” ara</button><button class="ghost" data-msg='{"type":"go","hash":"#/harita?yer=wc"}'><i>i</i>WC nerede?</button></div>`,
-    notes: `<p>Vurgula: <b>“Krokiyi sıfırdan çizmedik, sizin 23. fuar krokinizden yaptık.”</b> Yeni kroki gelince aynı şekilde aktarılır.</p>`
+      <h1 class="title">Stant numarası değil,<br><em>logo.</em></h1>
+      <p class="lead">Ziyaretçi “A-504”ü bilmez, Alfa’yı bilir. Krokide yayınevlerinin logoları görünür; logoya dokunmak ya da adını aramak yeter.</p>
+      <ul class="points"><li>Yayınevi logolarıyla kroki</li><li>Yayınevi adıyla arama</li><li>WC, kafe ve danışma noktaları</li></ul>
+      <div class="try"><span>Canlı dene</span><button data-msg='{"type":"go","hash":"#/harita?stand=A-410"}'><i>▶</i>Everest nerede?</button><button class="ghost" data-msg='{"type":"go","hash":"#/harita?yer=wc"}'><i>i</i>WC nerede?</button></div>`,
+    notes: `<p>Vurgula: <b>“Krokiyi sıfırdan çizmedik, sizin 23. fuar krokinizden yaptık. Okur numara değil logo arar.”</b></p><p>Telefonda bir logoya dokun: yayınevinin kartı açılır.</p>`
   },
   {
     id: 'duyuru', theme: 'light', layout: 'panel', phone: { msg: { type: 'go', fair: 'ankara', hash: '#/' } },
@@ -58,8 +58,8 @@ const SLIDES = [
     html: `
       <span class="kicker"><span class="num">03</span>Duyurular</span>
       <h1 class="title" style="font-size:52px;margin:16px 0 12px">Eylül yazar, <em>okurun telefonuna düşer.</em></h1>
-      <p class="lead" style="font-size:20px;max-width:900px">Saat değişikliği, kayıp eşya, genel duyuru. Aşağıdaki panelde <b>“Gönder”</b>e basın.</p>`,
-    notes: `<p>Panelde “Gönder”e bas: sağdaki telefona bildirim düşer.</p><p><b>“Instagram’a koyup görülmesini ummak yerine, fuardaki herkesin telefonuna doğrudan.”</b></p>`
+      <p class="lead" style="font-size:20px;max-width:900px">Saat değişikliği, kayıp eşya, genel duyuru. Aşağıdaki panelde <b>“Gönder”</b>e ya da telefondaki <b>“Bildirim gönder”</b>e basın.</p>`,
+    notes: `<p>Panelde “Gönder”e bas: sağdaki telefona bildirim düşer. Telefonun alt menüsündeki turuncu <b>“Bildirim gönder”</b> de her basışta farklı bir örnek bildirim gösterir.</p><p><b>“Instagram’a koyup görülmesini ummak yerine, fuardaki herkesin telefonuna doğrudan.”</b></p>`
   },
   {
     id: 'cocuk', theme: 'light', extra: 'teal', phone: { msg: { type: 'go', fair: 'cocuk', hash: '#/' } },

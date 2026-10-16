@@ -29,22 +29,22 @@ Sunum: http://localhost:4174 · Uygulama tek başına: http://localhost:4174/app
 - `F`: tam ekran
 - 1. slayta dönünce telefon sıfırlanır, demo baştan oynatılabilir.
 
-## Uygulamada ne var (sade sürüm)
+## Uygulamada ne var
 
-- **Ana sayfa:** şu anki/sıradaki imza, Program · Kroki · Duyurular kısayolları, son Eylül duyurusu, bugün imzada olan yazarlar.
-- **Program:** gün ve türe göre imza ve söyleşiler, “Planıma ekle”.
-- **Kroki:** yayınevi/stant araması, girişten standa yol, WC · kafe · danışma.
-- **Planım:** kaydedilen etkinlikler.
-- **Duyurular:** Eylül’ün panelden gönderdiği bildirimler.
+- **Ana sayfa:** şu anki imza, Program · Kroki · Duyurular kısayolları, son Eylül duyurusu, bugün imzada olan yazarlar.
+- **Program:** gün ve türe göre imzalar ve söyleşiler. Bir imzadan “Krokide göster” ile standa gidilir.
+- **Kroki:** stant numarası yerine yayınevi logoları. Logoya dokun ya da yayınevi adını ara. WC, kafe ve danışma noktaları.
+- **Duyurular:** Eylül’ün gönderdiği bildirimler (sağ üstteki zil).
+- **Bildirim gönder (alt menüdeki turuncu buton):** sunumda göstermek için. Her basışta telefona farklı bir örnek bildirim düşer.
 - Fuar seçici: aynı uygulama Çocuk Şenliği’ne geçer.
 
-## Akış (yaklaşık 5–6 dakika)
+## Akış (yaklaşık 5 dakika)
 
 1. **Kapak.** Yılda iki kez yarım milyon okur.
 2. **Okurun üç sorusu:** kim ne zaman nerede, stant nerede, değişiklikten nasıl haberim olur.
-3. **Program.** Bir imzayı aç, “Planıma ekle”.
-4. **Kroki.** “Everest” ara, WC’yi göster.
-5. **Duyurular.** Paneldeki “Gönder”e bas, bildirim telefona düşer.
+3. **Program.** Murat Menteş imzasını aç, “Krokide göster”.
+4. **Kroki.** “Everest nerede?” ya da bir logoya dokun.
+5. **Duyurular.** Paneldeki “Gönder”e ya da telefondaki “Bildirim gönder”e bas.
 6. **Çocuk Şenliği 2027.** Aynı uygulama, fuar değişir.
 7. **Önerimiz.** Bulbi geliştirir; Eylül stant ve görünürlük verir.
 8. **Teşekkürler.**

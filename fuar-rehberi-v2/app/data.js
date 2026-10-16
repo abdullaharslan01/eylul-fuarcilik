@@ -110,7 +110,6 @@ const EVENTS = [
 
 // Stand -> kim
 const STAND_OWNERS = Object.fromEntries(PUBLISHERS.map(p => [p.stand, p.id]));
-Object.assign(STAND_OWNERS, { 'A-306': 'iletisim', 'A-204': 'cumhuriyet' });
 
 const NOTICES = [
   { id: 'n1', type: 'change', time: '13.20', title: 'Söyleşi salonu değişti', body: '“Bir roman nasıl doğar?” söyleşisi 15.00’te Salon B’de yapılacak.', link: '#/etkinlik/e8' },
@@ -120,8 +119,10 @@ const NOTICES = [
 
 // Sunumdan veya panelden tetiklenen canlı duyurular
 const LIVE_PUSHES = [
+  { type: 'eylul', title: 'İmza 15 dk sonra başlıyor', body: 'Murat Menteş, 14.00’te Alfa Yayınları standında okurlarıyla buluşuyor.', link: '#/etkinlik/e7' },
   { type: 'change', title: 'Program değişikliği', body: 'Timur Soykan imzası 18.00 yerine 18.30’da başlayacak.', link: '#/etkinlik/e11' },
-  { type: 'eylul', title: 'Kayıp eşya', body: 'Mavi bir sırt çantası Danışma’ya teslim edildi. Girişin hemen sağında.', link: '#/harita?yer=danisma' }
+  { type: 'eylul', title: 'Kayıp eşya', body: 'Mavi bir sırt çantası Danışma’ya teslim edildi. Girişin hemen sağında.', link: '#/harita?yer=danisma' },
+  { type: 'eylul', title: 'Fuar 20.00’de kapanıyor', body: 'Bugün için son bir saat. Yarın 10.00’da yeniden buradayız.', link: '#/program' }
 ];
 
 const KID_ZONES = [
