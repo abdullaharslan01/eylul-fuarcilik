@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Eylül Fuar Paneli</title>
+  <link rel="icon" type="image/png" href="assets/eylul-fuarcilik-logo.png">
+  <link rel="stylesheet" href="assets/fonts/fonts.css">
+  <style>
+    :root {
+      --paper: #faf6ef; --paper-2: #f2ebdf; --card: #fff; --ink: #1a1712; --ink-2: #4b443a; --muted: #8b8274; --line: #ebe3d6;
+      --brand: #f19a1b; --brand-deep: #c26f05; --brand-soft: #fdf0d9; --night: #15171c; --ok: #1f9d55; --hot: #e2493b; --indigo: #5a57d6;
+      --serif: 'Fraunces', Georgia, serif; --sans: 'Manrope', -apple-system, 'Segoe UI', sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; }
+    body { font-family: var(--sans); background: var(--paper); color: var(--ink); font-size: 14px; -webkit-font-smoothing: antialiased; }
+    button, input, select, textarea { font: inherit; color: inherit; }
+    button { cursor: pointer; border: 0; background: none; padding: 0; }
+    .shell { display: grid; grid-template-columns: 232px 1fr; min-height: 100%; }
+    aside { background: var(--night); color: #fff; padding: 22px 16px; display: flex; flex-direction: column; gap: 6px; }
+    aside .logo { background: #fff; border-radius: 12px; padding: 9px 12px; margin-bottom: 18px; }
+    aside .logo img { height: 28px; display: block; }
+    aside .fair { padding: 12px; border-radius: 14px; background: rgba(255,255,255,.06); margin-bottom: 14px; }
+    aside .fair small { display: block; font-size: 10.5px; letter-spacing: .14em; color: rgba(255,255,255,.5); font-weight: 800; }
+    aside .fair b { display: block; margin-top: 3px; font-size: 14px; }
+    aside .fair span { display: inline-flex; align-items: center; gap: 6px; margin-top: 8px; font-size: 12px; color: #7ee2a8; font-weight: 700; }
+    aside .fair span::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: #3ddc84; }
+    aside nav button { display: flex; width: 100%; align-items: center; gap: 11px; padding: 11px 12px; border-radius: 11px; color: rgba(255,255,255,.68); font-weight: 700; font-size: 13.5px; }
+    aside nav button.on { background: rgba(241,154,27,.16); color: #fff; }
+    aside nav button.on svg { color: var(--brand); }
+    aside nav svg, .i { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+    aside nav .n { margin-left: auto; background: var(--hot); color: #fff; font-size: 11px; padding: 1px 7px; border-radius: 8px; }
+    aside .credit { margin-top: auto; font-size: 11px; color: rgba(255,255,255,.45); display: flex; align-items: center; gap: 6px; }
+    aside .credit img { height: 13px; }
+    main { padding: 24px 28px 34px; overflow: auto; }
+    .head { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; margin-bottom: 20px; }
+    .head small { font-size: 11px; letter-spacing: .14em; color: var(--brand-deep); font-weight: 800; }
+    .head h1 { font-family: var(--serif); font-size: 32px; font-weight: 600; letter-spacing: -.02em; margin: 4px 0 0; }
+    .head .live { display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px; border-radius: 11px; background: var(--card); box-shadow: inset 0 0 0 1px var(--line); font-weight: 700; font-size: 13px; }
+    .head .live::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--hot); animation: bl 1.4s infinite; }
+    @keyframes bl { 50% { opacity: .2; } }
+    .kpis { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 14px; }
+    .kpi { background: var(--card); border-radius: 18px; padding: 15px 16px; box-shadow: 0 1px 2px rgba(40,28,10,.05); }
+    .kpi small { display: block; color: var(--muted); font-weight: 700; font-size: 12px; }
+    .kpi b { display: block; font-family: var(--serif); font-size: 30px; font-weight: 600; letter-spacing: -.02em; margin-top: 4px; line-height: 1; }
+    .kpi em { font-style: normal; font-size: 12px; font-weight: 800; color: var(--ok); }
+    .grid { display: grid; grid-template-columns: 1.15fr 1fr; gap: 14px; }
+    .card { background: var(--card); border-radius: 20px; padding: 18px; box-shadow: 0 1px 2px rgba(40,28,10,.05); }
+    .card h2 { font-family: var(--serif); font-size: 19px; font-weight: 600; margin: 0 0 3px; letter-spacing: -.01em; }
+    .card .sub { color: var(--muted); font-size: 12.5px; margin: 0 0 14px; }
+    .tpl { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+    .tpl button { height: 32px; padding: 0 12px; border-radius: 10px; background: var(--paper); box-shadow: inset 0 0 0 1px var(--line); font-weight: 700; font-size: 12.5px; }
+    .tpl button.on { background: var(--ink); color: #fff; box-shadow: none; }
+    label.f { display: block; margin-bottom: 10px; }
+    label.f span { display: block; font-size: 11.5px; font-weight: 800; color: var(--muted); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 5px; }
+    label.f input, label.f textarea, label.f select { width: 100%; border: 0; border-radius: 11px; background: var(--paper); box-shadow: inset 0 0 0 1px var(--line); padding: 10px 12px; font-weight: 600; outline: none; resize: none; }
+    label.f input:focus, label.f textarea:focus { box-shadow: inset 0 0 0 2px var(--brand); }
+    .compose { display: grid; grid-template-columns: 1fr 230px; gap: 16px; }
+    .preview { background: linear-gradient(160deg, #2b2f3a, #15171c); border-radius: 22px; padding: 16px 12px; display: flex; flex-direction: column; gap: 10px; }
+    .preview .time { color: rgba(255,255,255,.85); text-align: center; font-family: var(--serif); font-size: 34px; font-weight: 500; margin: 8px 0 6px; }
+    .pv { background: rgba(250,247,242,.92); border-radius: 16px; padding: 10px 11px; display: flex; gap: 9px; }
+    .pv img { width: 28px; height: 28px; border-radius: 7px; background: #fff; object-fit: contain; padding: 2px; flex: none; }
+    .pv small { display: block; font-size: 10px; color: var(--muted); font-weight: 800; letter-spacing: .04em; }
+    .pv b { display: block; font-size: 12.5px; margin-top: 1px; }
+    .pv p { margin: 1px 0 0; font-size: 12px; color: var(--ink-2); line-height: 1.3; }
+    .reach { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 4px; }
+    .reach div { font-size: 12.5px; color: var(--ink-2); }
+    .reach b { font-size: 16px; }
+    .send { height: 46px; padding: 0 22px; border-radius: 13px; background: var(--brand); color: #1a1100; font-weight: 800; display: inline-flex; align-items: center; gap: 8px; transition: transform .1s; }
+    .send:active { transform: scale(.97); }
+    .send.sent { background: var(--ok); color: #fff; }
+    .zones { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+    .zone { height: 64px; border-radius: 12px; padding: 8px 10px; display: flex; flex-direction: column; justify-content: space-between; color: #fff; font-size: 11.5px; font-weight: 700; }
+    .zone b { font-family: var(--serif); font-size: 20px; font-weight: 600; }
+    .bars { display: flex; align-items: flex-end; gap: 6px; height: 120px; margin-top: 10px; }
+    .bars div { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px; height: 100%; justify-content: flex-end; }
+    .bars span { width: 100%; border-radius: 6px 6px 2px 2px; background: #efe5d4; }
+    .bars span.now { background: var(--brand); }
+    .bars small { font-size: 10.5px; color: var(--muted); font-weight: 700; }
+    table { width: 100%; border-collapse: collapse; }
+    th { text-align: left; font-size: 11px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; font-weight: 800; padding: 0 8px 8px; }
+    td { padding: 9px 8px; border-top: 1px solid var(--line); font-weight: 600; font-size: 13.5px; vertical-align: middle; }
+    td .who { white-space: nowrap; display: flex; align-items: center; gap: 10px; }
+    td .who img { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; }
+    .pill { white-space: nowrap; display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 6px; font-size: 11px; font-weight: 800; }
+    .pill.hot { background: #fde4e1; color: #b8291c; }
+    .pill.ok { background: #dff3e6; color: #157a40; }
+    .pill.wait { background: var(--brand-soft); color: #a85a00; }
+    .mini { white-space: nowrap; height: 30px; padding: 0 11px; border-radius: 9px; background: var(--ink); color: #fff; font-weight: 800; font-size: 12px; }
+    .rank { display: flex; flex-direction: column; gap: 9px; }
+    .rank div { display: grid; grid-template-columns: 22px 1fr 54px; align-items: center; gap: 8px; font-weight: 700; font-size: 13px; }
+    .rank i { display: block; height: 8px; border-radius: 4px; background: linear-gradient(90deg, var(--brand), #ffd38a); }
+    .rank em { font-style: normal; color: var(--muted); font-size: 12px; text-align: right; }
+    .row3 { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 14px; margin-top: 14px; }
+    .toast { position: fixed; right: 24px; bottom: 24px; background: var(--ink); color: #fff; padding: 12px 16px; border-radius: 13px; font-weight: 700; transform: translateY(20px); opacity: 0; transition: .3s; }
+    .toast.show { transform: none; opacity: 1; }
+  </style>
+</head>
+<body>
+<div class="shell">
+  <aside>
+    <div class="logo"><img src="assets/eylul-fuarcilik-logo.png" alt="Eylül Fuarcılık"></div>
+    <div class="fair"><small>CANLI FUAR</small><b>24. Ankara Kitap Fuarı</b><span>2. gün · açık</span></div>
+    <nav>
+      <button class="on"><svg viewBox="0 0 24 24"><path d="M3 13h7V3H3zM14 21h7V11h-7zM3 21h7v-4H3zM14 7h7V3h-7z"/></svg>Genel bakış</button>
+      <button><svg viewBox="0 0 24 24"><path d="M18 9a6 6 0 0 0-12 0c0 6.5-2.5 8-2.5 8h17S18 15.5 18 9M10 20.5a2.2 2.2 0 0 0 4 0"/></svg>Bildirimler</button>
+      <button><svg viewBox="0 0 24 24"><path d="M3 8a2 2 0 0 0 2-2h14a2 2 0 0 0 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 0-2 2H5a2 2 0 0 0-2-2v-2a2 2 0 0 0 0-4z"/></svg>İmza sıraları<span class="n">4</span></button>
+      <button><svg viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="16.5" rx="3"/><path d="M8 2.5v4M16 2.5v4M3 9.5h18"/></svg>Program</button>
+      <button><svg viewBox="0 0 24 24"><path d="m9 4-6 2.5v14L9 18l6 2.5 6-2.5v-14L15 6.5z"/><path d="M9 4v14M15 6.5v14"/></svg>Kroki & stantlar</button>
+      <button><svg viewBox="0 0 24 24"><path d="M3 12V4a1 1 0 0 1 1-1h8l9 9-9 9z"/></svg>Sponsor alanları</button>
+      <button><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Raporlar</button>
+    </nav>
+    <div class="credit">Geliştiren <img src="assets/bulbi-logo.png" alt="Bulbi"></div>
+  </aside>
+  <main>
+    <div class="head">
+      <div><small>EYLÜL FUAR PANELİ</small><h1>Fuarın nabzı, tek ekranda.</h1></div>
+      <span style="display:flex;gap:10px;align-items:center"><small style="color:var(--muted);letter-spacing:0;font-weight:600">Sayılar sunum için örnektir</small><span class="live">Canlı · Cumartesi 13:42</span></span>
+    </div>
+    <div class="kpis">
+      <div class="kpi"><small>Uygulamada şu an</small><b id="k-live">12.480</b><em>▲ %18 dünden</em></div>
+      <div class="kpi"><small>Bugün indiren</small><b>8.214</b><em>▲ QR afişler</em></div>
+      <div class="kpi"><small>Dijital imza sırasında</small><b>125</b><em style="color:var(--brand-deep)">4 aktif sıra</em></div>
+      <div class="kpi"><small>Bildirim açılma</small><b>%61</b><em>▲ %9 dünden</em></div>
+      <div class="kpi"><small>Sponsor gösterimi</small><b>214 B</b><em>9 yayınevi</em></div>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <h2>Anlık bildirim gönder</h2>
+        <p class="sub">Program değişikliği, yoğunluk ya da kayıp eşya — saniyeler içinde ilgili ziyaretçiye.</p>
+        <div class="compose">
+          <div>
+            <div class="tpl" id="tpl">
+              <button class="on" data-t="0">Program değişikliği</button>
+              <button data-t="1">Yoğunluk</button>
+              <button data-t="2">Kayıp eşya</button>
+              <button data-t="3">Fırsat</button>
+            </div>
+            <label class="f"><span>Kime</span>
+              <select id="aud">
+                <option value="3120">Timur Soykan’ı takip edenler · 3.120 kişi</option>
+                <option value="12480">Şu an fuardaki herkes · 12.480 kişi</option>
+                <option value="860">Bu etkinliği planına ekleyenler · 860 kişi</option>
+                <option value="2140">A-5 / A-6 sıralarına yakın olanlar · 2.140 kişi</option>
+              </select></label>
+            <label class="f"><span>Başlık</span><input id="title" maxlength="48"></label>
+            <label class="f"><span>Mesaj</span><textarea id="body" rows="3" maxlength="140"></textarea></label>
+            <div class="reach"><div>Tahmini erişim<br><b id="reach">3.120 kişi</b> · 10 sn içinde</div><button class="send" id="send"><svg class="i" viewBox="0 0 24 24"><path d="M21 3 3 10.5l7 3 3 7z"/><path d="m10 13.5 4-4"/></svg>Şimdi gönder</button></div>
+          </div>
+          <div class="preview">
+            <div class="time">13:42</div>
+            <div class="pv"><img src="assets/eylul-fuarcilik-logo.png" alt=""><div><small>EYLÜL FUAR REHBERİ · şimdi</small><b id="pv-t"></b><p id="pv-b"></p></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Salon yoğunluğu</h2>
+        <p class="sub">Turnike ve uygulama konum verisinden · 2 dk önce güncellendi</p>
+        <div class="zones" id="zones"></div>
+        <h2 style="margin-top:18px;font-size:16px">Saatlik ziyaretçi</h2>
+        <div class="bars" id="bars"></div>
+      </div>
+    </div>
+    <div class="row3">
+      <div class="card">
+        <h2>İmza sıraları</h2>
+        <p class="sub">Yayınevi görevlisi tabletten yönetir, ziyaretçi kuyrukta beklemez.</p>
+        <table><thead><tr><th>Yazar</th><th>Stant</th><th>Sırada</th><th>Bekleme</th><th></th></tr></thead><tbody id="queues"></tbody></table>
+      </div>
+      <div class="card">
+        <h2>En çok arananlar</h2>
+        <p class="sub">Bugün · uygulama içi arama</p>
+        <div class="rank" id="rank"></div>
+      </div>
+      <div class="card">
+        <h2>Sponsor alanları</h2>
+        <p class="sub">Uygulama içi gelir kalemleri</p>
+        <div class="rank">
+          <div><span>1</span><span>Ana ekran vitrini</span><em>48 B</em></div>
+          <div><span>2</span><span>Fuar fırsatları</span><em>96 B</em></div>
+          <div><span>3</span><span>Hedefli bildirim</span><em>41 B</em></div>
+          <div><span>4</span><span>Kroki öne çıkarma</span><em>29 B</em></div>
+        </div>
+        <p class="sub" style="margin:14px 0 0">Gösterim sayıları örnektir.</p>
+      </div>
+    </div>
+  </main>
+</div>
+<div class="toast" id="toast"></div>
+<script src="app/data.js"></script>
+<script>
+  const $ = s => document.querySelector(s);
+  const TEMPLATES = [
+    { type: 'change', title: 'Program değişikliği', body: 'Timur Soykan imzası 18.00 yerine 18.30’da başlayacak. Sıranız korunuyor.', link: '#/etkinlik/e11', aud: '3120' },
+    { type: 'eylul', title: 'A-5 / A-6 sıraları çok yoğun', body: 'A-7 / A-8 sıraları şu an sakin. Önce oraya uğramak ister misin?', link: '#/harita?katman=yogunluk', aud: '2140' },
+    { type: 'eylul', title: 'Kayıp eşya', body: 'Mavi bir sırt çantası Danışma’ya teslim edildi. Girişin hemen sağında.', link: '#/harita?yer=danisma', aud: '12480' },
+    { type: 'deal', title: 'Son 1 saat!', body: 'Can Çocuk’ta 2 al 1 öde kampanyası 15.00’te bitiyor. A-104', link: '#/yayinevi/can', aud: '12480' }
+  ];
+  let cur = 0;
+  function setTpl(i) {
+    cur = i; const t = TEMPLATES[i];
+    document.querySelectorAll('#tpl button').forEach(b => b.classList.toggle('on', Number(b.dataset.t) === i));
+    $('#title').value = t.title; $('#body').value = t.body; $('#aud').value = t.aud; sync();
+  }
+  function sync() {
+    $('#pv-t').textContent = $('#title').value; $('#pv-b').textContent = $('#body').value;
+    $('#reach').textContent = Number($('#aud').value).toLocaleString('tr-TR') + ' kişi';
+  }
+  $('#tpl').addEventListener('click', e => { const b = e.target.closest('button'); if (b) setTpl(Number(b.dataset.t)); });
+  ['title', 'body', 'aud'].forEach(id => $('#' + id).addEventListener('input', sync));
+  let bc; try { bc = new BroadcastChannel('eylul-demo'); } catch {}
+  $('#send').addEventListener('click', () => {
+    const t = TEMPLATES[cur];
+    const notice = { type: t.type, title: $('#title').value, body: $('#body').value, link: t.link, nid: Date.now() + '-' + Math.random() };
+    bc && bc.postMessage({ type: 'push', notice });
+    parent !== window && parent.postMessage({ type: 'panel-push', notice }, '*');
+    const b = $('#send'); b.classList.add('sent'); b.lastChild.textContent = 'Gönderildi ✓';
+    toast($('#reach').textContent + ' ziyaretçiye gönderildi');
+    setTimeout(() => { b.classList.remove('sent'); b.lastChild.textContent = 'Şimdi gönder'; }, 2200);
+  });
+  function toast(m) { const t = $('#toast'); t.textContent = m; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2200); }
+
+  $('#zones').innerHTML = CROWD.map(c => {
+    const col = c.level > .85 ? '#e2493b' : c.level > .6 ? '#f19a1b' : '#1f9d55';
+    return `<div class="zone" style="background:${col}"><span>${c.zone.replace(' sıraları', '').replace('Giriş & B koridoru', 'Giriş')}</span><b>%${Math.round(c.level * 100)}</b></div>`;
+  }).join('');
+  $('#bars').innerHTML = CROWD_HOURS.map((v, i) => `<div><span class="${i === 3 ? 'now' : ''}" style="height:${v * 100}%"></span><small>${10 + i}</small></div>`).join('');
+  const qs = [['e7', 38], ['e11', 52], ['e9', 21], ['e6', 14]];
+  function drawQueues() {
+    $('#queues').innerHTML = qs.map(([id, n], i) => {
+      const e = EVENTS.find(x => x.id === id), a = AUTHORS.find(x => x.id === e.author), p = PUBLISHERS.find(x => x.id === e.publisher);
+      return `<tr><td><div class="who"><img src="assets/${a.photo}" alt="">${a.name}</div></td><td>${p.stand}</td><td><span class="pill ${n > 30 ? 'hot' : n ? 'wait' : 'ok'}">${n} kişi</span></td><td>~${Math.round(n * .7)} dk</td><td><button class="mini" data-q="${i}">Sıradaki →</button></td></tr>`;
+    }).join('');
+  }
+  drawQueues();
+  $('#queues').addEventListener('click', e => { const b = e.target.closest('[data-q]'); if (!b) return; const q = qs[b.dataset.q]; q[1] = Math.max(0, q[1] - 1); drawQueues(); if (q[0] === 'e7') { bc && bc.postMessage({ type: 'queue-advance', by: 3 }); } });
+  const ranks = [['Murat Menteş', 100], ['Timur Soykan', 86], ['Çocuk kitapları', 64], ['Buket Uzuner', 55], ['WC', 41], ['İletişim Yayınları', 33]];
+  $('#rank').innerHTML = ranks.map(([n, v], i) => `<div><span>${i + 1}</span><span>${n}<i style="width:${v}%;margin-top:5px"></i></span><em>${Math.round(v * 31.4).toLocaleString('tr-TR')}</em></div>`).join('');
+  setTpl(0);
+  setInterval(() => { const k = $('#k-live'); k.textContent = (12400 + Math.floor(Math.random() * 180)).toLocaleString('tr-TR'); }, 3000);
+</script>
+</body>
+</html>

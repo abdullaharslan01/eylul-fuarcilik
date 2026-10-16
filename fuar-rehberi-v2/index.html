@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Eylül Fuar Rehberi — Sunum</title>
+  <meta name="description" content="Eylül Fuarcılık için Bulbi'nin hazırladığı mobil fuar rehberi konsept sunumu.">
+  <link rel="icon" type="image/png" href="assets/eylul-fuarcilik-logo.png">
+  <link rel="stylesheet" href="assets/fonts/fonts.css">
+  <link rel="stylesheet" href="sunum.css">
+</head>
+<body>
+  <div class="viewport" id="viewport">
+    <div class="stage" id="stage">
+      <div class="bg" id="bg"></div>
+      <div class="slides" id="slides"></div>
+
+      <div class="device" id="device" aria-label="Canlı uygulama">
+        <span class="btn-l1"></span><span class="btn-l2"></span><span class="btn-r"></span>
+        <div class="screen">
+          <iframe id="phone" title="Eylül Fuar Rehberi uygulaması" src="app/?embed=1&reset=1#/hosgeldin"></iframe>
+          <div class="island"></div>
+          <div class="home-ind"></div>
+        </div>
+        <div class="device-caption">Canlı uygulama · dokunabilirsiniz</div>
+      </div>
+
+      <div class="browser" id="browser" aria-label="Organizatör paneli">
+        <div class="bar"><i></i><i></i><i></i><span>panel.eylulfuar · Organizatör paneli</span></div>
+        <iframe id="panel" title="Eylül organizatör paneli" data-src="panel.html"></iframe>
+      </div>
+
+      <footer class="foot">
+        <div class="brand"><img class="eylul" src="assets/eylul-fuarcilik-logo.png" alt="Eylül Fuarcılık"><span>×</span><img class="bulbi" src="assets/bulbi-logo.png" alt="Bulbi"></div>
+        <div class="nav">
+          <button id="prev" aria-label="Önceki slayt">←</button>
+          <button id="next" aria-label="Sonraki slayt">→</button>
+          <span class="count" id="count">01 / 14</span>
+        </div>
+        <div class="dots" id="dots"></div>
+      </footer>
+      <div class="progress"><b id="bar"></b></div>
+    </div>
+  </div>
+
+  <aside class="notes" id="notes" hidden>
+    <div class="notes-head"><strong>Konuşmacı notu</strong><span id="notes-step"></span><button id="notes-close" aria-label="Kapat">×</button></div>
+    <div id="notes-body"></div>
+    <small>N: notları aç/kapat · F: tam ekran · ←/→: slayt</small>
+  </aside>
+  <button class="help-chip" id="help-chip" type="button">N · notlar</button>
+
+  <script src="assets/qrcode.min.js"></script>
+  <script src="sunum.js"></script>
+</body>
+</html>
