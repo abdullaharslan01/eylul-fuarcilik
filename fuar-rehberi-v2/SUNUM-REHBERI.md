@@ -34,12 +34,14 @@ Sunum: http://localhost:4174 · Uygulama tek başına: http://localhost:4174/app
 - **Ana sayfa:** yazar/yayınevi araması, kendi kendine dönen banner, Program · Yazarlar · Yayınevleri · Kroki kısayolları ve sağa doğru kayan “Bugün imzada” şeridi.
 - **Ara (alt menü):** yazar ve yayınevi araması; Tümü / Yazarlar / Yayınevleri filtreleri. Boşken tüm yazarları ve 27 yayınevini listeler.
 - **Yazarlar / Yayınevleri:** ana sayfadaki kısayollardan açılan tam liste.
-- **Program:** gün ve türe göre imzalar ve söyleşiler. “Planıma ekle” ve “Krokide göster”.
+- **Program:** 5 günün tamamı dolu; imzalar, söyleşiler ve çocuk etkinlikleri. “Planıma ekle” ve “Krokide göster” (kroki, sayfanın üstüne ayrı bir ekran olarak açılır).
+- **Yazar sayfası:** kitap kapağına dokununca tam ekran kitap sayfası açılır: büyük kapak, tanıtım yazısı, yazarın diğer kitapları.
+- **Detay ekranları:** iOS’taki gibi geri butonuyla açılır, alt menü gizlenir.
 - **Planım:** kaydedilen etkinlikler.
 - **Kroki:** stant numarası yerine yayınevi logoları (logosu olmayanlar renkli adlarıyla). Logoya dokun ya da yayınevi adını ara. WC, kafe ve danışma noktaları.
 - **Duyurular:** Eylül’ün gönderdiği bildirimler (sağ üstteki zil).
 - **Bildirim gönder:** uygulamanın parçası değil; sunumda telefonun üstündeki turuncu buton. Her basışta telefona farklı bir örnek bildirim düşer.
-- Fuar seçici: aynı uygulama Çocuk Şenliği’ne geçer.
+- **Çocuk Şenliği modu (fuar seçiciden):** tema değişir; 2 günlük 15 etkinlik, 11 katılımcı (atölye, tiyatro, yayınevi, marka), 6 alanlı şenlik haritası, katılımcı ve etkinlik araması, şenliğe özel duyurular.
 
 ## Akış (yaklaşık 5 dakika)
 

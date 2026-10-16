@@ -86,8 +86,10 @@ const ev = id => EVENTS.find(e => e.id === id);
 const fairEvents = () => EVENTS.filter(e => e.fair === S.fair);
 const KIND = { imza: 'İmza', soylesi: 'Söyleşi', cocuk: 'Çocuk', atolye: 'Atölye' };
 const KCOL = { imza: 'var(--imza)', soylesi: 'var(--soylesi)', cocuk: 'var(--cocuk)', atolye: 'var(--atolye)' };
-const evPlace = e => e.publisher ? `${pub(e.publisher).name} · ${pub(e.publisher).stand}` : e.place;
-const evStand = e => e.publisher ? pub(e.publisher).stand : e.place === 'Söyleşi Salonu' ? 'SOYLESI' : e.place === 'Çocuk Atölyesi' ? 'COCUK' : null;
+const org = id => KID_ORGS.find(o => o.id === id);
+const zone = id => KID_ZONES.find(z => z.id === id);
+const evPlace = e => e.publisher ? `${pub(e.publisher).name} · ${pub(e.publisher).stand}` : e.zone ? `${zone(e.zone).name} · ${org(e.org).name}` : e.place;
+const evStand = e => e.publisher ? pub(e.publisher).stand : e.zone ? e.zone : e.place === 'Söyleşi Salonu' ? 'SOYLESI' : e.place === 'Çocuk Atölyesi' ? 'COCUK' : null;
 const evImg = e => e.author ? A + author(e.author).photo : null;
 function evStatus(e) {
   if (e.day !== DEMO_NOW.day) return e.day < DEMO_NOW.day ? 'past' : 'future';
@@ -222,7 +224,7 @@ const TABS = [
   { id: 'harita', label: 'Kroki', icon: 'map' },
   { id: 'planim', label: 'Planım', icon: 'heart' }
 ];
-const TAB_OF = { etkinlik: 'program', yazar: 'ara', yayinevi: 'ara', bildirimler: 'home', katilimcilar: 'ara' };
+const TAB_OF = { etkinlik: 'program', yazar: 'ara', yayinevi: 'ara', firma: 'ara', bildirimler: 'home', katilimcilar: 'ara', konum: 'harita' };
 const isTab = name => TABS.some(t => t.id === name);
 function parse(hash) {
   const h = (hash || '').replace(/^#\/?/, '');
@@ -232,6 +234,7 @@ function parse(hash) {
 }
 function go(hash) { if (location.hash === hash) render('none'); else location.hash = hash; }
 window.addEventListener('hashchange', () => {
+  closeBook();
   const next = parse(location.hash);
   const isTabRoute = isTab(next.name);
   const dir = isTabRoute ? 'fade' : (history_.length && history_[history_.length - 1] === location.hash) ? 'back' : 'fwd';
@@ -259,10 +262,13 @@ function render(dir = 'fade') {
   if (dir !== 'none') view.scrollTop = 0;
   const tab = isTab(route.name) ? route.name : (TAB_OF[route.name] || lastTab);
   lastTab = tab;
-  $('#tabbar').innerHTML = TABS.map(t => `<button type="button" class="${t.id === tab ? 'on' : ''}" data-go="#/${t.id === 'home' ? '' : t.id}">${ic(t.icon)}<span>${t.label}</span>${t.id === 'planim' && S.saved.length ? `<span class="badge">${S.saved.length}</span>` : ''}</button>`).join('');
+  app.classList.toggle('no-tabs', !isTab(route.name));
+  $('#tabbar').innerHTML = TABS.map(t => `<button type="button" class="${t.id === tab ? 'on' : ''}" data-go="#/${t.id === 'home' ? '' : t.id}">${ic(t.icon)}<span>${t.label}</span>${t.id === 'planim' && savedHere().length ? `<span class="badge">${savedHere().length}</span>` : ''}</button>`).join('');
   out.after && out.after();
 }
-const unread = () => [...S.extraNotices, ...NOTICES].filter(n => !S.read.includes(n.id)).length;
+const savedHere = () => EVENTS.filter(e => e.fair === S.fair && has('saved', e.id));
+const fairNotices = () => [...S.extraNotices.filter(n => (n.fair || 'ankara') === S.fair), ...NOTICES.filter(n => n.fair === S.fair)];
+const unread = () => fairNotices().filter(n => !S.read.includes(n.id)).length;
 const bell = () => `<button class="icon-btn" data-go="#/bildirimler" aria-label="Duyurular">${ic('bell', 'sm')}${unread() ? '<span class="dot"></span>' : ''}</button>`;
 function topMain() {
   return `<img class="logo" src="${A}eylul-fuarcilik-logo.png" alt="Eylül Fuarcılık">
@@ -284,8 +290,9 @@ SCREENS.home = () => {
   const today = fairEvents().filter(e => e.day === day).sort((a, b) => tmin(a.start) - tmin(b.start));
   const now = !kids() && (today.find(e => evStatus(e) === 'live' && e.kind === 'imza') || today.find(e => evStatus(e) === 'soon'));
   const slides = kids() ? [
-    { img: 'children-workshop.jpg', tag: 'ÇOCUK ŞENLİĞİ', title: 'Atölyeler, masallar, oyunlar', sub: 'Nisan 2027 · aileler için', link: '#/program' },
-    { img: 'eylul-galeri-2.jpg', tag: 'KİTAP KÖŞESİ', title: 'Resimli kitaplarla keşif', sub: 'Her gün 11.00’de', link: '#/program' }
+    { img: 'children-workshop.jpg', tag: 'ÇOCUK ŞENLİĞİ', title: 'Atölyeler, masallar, oyunlar', sub: '24–25 Nisan 2027 · aileler için', link: '#/program' },
+    { img: 'eylul-galeri-2.jpg', tag: 'KİTAP KÖŞESİ', title: 'Yazarlarla okuma saatleri', sub: 'Can Çocuk, Tudem ve Günışığı', link: '#/konum/kitap' },
+    { img: 'children-workshop.jpg', tag: 'BİLİM ALANI', title: 'Robotlar ve deneyler', sub: 'Minik Mucitler · Bilim Kâşifleri', link: '#/konum/bilim', pos: 'center 70%' }
   ] : [
     { img: 'ankara-fuar-arsiv.jpg', tag: '24. ANKARA KİTAP FUARI', title: 'Kitap fuarı başladı', sub: '4–13 Aralık · ATO Congresium', link: '#/program' },
     ...(now ? [{ img: author(now.author).photo, tag: (evStatus(now) === 'live' ? 'ŞİMDİ İMZADA' : 'SIRADAKİ İMZA') + ' · ' + now.start, title: now.title, sub: evPlace(now), link: '#/etkinlik/' + now.id, pos: 'center 25%' }] : []),
@@ -316,7 +323,7 @@ SCREENS.home = () => {
 
     <div class="quick">
       <button data-go="#/program"><span class="q-ico brand">${ic('cal')}</span>Program</button>
-      ${kids() ? '' : `<button data-go="#/katilimcilar?tab=yazar"><span class="q-ico">${ic('pen')}</span>Yazarlar</button>
+      ${kids() ? `<button data-go="#/katilimcilar"><span class="q-ico">${ic('users')}</span>Katılımcılar</button>` : `<button data-go="#/katilimcilar?tab=yazar"><span class="q-ico">${ic('pen')}</span>Yazarlar</button>
       <button data-go="#/katilimcilar?tab=yayinevi"><span class="q-ico">${ic('book')}</span>Yayınevleri</button>`}
       <button data-go="#/harita"><span class="q-ico">${ic('map')}</span>Kroki</button>
       ${kids() ? `<button data-go="#/bildirimler"><span class="q-ico">${ic('bell')}</span>Duyurular</button>` : ''}
@@ -392,13 +399,14 @@ SCREENS.etkinlik = id => {
   const st = evStatus(e);
   const d = FAIRS[e.fair].days.find(d => d.n === e.day);
   const stand = evStand(e);
-  const a = e.author && author(e.author), p = e.publisher && pub(e.publisher);
+  const a = e.author && author(e.author), p = e.publisher && pub(e.publisher), o = e.org && org(e.org);
   const books = a ? BOOKS.filter(b => b.author === a.id) : [];
+  const heroImg = a ? A + a.photo : o ? A + (e.zone === 'kitap' ? 'eylul-galeri-2.jpg' : 'children-workshop.jpg') : null;
   return {
     top: topBack(KIND[e.kind], FAIRS[e.fair].short),
     html: `
-    <div class="hero ${a ? '' : 'flat k-' + e.kind}" style="${a ? '' : 'min-height:210px'}">
-      ${a ? `<img class="bg" src="${A}${a.photo}" alt="">` : ''}
+    <div class="hero ${heroImg ? '' : 'flat k-' + e.kind}" style="${heroImg ? '' : 'min-height:210px'}">
+      ${heroImg ? `<img class="bg" src="${heroImg}" alt="">` : ''}
       <div class="inner">
         <span class="tag ${st === 'live' ? 'hot' : 'dark'}">${st === 'live' ? '● ŞİMDİ' : KIND[e.kind].toLocaleUpperCase('tr-TR')} · ${d.label} ${d.date}</span>
         <h1>${esc(e.title)}</h1>
@@ -407,12 +415,13 @@ SCREENS.etkinlik = id => {
     </div>
     <div class="facts">
       <div class="fact">${ic('clock', 'sm')}<div><small>Saat</small><b>${e.start} – ${e.end}</b></div></div>
-      <div class="fact">${ic('pin', 'sm')}<div><small>${p ? 'Stant' : 'Yer'}</small><b>${esc(p ? p.stand + ' · ' + p.name.split(' ')[0] : e.place)}</b></div></div>
+      <div class="fact">${ic('pin', 'sm')}<div><small>${p ? 'Stant' : 'Yer'}</small><b>${esc(p ? p.stand + ' · ' + p.name.split(' ')[0] : e.zone ? zone(e.zone).name : e.place)}</b></div></div>
     </div>
     <div class="cta-bar">
       <button class="btn ${has('saved', e.id) ? 'done' : 'dark'}" data-save="${e.id}">${has('saved', e.id) ? ic('check', 'sm') + ' Planımda' : ic('plus', 'sm') + ' Planıma ekle'}</button>
-      ${p ? `<button class="btn ghost" data-go="#/harita?stand=${stand}">${ic('map', 'sm')} Krokide göster</button>` : ''}
+      ${p ? `<button class="btn ghost" data-go="#/konum/${stand}">${ic('map', 'sm')} Krokide göster</button>` : e.zone ? `<button class="btn ghost" data-go="#/konum/${e.zone}">${ic('map', 'sm')} Haritada göster</button>` : ''}
     </div>
+    ${o ? `<div class="section"><div class="section-head"><h2>Düzenleyen</h2></div><div class="list">${orgRow(o)}</div></div>` : ''}
     ${books.length ? `<div class="section">
       <div class="section-head"><h2>Yazarın kitapları</h2><button class="more" data-go="#/yazar/${a.id}">Profil →</button></div>
       <div class="hscroll">${books.map(bookTile).join('')}</div>
@@ -420,8 +429,35 @@ SCREENS.etkinlik = id => {
   };
 };
 function bookTile(b) {
-  return `<div class="book-tile"><div class="cv"><img src="${A}${b.cover}" alt="${esc(b.title)}" loading="lazy"></div><strong>${esc(b.title)}</strong></div>`;
+  return `<button class="book-tile" data-book="${b.id}"><div class="cv"><img src="${A}${b.cover}" alt="${esc(b.title)}" loading="lazy"></div><strong>${esc(b.title)}</strong></button>`;
 }
+function openBook(id) {
+  const b = book(id); if (!b) return;
+  const a = author(b.author), p = pub(a.publisher);
+  const others = BOOKS.filter(x => x.author === a.id && x.id !== id);
+  const el = $('#bookview');
+  el.innerHTML = `
+    <div class="bv-head" style="--cover:url('${A}${b.cover}')">
+      <button class="bv-close" data-close-book aria-label="Kapat">${ic('x', 'sm')}</button>
+      <img class="bv-cover" src="${A}${b.cover}" alt="${esc(b.title)}">
+    </div>
+    <div class="bv-body">
+      <h1>${esc(b.title)}</h1>
+      <p class="bv-by">${esc(a.name)} · ${esc(p.name)}</p>
+      <p class="bv-about">${esc(b.about)}</p>
+      <div class="bv-meta">
+        <div><small>Yazar</small><b>${esc(a.name)}</b></div>
+        <div><small>Yayınevi</small><b>${esc(p.name)}</b></div>
+        <div><small>Stant</small><b>${p.stand}</b></div>
+      </div>
+      <button class="btn dark block" data-close-book data-go="#/konum/${p.stand}">${ic('map', 'sm')} Yayınevini krokide gör</button>
+      ${others.length ? `<h3>Yazarın diğer kitapları</h3><div class="hscroll" style="padding-left:0">${others.map(bookTile).join('')}</div>` : ''}
+    </div>`;
+  el.scrollTop = 0;
+  el.classList.add('show');
+  $('#app').classList.add('book-open');
+}
+function closeBook() { $('#bookview').classList.remove('show'); $('#app').classList.remove('book-open'); }
 
 /* ---------- Yazar / Yayınevi ---------- */
 SCREENS.yazar = id => {
@@ -451,13 +487,19 @@ SCREENS.yayinevi = id => {
       <h1>${esc(p.name)}</h1><p>Stant ${p.stand}</p>
     </div>
     <p class="prose" style="margin-top:12px;text-align:center">${esc(p.about || p.name + ', fuarda kendi standında okurlarını bekliyor.')}</p>
-    <div class="section"><button class="mini-map" data-go="#/harita?stand=${p.stand}" style="display:block;width:calc(100% - 36px)">${floorSVG({ sel: p.stand, fac: false })}<div class="cap"><div style="text-align:left"><b>Krokide gör</b><small>${esc(p.name)} standı</small></div>${ic('chev', 'sm')}</div></button></div>
+    <div class="section"><button class="mini-map" data-go="#/konum/${p.stand}" style="display:block;width:calc(100% - 36px)">${floorSVG({ sel: p.stand, fac: false })}<div class="cap"><div style="text-align:left"><b>Krokide gör</b><small>${esc(p.name)} standı</small></div>${ic('chev', 'sm')}</div></button></div>
     ${evs.length ? `<div class="section"><div class="section-head"><h2>Standdaki imzalar</h2></div><div class="list">${evs.map(eventRow).join('')}</div></div>` : ''}`
   };
 };
 
 /* ---------- Yazarlar ve yayınevleri ---------- */
+const orgRow = o => `<button class="row" data-go="#/firma/${o.id}"><span class="logo-tile">${logoHTML(o)}</span><span class="txt"><strong>${esc(o.name)}</strong><small>${o.kind} · ${zone(o.zone).name}</small></span>${ic('chev', 'sm')}</button>`;
+const orgTile = o => `<button class="pub-tile" data-go="#/firma/${o.id}"><span class="pl">${logoHTML(o)}</span><strong>${esc(o.name)}</strong><small>${o.kind} · ${zone(o.zone).name}</small></button>`;
 SCREENS.katilimcilar = () => {
+  if (kids()) return {
+    top: topBack('Katılımcılar', fair().short),
+    html: `<p class="prose" style="margin:0 0 4px">Şenlikte atölye, gösteri ve buluşma düzenleyen ${KID_ORGS.length} katılımcı.</p><div class="pub-grid">${KID_ORGS.map(orgTile).join('')}</div>`
+  };
   const tab = route.q.get('tab') === 'yayinevi' ? 'yayinevi' : 'yazar';
   return {
     top: topBack(tab === 'yazar' ? 'Yazarlar' : 'Yayınevleri', fair().short),
@@ -475,7 +517,40 @@ SCREENS.katilimcilar = () => {
   };
 };
 
+SCREENS.firma = id => {
+  const o = org(id); if (!o) return SCREENS.katilimcilar();
+  const z = zone(o.zone);
+  const evs = EVENTS.filter(e => e.org === id).sort((a, b) => a.day - b.day || tmin(a.start) - tmin(b.start));
+  return {
+    top: topBack(o.kind, fair().short),
+    html: `
+    <div class="profile-head">
+      <div class="big-logo">${logoHTML(o)}</div>
+      <h1>${esc(o.name)}</h1><p>${o.kind} · ${z.name}</p>
+    </div>
+    <p class="prose" style="margin-top:12px;text-align:center">${esc(o.about)}</p>
+    <div class="cta-bar"><button class="btn dark" data-go="#/konum/${z.id}">${ic('map', 'sm')} Haritada gör</button></div>
+    ${evs.length ? `<div class="section"><div class="section-head"><h2>Etkinlikleri</h2></div><div class="list">${evs.map(eventRow).join('')}</div></div>` : ''}`
+  };
+};
+
 /* ---------- Kroki ---------- */
+SCREENS.konum = id => {
+  if (zone(id)) return kidsZone(id);
+  const p = STAND_OWNERS[id] && pub(STAND_OWNERS[id]);
+  return {
+    top: topBack(p ? p.name : 'Kroki', 'KROKİDE'),
+    html: `
+    <div class="map-wrap" id="mapwrap">
+      <div class="map-tools"><button data-zoom="1" aria-label="Yakınlaş">+</button><button data-zoom="-1" aria-label="Uzaklaş">−</button></div>
+      <div class="map-scroll" id="mapscroll"><div class="map-canvas" id="mapcanvas" style="width:${mapW}px">${floorSVG({ sel: id })}</div></div>
+    </div>
+    ${p ? `<div class="card map-sheet"><span class="logo-tile" style="width:64px;height:48px">${logoHTML(p)}</span>
+      <div style="flex:1;min-width:0"><strong style="display:block">${esc(p.name)}</strong><small class="muted">Stant ${id}</small></div>
+      <button class="btn sm dark" data-go="#/yayinevi/${p.id}">Profil</button></div>` : ''}`,
+    after: () => requestAnimationFrame(() => centerMap(id))
+  };
+};
 SCREENS.harita = () => {
   if (kids()) return kidsMap();
   const stand = route.q.get('stand'), yer = route.q.get('yer');
@@ -504,44 +579,76 @@ function centerMap(id) {
   const sc = $('#mapscroll'), t = targetPoint(id); if (!sc || !t) return;
   sc.scrollTo({ left: t.end.x / 1000 * mapW - sc.clientWidth / 2, top: t.end.y / 640 * mapW * .64 - sc.clientHeight / 2, behavior: 'instant' });
 }
+function kidsFloor(sel) {
+  let s = `<svg class="floor kids-floor" viewBox="0 0 400 320">
+    <rect x="6" y="6" width="388" height="308" rx="18" fill="#eef7f2" stroke="#cfe5da"/>`;
+  KID_ZONES.forEach((z, i) => {
+    const x = 18 + (i % 3) * 124, y = 18 + Math.floor(i / 3) * 124, on = sel === z.id;
+    const orgs = KID_ORGS.filter(o => o.zone === z.id);
+    s += `<g class="kzone${on ? ' on' : ''}" data-zone="${z.id}"><rect x="${x}" y="${y}" width="116" height="114" rx="16" fill="${z.bg}" stroke="${on ? z.color : 'rgba(0,0,0,.06)'}" stroke-width="${on ? 4 : 1}"/>
+      <text x="${x + 58}" y="${y + 50}" class="kz-name" fill="${z.color}">${z.name.toLocaleUpperCase('tr-TR').split(' ').join('</text><text x="' + (x + 58) + '" y="' + (y + 64) + '" class="kz-name" fill="' + z.color + '">')}</text>
+      <text x="${x + 58}" y="${y + 92}" class="kz-count">${orgs.length} katılımcı</text></g>`;
+  });
+  s += `<g class="fac"><circle cx="200" cy="292" r="13" style="fill:#0b8e78;stroke:#fff;stroke-width:2"/><text x="200" y="292" style="fill:#fff">i</text></g>
+    <text class="zlabel kids" x="246" y="295" style="font-size:9px">DANIŞMA</text>
+    <g class="fac"><circle cx="40" cy="292" r="11"/><text x="40" y="292">WC</text></g>
+    <text class="zlabel" x="350" y="295" style="font-size:9px">GİRİŞ</text>`;
+  return s + '</svg>';
+}
 function kidsMap() {
   return {
     top: topTitle('Şenlik haritası', 'ÇOCUK ŞENLİĞİ'),
-    html: `<div class="map-wrap" style="height:auto">
-      <svg class="floor" viewBox="0 0 400 300">
-        <rect x="6" y="6" width="388" height="288" rx="16" fill="#eef7f2" stroke="#cfe5da"/>
-        <rect x="20" y="20" width="170" height="110" rx="14" fill="#dcf3ec" stroke="#b5e3d6"/><text class="zlabel kids" x="105" y="80">MASAL SAHNESİ</text>
-        <rect x="210" y="20" width="170" height="110" rx="14" fill="#fde6ee" stroke="#f5c3d4"/><text class="zlabel" x="295" y="80" style="fill:#b52b59">RENK ATÖLYESİ</text>
-        <rect x="20" y="146" width="170" height="90" rx="14" fill="#fff1db" stroke="#f6d9a8"/><text class="zlabel" x="105" y="195" style="fill:#a85a00">OYUN ALANI</text>
-        <rect x="210" y="146" width="170" height="90" rx="14" fill="#ecebff" stroke="#c9c7f0"/><text class="zlabel talk" x="295" y="195">KİTAP KÖŞESİ</text>
-        <g class="fac"><circle cx="200" cy="268" r="14" style="fill:#0b8e78;stroke:#fff;stroke-width:2"/><text x="200" y="268" style="fill:#fff">i</text></g>
-        <text class="zlabel kids" x="200" y="292" style="font-size:9px">DANIŞMA</text>
-        <g class="fac"><circle cx="40" cy="268" r="11"/><text x="40" y="268">WC</text></g>
-      </svg></div>
-      <p class="muted" style="font-size:11.5px;margin:14px 22px 0">Çocuk Şenliği haritası konsepttir; mekân belli olunca çizilir.</p>`
+    html: `<div class="map-wrap" style="height:auto">${kidsFloor()}</div>
+      <p class="muted" style="font-size:13px;margin:12px 22px 0">Bir alana dokun; oradaki katılımcıları ve etkinlikleri gör.</p>
+      <div class="list" style="margin-top:12px">${KID_ZONES.map(z => `<button class="row" data-go="#/konum/${z.id}"><span class="ico-tile" style="background:${z.bg};color:${z.color}">${ic(z.icon, 'sm')}</span><span class="txt"><strong>${z.name}</strong><small>${KID_ORGS.filter(o => o.zone === z.id).map(o => o.name).join(' · ')}</small></span>${ic('chev', 'sm')}</button>`).join('')}</div>`
+  };
+}
+function kidsZone(id) {
+  const z = zone(id);
+  const orgs = KID_ORGS.filter(o => o.zone === id);
+  const evs = EVENTS.filter(e => e.zone === id).sort((a, b) => a.day - b.day || tmin(a.start) - tmin(b.start));
+  return {
+    top: topBack(z.name, 'ŞENLİK HARİTASI'),
+    html: `<div class="map-wrap" style="height:auto">${kidsFloor(id)}</div>
+      <div class="section"><div class="section-head"><h2>Bu alanda</h2></div><div class="list">${orgs.map(orgRow).join('')}</div></div>
+      <div class="section"><div class="section-head"><h2>Etkinlikler</h2></div><div class="list">${evs.map(eventRow).join('')}</div></div>`
   };
 }
 
 /* ---------- Ara ---------- */
 let searchKind = 'tum';
 SCREENS.ara = () => {
-  searchKind = ['yazar', 'yayinevi'].includes(route.q.get('tur')) ? route.q.get('tur') : 'tum';
+  const kinds = kids() ? [['tum', 'Tümü'], ['etkinlik', 'Etkinlikler'], ['firma', 'Katılımcılar']] : [['tum', 'Tümü'], ['yazar', 'Yazarlar'], ['yayinevi', 'Yayınevleri']];
+  searchKind = kinds.some(([k]) => k === route.q.get('tur')) ? route.q.get('tur') : 'tum';
   return {
-    top: topTitle('Ara', 'YAZAR · YAYINEVİ'),
+    top: topTitle('Ara', kids() ? 'ETKİNLİK · KATILIMCI' : 'YAZAR · YAYINEVİ'),
     html: `
-    <label class="search big">${ic('search', 'sm')}<input id="q" type="search" placeholder="Yazar ya da yayınevi adı yaz…" autocomplete="off" value="${esc(route.q.get('q') || '')}"></label>
+    <label class="search big">${ic('search', 'sm')}<input id="q" type="search" placeholder="${kids() ? 'Etkinlik ya da katılımcı ara…' : 'Yazar ya da yayınevi adı yaz…'}" autocomplete="off" value="${esc(route.q.get('q') || '')}"></label>
     <div class="chips" style="margin-top:12px" id="search-kinds">
-      ${[['tum', 'Tümü'], ['yazar', 'Yazarlar'], ['yayinevi', 'Yayınevleri']].map(([k, l]) => `<button class="chip ${k === searchKind ? 'on' : ''}" data-kind="${k}">${l}</button>`).join('')}
+      ${kinds.map(([k, l]) => `<button class="chip ${k === searchKind ? 'on' : ''}" data-kind="${k}">${l}</button>`).join('')}
     </div>
     <div id="results"></div>`,
     after: () => { const i = $('#q'); runSearch(i.value); if (!EMBED) i.focus({ preventScroll: true }); }
   };
 };
+function kidsSearch(box, q) {
+  const wantE = searchKind !== 'firma', wantO = searchKind !== 'etkinlik';
+  const evs = fairEvents().sort((a, b) => a.day - b.day || tmin(a.start) - tmin(b.start));
+  const n = norm(q), m = s => norm(s).includes(n);
+  const es = wantE ? (q ? evs.filter(e => m(e.title) || m(org(e.org).name) || m(zone(e.zone).name)) : evs.filter(e => e.day === 1)) : [];
+  const os = wantO ? (q ? KID_ORGS.filter(o => m(o.name) || m(o.kind)) : KID_ORGS) : [];
+  if (!es.length && !os.length) { box.innerHTML = `<div class="empty" style="margin-top:20px"><strong>“${esc(q)}” bulunamadı</strong><p>Başka bir kelime deneyebilirsin.</p></div>`; return; }
+  box.innerHTML = `
+    ${q ? `<p class="muted" style="margin:14px 22px 0;font-size:12.5px;font-weight:700">${es.length + os.length} sonuç</p>` : ''}
+    ${os.length ? `<div class="res-group"><h3>Katılımcılar · ${os.length}</h3>${q ? `<div class="list">${os.map(orgRow).join('')}</div>` : `<div class="pub-grid" style="padding-top:0">${os.map(orgTile).join('')}</div>`}</div>` : ''}
+    ${es.length ? `<div class="res-group"><h3>${q ? 'Etkinlikler' : 'Bugünün etkinlikleri'}</h3><div class="list">${es.map(eventRow).join('')}</div></div>` : ''}`;
+}
 const authorRow = (a, q = '') => `<button class="row" data-go="#/yazar/${a.id}"><img class="avatar" src="${A}${a.photo}" alt=""><span class="txt"><strong>${hl(a.name, q)}</strong><small>${esc(pub(a.publisher).name)}</small></span>${ic('chev', 'sm')}</button>`;
 const pubTile = p => `<button class="pub-tile" data-go="#/yayinevi/${p.id}"><span class="pl">${logoHTML(p)}</span><strong>${esc(p.name)}</strong><small>Stant ${p.stand || '—'}</small></button>`;
 function runSearch(q) {
   const box = $('#results'); if (!box) return;
   q = q.trim();
+  if (kids()) return kidsSearch(box, q);
   const wantA = searchKind !== 'yayinevi', wantP = searchKind !== 'yazar';
   const sortedPubs = [...PUBLISHERS].sort((a, b) => a.name.localeCompare(b.name, 'tr'));
   if (!q) {
@@ -568,7 +675,7 @@ function pubRow(p, q = '') {
 
 /* ---------- Planım ---------- */
 SCREENS.planim = () => {
-  const saved = EVENTS.filter(e => has('saved', e.id)).sort((a, b) => a.fair.localeCompare(b.fair) || a.day - b.day || tmin(a.start) - tmin(b.start));
+  const saved = savedHere().sort((a, b) => a.fair.localeCompare(b.fair) || a.day - b.day || tmin(a.start) - tmin(b.start));
   const byDay = {};
   saved.forEach(e => (byDay[e.fair + '-' + e.day] = byDay[e.fair + '-' + e.day] || []).push(e));
   return {
@@ -585,7 +692,7 @@ SCREENS.planim = () => {
 
 /* ---------- Duyurular ---------- */
 SCREENS.bildirimler = () => {
-  const all = [...S.extraNotices, ...NOTICES];
+  const all = fairNotices();
   setTimeout(() => { S.read = all.map(n => n.id); save(); }, 1500);
   return {
     top: topBack('Duyurular', 'EYLÜL FUARCILIK'),
@@ -608,7 +715,7 @@ function toast(msg, icon = 'check') { const t = $('#toast'); t.innerHTML = ic(ic
 let pushT, pushCursor = 0, noticeSeq = 0;
 function push(n) {
   const id = 'live' + (++noticeSeq) + Date.now();
-  S.extraNotices.unshift({ ...n, id, time: 'şimdi' }); save();
+  S.extraNotices.unshift({ ...n, id, time: 'şimdi', fair: S.fair }); save();
   const el = $('#push');
   el.innerHTML = `<span class="app-ico"><img src="${A}eylul-fuarcilik-logo.png" alt=""></span><span class="txt"><span class="h"><span>EYLÜL FUAR REHBERİ</span><span>şimdi</span></span><strong>${esc(n.title)}</strong><p>${esc(n.body)}</p></span>`;
   el.dataset.link = n.link || '#/bildirimler';
@@ -619,9 +726,11 @@ function push(n) {
 
 /* ---------- Etkileşimler ---------- */
 document.addEventListener('click', e => {
-  const el = e.target.closest('[data-go],[data-back],[data-save],[data-kind],[data-sheet],[data-fair],[data-zoom],[data-stand],#push,#backdrop');
+  const el = e.target.closest('[data-zone],[data-close-book],[data-book],[data-go],[data-back],[data-save],[data-kind],[data-sheet],[data-fair],[data-zoom],[data-stand],#push,#backdrop');
   if (!el) return;
   const d = el.dataset;
+  if (d.book) return openBook(d.book);
+  if (d.closeBook != null) { closeBook(); if (!d.go) return; }
   if (el.id === 'push') { el.classList.remove('show'); return go(d.link); }
   if (el.id === 'backdrop') return closeSheet();
   if (d.save) { e.stopPropagation(); const on = toggle('saved', d.save); toast(on ? 'Planına eklendi' : 'Plandan çıkarıldı', on ? 'bookmark' : 'x'); return render('none'); }
@@ -641,6 +750,8 @@ document.addEventListener('click', e => {
     return;
   }
   if (d.stand && route.name === 'harita') return go('#/harita?stand=' + d.stand);
+  if (d.stand && route.name === 'konum') return go('#/konum/' + d.stand);
+  if (d.zone) return go('#/konum/' + d.zone);
   if (d.back != null) { closeSheet(); return back(); }
   if (d.go) { closeSheet(); return go(d.go); }
 });
@@ -651,10 +762,11 @@ $('#view').addEventListener('scroll', () => $('#topbar').classList.toggle('scrol
 const seenPush = new Set();
 function onDemoMessage(m) {
   if (!m || typeof m !== 'object') return;
-  if (m.type === 'go') { closeSheet(); if (m.fair && S.fair !== m.fair) { S.fair = m.fair; save(); } go(m.hash); }
+  if (m.type === 'go') { closeSheet(); closeBook(); if (m.fair && S.fair !== m.fair) { S.fair = m.fair; save(); } go(m.hash); }
   if (m.type === 'push') {
     if (m.notice && m.notice.nid) { if (seenPush.has(m.notice.nid)) return; seenPush.add(m.notice.nid); }
-    push(m.notice || LIVE_PUSHES[(pushCursor++) % LIVE_PUSHES.length]);
+    const pool = kids() ? KID_PUSHES : LIVE_PUSHES;
+    push(m.notice || pool[(pushCursor++) % pool.length]);
   }
   if (m.type === 'reset') { resetState(); history_ = []; go(m.hash || '#/'); }
 }
@@ -669,6 +781,7 @@ if (EMBED) document.addEventListener('keydown', e => {
 if (EMBED) $('#app').classList.add('embed');
 if (params.has('still')) document.documentElement.classList.add('still');
 if (params.get('demo') === 'cocuk') S.fair = 'cocuk';
+if (params.get('kitap')) setTimeout(() => openBook(params.get('kitap')), 0);
 setInterval(() => { const c = $('#clock'); if (c) c.textContent = fmtNow().replace('.', ':'); }, 10000);
 $('#clock').textContent = fmtNow().replace('.', ':');
 route = parse(location.hash);

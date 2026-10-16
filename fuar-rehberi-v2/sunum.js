@@ -66,9 +66,9 @@ const SLIDES = [
     html: `
       <span class="kicker" style="color:var(--teal)"><span class="num" style="background:#ffb21f">2027</span>Çocuk Şenliği</span>
       <h1 class="title">Aynı uygulama,<br><em>her fuarda.</em></h1>
-      <p class="lead">Önümüzdeki yıl çocuk etkinliklerinde aynı uygulama kullanılır. Okur sadece fuarı değiştirir; program, harita ve duyurular o etkinliğe göre açılır.</p>
-      <div class="try"><span>Canlı dene</span><button data-msg='{"type":"go","fair":"cocuk","hash":"#/program"}'><i>▶</i>Şenlik programı</button><button class="ghost" data-msg='{"type":"go","fair":"ankara","hash":"#/"}'><i>↺</i>Kitap fuarına dön</button></div>`,
-    notes: `<p>Telefon tema değiştirdi: aynı uygulama, Çocuk Şenliği. Bir kez indirilen uygulama Eylül’ün bütün etkinliklerinde kullanılır.</p>`
+      <p class="lead">Önümüzdeki yıl çocuk etkinliklerinde aynı uygulama kullanılır. Fuar değişince program, katılımcılar, harita ve duyurular o etkinliğe göre açılır.</p>
+      <div class="try"><span>Canlı dene</span><button data-msg='{"type":"go","fair":"cocuk","hash":"#/program"}'><i>▶</i>Şenlik programı</button><button class="ghost" data-msg='{"type":"go","fair":"cocuk","hash":"#/katilimcilar"}'><i>☺</i>Katılımcılar</button></div>`,
+    notes: `<p>Telefon tema değiştirdi: aynı uygulama, Çocuk Şenliği. Arama artık atölye ve katılımcıları buluyor; harita alanlara ayrılmış. Bir kez indirilen uygulama Eylül’ün bütün etkinliklerinde kullanılır.</p>`
   },
   {
     id: 'birlikte', theme: 'dark', layout: 'full', plain: true,
