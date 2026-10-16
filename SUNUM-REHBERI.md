@@ -6,19 +6,20 @@ Bulbi’nin Eylül Fuarcılık’a sunacağı mobil fuar rehberi konsepti. Klas�
 | --- | --- |
 | `index.html` | 15 slaytlık sunum: uygulamayı baştan sona gezen bir tur. Sağdaki telefon gerçek, tıklanabilir. |
 | `app/` | Mobil uygulama. Telefonda tek başına da açılır. |
-| `panel.html` | Eylül paneli: duyuru gönderme ve canlı yarışmayı başlatma. Sunumun 12. adımında canlı çalışır. |
+| `panel.html` | Eylül paneli; yalnızca sunumun 12. slaytında, sunumun içinde gösterilir. |
 
-Eski prototip `../fuar-rehberi-prototip/` klasöründe olduğu gibi duruyor.
 
 ## Açmak
 
 Klasörde bir yerel sunucu başlat ve tarayıcıda aç:
 
 ```bash
-cd ~/Documents/Bulbi/Eylul/fuar-rehberi-v2 && python3 -m http.server 4174
+cd ~/Documents/Bulbi/Eylul && python3 -m http.server 4174
 ```
 
-Sunum: http://localhost:4174 · Uygulama tek başına: http://localhost:4174/app/ · Panel: http://localhost:4174/panel.html
+Sunum: http://localhost:4174 · Uygulama tek başına: http://localhost:4174/app/
+
+Canlı: https://eylul-fuarcilik.vercel.app (sunum) · https://eylul-fuarcilik.vercel.app/app/ (uygulama). GitHub’a her push otomatik yayına çıkar.
 
 İnternet gerekmez; fontlar klasörün içinde.
 
