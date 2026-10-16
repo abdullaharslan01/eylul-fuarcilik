@@ -4,9 +4,9 @@ Bulbi’nin Eylül Fuarcılık’a sunacağı mobil fuar rehberi konsepti. Klas�
 
 | Dosya | Ne işe yarar |
 | --- | --- |
-| `index.html` | 8 slaytlık tanıtım sunumu. Sağdaki telefon gerçek, tıklanabilir uygulama. |
+| `index.html` | 16 adımlık sunum: uygulamayı baştan sona gezen bir tur. Sağdaki telefon gerçek, tıklanabilir. |
 | `app/` | Mobil uygulama. Telefonda tek başına da açılır. |
-| `panel.html` | Eylül ekibinin duyuru gönderdiği basit panel. Sunumun 5. slaytında canlı çalışır. |
+| `panel.html` | Eylül paneli: duyuru gönderme ve canlı yarışmayı başlatma. Sunumun 12. adımında canlı çalışır. |
 
 Eski prototip `../fuar-rehberi-prototip/` klasöründe olduğu gibi duruyor.
 
@@ -36,26 +36,38 @@ Alt menü: **Ana sayfa · Program · Hediyeler · Kroki · Planım**
 - **Ana sayfa:** yazar/yayınevi araması, dönen banner, Program · Kroki · Hediyeler · Duyurular kısayolları, pasaport ilerlemesi, kendi kendine kayan “Bugün imzada” şeridi, popüler yayınevleri.
 - **Program:** 5 günün tamamı dolu; program içinde arama. Etkinlik detayında süre, giriş, etkinlik hakkında yazı, konuşmacılar, “Planıma ekle” ve “Krokide göster”.
 - **Hediyeler:**
-  - **QR pasaportu:** stant QR’ları okutulur, damga toplanır. 3 damgada bez çanta, 6 damgada kitap, tüm görevlerde çekiliş.
+  - **QR & Hediyeler:** stantlardaki QR’lar okutulur. 3 QR’da bez çanta, 6 QR’da kitap. Hediyeler görselleri ve stok bilgisiyle listelenir.
+  - **Quiz’ler:** her zaman açık; sorular havuzdan her oyuncuya karışık gelir, her doğru 10 puan.
+  - **Sıralama:** her QR 20 puan; senin sıran ve günün liderleri.
   - **Görevler.**
-  - **Canlı bilgi yarışması:** 12.00 · 15.00 · 18.00’de herkese aynı anda 5 soru, her soruya 10 saniye. Süre bitince doğru cevap ve oyuncuların yüzde dağılımı gösterilir.
+  - **Canlı yarışma (ödüllü):** 12.00 · 15.00 · 18.00’de Eylül panelden başlatır; herkese aynı anda 5 soru, her soruya 10 saniye. Süre bitince doğru cevap ve oyuncuların yüzde dağılımı gösterilir.
 - **Kroki:** yayınevi logoları; yana kayan hizmet noktaları (WC, kafe, danışma, ilk yardım, mescit, asansör, kayıp çocuk, ATM, bebek bakım).
 - **Planım:** kayıtlı etkinlik özeti, sıradaki etkinlik, pasaport ilerlemesi, gün gün plan.
 - **Yazar sayfası:** kitap kapağına dokununca tam ekran kitap sayfası.
+- **Yayınevi sayfası:** tür etiketleri, tanıtım, standdaki imzalar, yazarlar, kitaplar, web sitesi bağlantısı.
 - **Detay ekranları:** iOS’taki gibi geri butonuyla açılır, alt menü gizlenir.
 - **Çocuk Şenliği modu (fuar seçiciden):** kendi programı, 11 katılımcı, 6 alanlı harita, katılımcı araması, alan pasaportu ve şenlik duyuruları.
 
-## Akış (yaklaşık 6 dakika)
+## Akış (yaklaşık 8–10 dakika)
+
+Her slaytta sol taraf anlatır, telefon o ekrana geçer. Telefona istediğin an dokunabilirsin; sonraki slayta geçince telefon yine sıradaki ekrana gider.
 
 1. **Kapak.**
 2. **Okurun üç sorusu.**
-3. **Program.** Bir imzayı aç; “Programda ara”.
-4. **Kroki.** “Everest nerede?”, “İletişim ara”.
-5. **Duyurular.** Paneldeki “Gönder” ya da telefonun üstündeki “Bildirim gönder”.
-6. **Hediyeler.** “QR okut” → damga ve ödül; “Canlı yarışmayı başlat” → bildirim, 3-2-1, soru, sonuç.
-7. **Çocuk Şenliği 2027.**
-8. **Önerimiz.**
-9. **Teşekkürler.**
+3. **Ana sayfa:** banner, kısayollar, kayan imza şeridi, popüler yayınevleri.
+4. **Arama:** “mentes” yaz, Murat Menteş çıkar.
+5. **Program:** filtreler, “şimdi” çizgisi, programda arama.
+6. **Etkinlik detayı:** hakkında, konuşmacılar, “Krokide göster”.
+7. **Yazar ve kitaplar:** “Kitabı aç” ile tam ekran kitap sayfası.
+8. **Yayınevi sayfası:** tanıtım, imzalar, kitaplar, web sitesi.
+9. **Kroki:** logolar, hizmet noktaları.
+10. **Hediyeler:** “QR okut”, 3. QR’da bez çanta.
+11. **Quiz ve sıralama:** havuzdan karışık sorular, puan, sıra.
+12. **Eylül paneli:** “Yarışmayı başlat” ile canlı yarışma, “Gönder” ile duyuru.
+13. **Planım.**
+14. **Çocuk Şenliği 2027.**
+15. **Önerimiz.**
+16. **Teşekkürler.**
 
 ## Kapanıştaki QR
 

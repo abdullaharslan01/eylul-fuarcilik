@@ -206,3 +206,34 @@ const KID_PUSHES = [
   { type: 'change', title: 'Atölyede yer açıldı', body: 'Robotlarla tanışıyoruz atölyesinde 3 kişilik yer açıldı.', link: '#/etkinlik/k7' },
   { type: 'eylul', title: 'Aile oyun saati', body: 'Hareket Oyun Kulübü 14.30’da Oyun Alanı’nda. Tüm yaşlar katılabilir.', link: '#/etkinlik/k6' }
 ];
+
+// Yayınevi sayfası: web sitesi, alanlar ve fuar için kısa tanıtım (tanıtım metinleri özettir).
+const PUB_INFO = {
+  bilgi: { web: 'https://www.bilgiyayinevi.com.tr', genres: ['Edebiyat', 'Tarih', 'Düşünce'], fair: 'Standda Köy Enstitüleri ve yakın tarih kitapları öne çıkıyor; Mustafa Gazalcı ve Mustafa Balbay imza günleriyle okurla buluşuyor.' },
+  dogan: { web: 'https://www.dogankitap.com.tr', genres: ['Roman', 'İnceleme', 'Araştırma'], fair: 'Saygı Öztürk’ün imza günleri ve araştırma dizisinin yeni baskıları standın en çok sorulanları arasında.' },
+  alfa: { web: 'https://www.alfayayinlari.com', genres: ['Roman', 'Kurgu dışı', 'Klasikler'], fair: 'Murat Menteş’in romanları ve imza günleri standın yıldızı; fuar boyunca yeni çıkan romanlar da masada.' },
+  everest: { web: 'https://www.everestyayinlari.com', genres: ['Çağdaş edebiyat', 'Dünya klasikleri', 'Öykü'], fair: 'Buket Uzuner’in imza ve söyleşi günleri var; çağdaş Türk edebiyatı rafları genişletildi.' },
+  kirmizi: { web: 'https://www.kirmizikedi.com', genres: ['Edebiyat', 'Araştırma', 'Gazetecilik'], fair: 'Timur Soykan’ın araştırma kitapları ve imza günleri standın en yoğun saatlerini oluşturuyor.' },
+  can: { web: 'https://www.canyayinlari.com', genres: ['Çocuk', 'Gençlik', 'Resimli kitap'], fair: 'Nehir Yarar’la okuma saatleri ve çocuklar için resimli kitap köşesi standda.' },
+  altin: { web: 'https://www.altinkitaplar.com.tr', genres: ['Edebiyat', 'Çocuk', 'Klasikler'], fair: 'Klasikler ve çocuk kitapları serileri fuara özel tam takım halinde sergileniyor.' },
+  otuken: { web: 'https://www.otuken.com.tr', genres: ['Türk edebiyatı', 'Tarih', 'Düşünce'], fair: 'Tarih ve düşünce dizilerinin yeni basımları standda.' },
+  timas: { web: 'https://www.timas.com.tr', genres: ['Roman', 'Çocuk', 'Kişisel gelişim'], fair: 'Yetişkin ve çocuk okurlar için geniş bir seçki standda.' },
+  iletisim: { web: 'https://iletisim.com.tr', genres: ['Edebiyat', 'Sosyal bilimler', 'Araştırma'] },
+  yky: { web: 'https://www.ykykultur.com.tr', genres: ['Edebiyat', 'Sanat', 'Çocuk'] },
+  iskultur: { web: 'https://www.iskultur.com.tr', genres: ['Klasikler', 'Tarih', 'Çocuk'] },
+  sel: { web: 'https://www.selyayincilik.com', genres: ['Edebiyat', 'Polisiye', 'Düşünce'] },
+  metis: { web: 'https://www.metiskitap.com', genres: ['Edebiyat', 'Siyaset', 'Felsefe'] },
+  ithaki: { web: 'https://www.ithaki.com.tr', genres: ['Bilimkurgu', 'Fantastik', 'Klasikler'] },
+  tudem: { web: 'https://www.tudem.com', genres: ['Çocuk', 'Gençlik', 'Eğitim'] },
+  gunisigi: { web: 'https://www.gunisigikitapligi.com', genres: ['Çocuk', 'Gençlik', 'Resimli kitap'] },
+  ayrinti: { web: 'https://www.ayrintiyayinlari.com.tr', genres: ['Edebiyat', 'Düşünce', 'Sosyal bilimler'] },
+  remzi: { web: 'https://www.remzi.com.tr', genres: ['Edebiyat', 'Çocuk', 'Kişisel gelişim'] },
+  profil: { web: 'https://www.profilkitap.com', genres: ['Tarih', 'Araştırma', 'Biyografi'] },
+  nobel: { genres: ['Akademik', 'Ders kitabı', 'Bilim'] },
+  pegasus: { genres: ['Roman', 'Fantastik', 'Gençlik'] },
+  epsilon: { genres: ['Roman', 'Polisiye', 'Çocuk'] },
+  kronik: { genres: ['Tarih', 'Biyografi', 'Araştırma'] },
+  destek: { genres: ['Kişisel gelişim', 'Roman', 'Psikoloji'] },
+  domingo: { genres: ['Edebiyat', 'Mizah', 'Gençlik'] },
+  kafka: { genres: ['Edebiyat', 'Felsefe', 'Psikoloji'] }
+};

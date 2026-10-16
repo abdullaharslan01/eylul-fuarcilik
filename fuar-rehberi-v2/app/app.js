@@ -66,6 +66,8 @@ const DEFAULT = {
   saved: ['e2', 'e20', 'e22', 'e7', 'e8', 'e11', 'e23', 'e25', 'e28', 'e31', 'k3', 'k5', 'k8', 'k12'],
   stamps: { ankara: ['alfa', 'everest'], cocuk: ['masal'] },
   quizBest: null,
+  quizPts: 0,
+  soloDone: {},
   read: [],
   extraNotices: []
 };
@@ -234,7 +236,7 @@ const TABS = [
   { id: 'harita', label: 'Kroki', icon: 'map' },
   { id: 'planim', label: 'Planım', icon: 'heart' }
 ];
-const TAB_OF = { etkinlik: 'program', ara: 'home', yazar: 'home', yayinevi: 'home', firma: 'home', bildirimler: 'home', katilimcilar: 'home', konum: 'harita', yarisma: 'hediyeler' };
+const TAB_OF = { quiz: 'hediyeler', etkinlik: 'program', ara: 'home', yazar: 'home', yayinevi: 'home', firma: 'home', bildirimler: 'home', katilimcilar: 'home', konum: 'harita', yarisma: 'hediyeler' };
 const isTab = name => TABS.some(t => t.id === name);
 function parse(hash) {
   const h = (hash || '').replace(/^#\/?/, '');
@@ -267,7 +269,7 @@ function back() {
 const SCREENS = {};
 function render(dir = 'fade') {
   clearInterval(bannerTimer);
-  if (route.name !== 'yarisma') clearInterval(quizTimer);
+  if (!['yarisma', 'quiz'].includes(route.name)) clearInterval(quizTimer);
   const app = $('#app');
   app.classList.toggle('kids', kids());
   const screen = SCREENS[route.name] || SCREENS.home;
@@ -529,17 +531,36 @@ SCREENS.yazar = id => {
 };
 SCREENS.yayinevi = id => {
   const p = pub(id); if (!p) return SCREENS.harita();
-  const evs = EVENTS.filter(e => e.publisher === id);
+  const info = PUB_INFO[id] || {};
+  const evs = EVENTS.filter(e => e.publisher === id).sort((a, b) => a.day - b.day || tmin(a.start) - tmin(b.start));
+  const auths = AUTHORS.filter(a => a.publisher === id);
+  const books = BOOKS.filter(b => auths.some(a => a.id === b.author));
+  const genres = info.genres || [];
   return {
     top: topBack('Yayınevi'),
     html: `
     <div class="profile-head">
       <div class="big-logo">${logoHTML(p)}</div>
-      <h1>${esc(p.name)}</h1><p>Stant ${p.stand}</p>
+      <h1>${esc(p.name)}</h1><p>Stant ${p.stand}${genres.length ? ' · ' + genres.join(', ') : ''}</p>
     </div>
-    <p class="prose" style="margin-top:12px;text-align:center">${esc(p.about || p.name + ', fuarda kendi standında okurlarını bekliyor.')}</p>
-    <div class="section"><button class="mini-map" data-go="#/konum/${p.stand}" style="display:block;width:calc(100% - 36px)">${floorSVG({ sel: p.stand, fac: false })}<div class="cap"><div style="text-align:left"><b>Krokide gör</b><small>${esc(p.name)} standı</small></div>${ic('chev', 'sm')}</div></button></div>
-    ${evs.length ? `<div class="section"><div class="section-head"><h2>Standdaki imzalar</h2></div><div class="list">${evs.map(eventRow).join('')}</div></div>` : ''}`
+    ${evs.length ? `<div class="stat-row" style="margin-top:16px">
+      <div><b>${p.stand}</b><small>Stant</small></div>
+      <div><b>${evs.length}</b><small>İmza / etkinlik</small></div>
+      <div><b>${books.length}</b><small>Kitap</small></div>
+    </div>` : ''}
+    <div class="cta-bar" style="margin-top:16px">
+      <button class="btn dark" data-go="#/konum/${p.stand}">${ic('map', 'sm')} Krokide gör</button>
+      ${info.web ? `<a class="btn ghost" href="${info.web}" target="_blank" rel="noopener">${ic('share', 'sm')} Web sitesi</a>` : ''}
+    </div>
+    <div class="section"><div class="section-head"><h2>Hakkında</h2></div>
+      <p class="prose" style="margin:0">${esc(p.about || `${p.name}, ${genres.length ? genres.join(', ').toLocaleLowerCase('tr-TR') + ' alanlarındaki' : ''} kitaplarıyla fuarda okurlarını bekliyor.`)}</p>
+      <p class="prose" style="margin:10px 0 0">${esc(info.fair || `Fuar boyunca ${p.stand} numaralı standda yeni çıkan kitaplar ve fuara özel seçkiler sergileniyor. Güncel katalog ve kampanyalar için yayınevinin web sitesine bakabilirsin.`)}</p>
+      ${genres.length ? `<div class="tags" style="display:flex;gap:6px;flex-wrap:wrap;margin:12px 18px 0">${genres.map(g => `<span class="tag imza">${esc(g)}</span>`).join('')}</div>` : ''}
+    </div>
+    ${evs.length ? `<div class="section"><div class="section-head"><h2>Standdaki imzalar</h2></div><div class="list">${evs.map(eventRow).join('')}</div></div>` : ''}
+    ${auths.length ? `<div class="section"><div class="section-head"><h2>Fuardaki yazarları</h2></div><div class="list">${auths.map(a => authorRow(a)).join('')}</div></div>` : ''}
+    ${books.length ? `<div class="section"><div class="section-head"><h2>Öne çıkan kitaplar</h2></div><div class="hscroll">${books.map(bookTile).join('')}</div></div>` : ''}
+    <div class="section"><button class="mini-map" data-go="#/konum/${p.stand}" style="display:block;width:calc(100% - 36px)">${floorSVG({ sel: p.stand, fac: false })}<div class="cap"><div style="text-align:left"><b>Stant ${p.stand}</b><small>Krokide büyüt</small></div>${ic('chev', 'sm')}</div></button></div>`
   };
 };
 
@@ -753,27 +774,39 @@ function planSummary(saved) {
   ${next ? `<button class="next-strip" data-go="#/etkinlik/${next.id}"><span class="eyebrow">SIRADAKİ</span><strong>${next.start} · ${esc(next.title)}</strong><small>${esc(evPlace(next))}</small></button>` : ''}`;
 }
 
-/* ---------- Hediyeler: QR pasaportu, görevler, bilgi yarışması ---------- */
+/* ---------- Hediyeler: QR pasaportu, hediyeler, quiz'ler, sıralama ---------- */
 const STAMP_PUBS = ['alfa', 'everest', 'bilgi', 'can', 'dogan', 'kirmizi'];
 const stampsAll = () => kids() ? KID_ZONES.map(z => z.id) : STAMP_PUBS;
 const stampsMine = () => (S.stamps[S.fair] || []).filter(x => stampsAll().includes(x));
-const REWARDS = {
+
+// Hediye görselleri: markalı çanta ve ayraç çizimleri, kitaplarda gerçek kapaklar.
+const giftArt = {
+  canta: () => `<svg viewBox="0 0 120 120"><path d="M42 34c0-12 8-20 18-20s18 8 18 20" fill="none" stroke="#c9b48f" stroke-width="5" stroke-linecap="round"/><path d="M22 36h76l-6 74H28z" fill="#f4ead8" stroke="#e1d2b6" stroke-width="2"/><image href="${A}eylul-fuarcilik-logo.png" x="34" y="62" width="52" height="15"/><text x="60" y="94" text-anchor="middle" font-size="7" font-weight="800" fill="#a08a63" font-family="Manrope">24. ANKARA KİTAP FUARI</text></svg>`,
+  ayrac: () => `<svg viewBox="0 0 120 120"><rect x="44" y="10" width="32" height="96" rx="5" fill="#f19a1b"/><rect x="48" y="14" width="24" height="88" rx="3" fill="none" stroke="#fff" stroke-opacity=".6"/><text x="60" y="64" text-anchor="middle" font-size="9" font-weight="800" fill="#1a1100" font-family="Manrope" transform="rotate(-90 60 60)">AKF24 · OKU</text><path d="M60 106v8M56 114l4-4 4 4" stroke="#c26f05" stroke-width="2" fill="none" stroke-linecap="round"/></svg>`,
+  kitap: () => `<img src="${A}book-murat-korkma-portrait.jpg" alt="">`,
+  set: () => `<span class="fan"><img src="${A}book-buket.jpg" alt=""><img src="${A}book-timur.jpg" alt=""><img src="${A}book-murat.jpg" alt=""></span>`,
+  cikartma: () => `<svg viewBox="0 0 120 120"><circle cx="44" cy="46" r="24" fill="#ffb21f"/><path d="M44 30l5 10 11 2-8 8 2 11-10-5-10 5 2-11-8-8 11-2z" fill="#fff"/><circle cx="80" cy="76" r="22" fill="#0b8e78"/><circle cx="74" cy="72" r="3" fill="#fff"/><circle cx="86" cy="72" r="3" fill="#fff"/><path d="M72 82q8 7 16 0" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/><rect x="24" y="78" width="30" height="22" rx="6" fill="#e2497a"/></svg>`,
+  boyama: () => `<img src="${A}book-nehir.jpg" alt="">`
+};
+const GIFTS = {
   ankara: [
-    { need: 3, title: 'Eylül bez çanta', where: 'Danışma noktasından alınır' },
-    { need: 6, title: 'Alfa Yayınları’ndan kitap hediye', where: 'A-504 standından seçeceğin bir roman' },
-    { need: 99, title: 'İmzalı kitap seti çekilişi', where: 'Tüm görevleri tamamlayanlar arasında · 13 Aralık' }
+    { art: 'canta', title: 'Eylül bez çanta', need: 3, how: '3 QR okut', where: 'Danışma noktasından alınır', stock: 214 },
+    { art: 'ayrac', title: 'Kitap ayracı', quiz: true, how: 'Bir quiz’i bitir', where: 'Danışma noktasından alınır', stock: 640 },
+    { art: 'kitap', title: 'Alfa’dan roman hediye', need: 6, how: '6 QR okut', where: 'A-504 standından seçilir', stock: 48 },
+    { art: 'set', title: 'İmzalı kitap seti', live: true, how: 'Canlı yarışmada 5/5', where: 'Çekilişle · 13 Aralık', stock: 10 }
   ],
   cocuk: [
-    { need: 3, title: 'Çıkartma seti', where: 'Danışma noktasından alınır' },
-    { need: 6, title: 'Can Çocuk’tan boyama kitabı', where: 'Kitap Köşesi’nden alınır' }
+    { art: 'cikartma', title: 'Çıkartma seti', need: 3, how: '3 alanın QR’ını okut', where: 'Danışma noktasından alınır', stock: 300 },
+    { art: 'boyama', title: 'Boyama kitabı', need: 6, how: '6 alanın QR’ını okut', where: 'Kitap Köşesi’nden alınır', stock: 120 }
   ]
 };
+const giftDone = g => g.need ? stampsMine().length >= g.need : g.quiz ? (S.quizPts || 0) > 0 : (S.quizBest === 5);
 function passportCard() {
   const mine = stampsMine().length, all = stampsAll().length;
-  const next = REWARDS[S.fair].find(r => r.need > mine && r.need <= all);
+  const next = GIFTS[S.fair].find(g => g.need && g.need > mine);
   return `<button class="passport-mini" data-go="#/hediyeler">
     <span class="pm-ico">${ic('gift', 'sm')}</span>
-    <span class="pm-txt"><strong>${kids() ? 'Şenlik pasaportu' : 'Fuar pasaportu'} · ${mine}/${all} damga</strong><small>${next ? `${next.need - mine} damga sonra: ${next.title}` : 'Tüm damgaları topladın!'}</small><i><b style="width:${Math.round(mine / all * 100)}%"></b></i></span>
+    <span class="pm-txt"><strong>${mine}/${all} QR okuttun</strong><small>${next ? `${next.need - mine} QR daha: ${next.title}` : 'Tüm QR’ları topladın!'}</small><i><b style="width:${Math.round(mine / all * 100)}%"></b></i></span>
     ${ic('chev', 'sm')}
   </button>`;
 }
@@ -784,53 +817,92 @@ function stampItem(id) {
     return `<div class="stamp ${got ? 'got' : ''}" style="--c:${z.color}"><span class="st-face" style="background:${got ? z.bg : ''}">${ic(z.icon)}</span><small>${z.name}</small></div>`;
   }
   const p = pub(id);
-  return `<div class="stamp ${got ? 'got' : ''}"><span class="st-face">${logoHTML(p)}</span><small>${got ? 'Damgalandı' : 'Stant ' + p.stand}</small></div>`;
+  return `<div class="stamp ${got ? 'got' : ''}"><span class="st-face">${logoHTML(p)}</span><small>${got ? 'Okutuldu' : 'Stant ' + p.stand}</small></div>`;
 }
+function giftCard(g) {
+  const ok = giftDone(g);
+  const left = g.need ? Math.max(0, g.need - stampsMine().length) : 0;
+  return `<div class="gift ${ok ? 'ok' : ''}">
+    <div class="g-art">${giftArt[g.art]()}${ok ? `<span class="g-badge">${ic('check', 'xs')} Kazandın</span>` : ''}</div>
+    <strong>${esc(g.title)}</strong>
+    <small>${esc(g.how)}</small>
+    <div class="g-foot"><span>${ok ? esc(g.where) : g.need ? `${left} QR kaldı` : esc(g.where)}</span><em>${g.stock} adet</em></div>
+  </div>`;
+}
+
+// Puan: her QR 20, her quiz doğrusu 10 puan.
+const myPoints = () => stampsMine().length * 20 + (S.quizPts || 0);
+const LEADERS = [['Elif K.', 540], ['Mert A.', 510], ['Zeynep T.', 495], ['Deniz A.', 470], ['Ayşe Y.', 455], ['Can D.', 430], ['Selin E.', 410], ['Burak K.', 390]];
+const myRank = () => Math.max(9, 160 - Math.round(myPoints() / 3));
+
 SCREENS.hediyeler = () => {
+  const tab = kids() ? 'qr' : (route.q.get('sekme') || 'qr');
   const mine = stampsMine().length, all = stampsAll().length;
-  const rewards = REWARDS[S.fair];
-  const missions = kids() ? [
-    { done: stampsMine().includes('masal'), title: 'Masal Sahnesi’ne uğra', sub: 'Sahne girişindeki QR’ı okut', link: '#/konum/masal' },
-    { done: stampsMine().includes('bilim'), title: 'Bir bilim deneyine katıl', sub: 'Bilim Alanı · Minik Mucitler', link: '#/konum/bilim' },
-    { done: false, title: 'Kitap Köşesi’nde bir kitap oku', sub: 'Okuma saatine katıl', link: '#/konum/kitap' }
-  ] : [
-    { done: stampsMine().includes('alfa'), title: 'Alfa Yayınları standına uğra', sub: 'A-504 · standdaki QR’ı okut', link: '#/konum/A-504' },
-    { done: false, title: 'Bir söyleşiye katıl', sub: 'Salon girişindeki QR’ı okut', link: '#/program?tur=soylesi' },
-    { done: false, title: 'Murat Menteş imzasına git', sub: 'Bugün 14.00 · A-504', link: '#/etkinlik/e7' },
-    { done: S.quizBest != null, title: 'Canlı yarışmaya katıl', sub: S.quizBest != null ? `Skorun ${S.quizBest}/5` : 'Turlar 12.00 · 15.00 · 18.00', link: '#/yarisma' }
-  ];
-  return {
-    top: topTitle('Hediyeler', kids() ? 'ŞENLİK PASAPORTU' : 'FUAR PASAPORTU'),
-    html: `
+  const seg = kids() ? '' : `<div class="seg" style="margin-bottom:14px">
+      <button class="${tab === 'qr' ? 'on' : ''}" data-go="#/hediyeler?sekme=qr">QR & Hediyeler</button>
+      <button class="${tab === 'quiz' ? 'on' : ''}" data-go="#/hediyeler?sekme=quiz">Quiz’ler</button>
+      <button class="${tab === 'sira' ? 'on' : ''}" data-go="#/hediyeler?sekme=sira">Sıralama</button>
+    </div>`;
+  let body = '';
+  if (tab === 'qr') {
+    const missions = kids() ? [
+      { done: stampsMine().includes('masal'), title: 'Masal Sahnesi’ne uğra', sub: 'Sahne girişindeki QR’ı okut', link: '#/konum/masal' },
+      { done: stampsMine().includes('bilim'), title: 'Bir bilim deneyine katıl', sub: 'Bilim Alanı · Minik Mucitler', link: '#/konum/bilim' },
+      { done: false, title: 'Kitap Köşesi’nde bir kitap oku', sub: 'Okuma saatine katıl', link: '#/konum/kitap' }
+    ] : [
+      { done: stampsMine().includes('alfa'), title: 'Alfa Yayınları standına uğra', sub: 'A-504 · standdaki QR’ı okut', link: '#/konum/A-504' },
+      { done: false, title: 'Bir söyleşiye katıl', sub: 'Salon girişindeki QR’ı okut', link: '#/program?tur=soylesi' },
+      { done: (S.quizPts || 0) > 0, title: 'Bir quiz bitir', sub: 'Kitap ayracı kazandırır', link: '#/hediyeler?sekme=quiz' }
+    ];
+    body = `
     <div class="passport">
-      <div class="pp-top"><span class="eyebrow" style="color:var(--brand)">${kids() ? 'ŞENLİK PASAPORTU' : 'FUAR PASAPORTU'}</span><span class="pp-count"><b>${mine}</b>/${all}</span></div>
-      <h3>${kids() ? 'Alanları gez,<br>damgaları topla.' : 'Stantları gez,<br>hediyeleri topla.'}</h3>
+      <div class="pp-top"><span class="eyebrow" style="color:var(--brand)">NASIL ÇALIŞIR?</span><span class="pp-count"><b>${mine}</b>/${all} QR</span></div>
+      <h3>${kids() ? 'Alanlardaki QR’ları<br>okut, hediyeni al.' : 'Stantlardaki QR’ları<br>okut, hediyeni al.'}</h3>
+      <ol class="pp-steps"><li>${kids() ? 'Her alanın girişinde' : 'Katılımcı stantlarında'} bir QR kod var.</li><li>Telefonunla okut, pasaportuna eklensin.</li><li>Yeterli QR’da hediyeni Danışma’dan al.</li></ol>
       <div class="pp-bar"><b style="width:${Math.round(mine / all * 100)}%"></b></div>
       <button class="btn primary block" data-scan>${ic('scan', 'sm')} QR okut</button>
     </div>
-    <div class="stamps">${stampsAll().map(stampItem).join('')}</div>
-
-    <div class="section"><div class="section-head"><h2>Ödüller</h2></div><div class="list">
-      ${rewards.map(r => { const ok = r.need <= mine; const left = r.need > all ? null : r.need - mine; return `<div class="reward ${ok ? 'ok' : ''}"><span class="rw-ico">${ic(ok ? 'check' : r.need > all ? 'trophy' : 'gift', 'sm')}</span><span class="txt"><strong>${esc(r.title)}</strong><small>${r.need > all ? 'Çekiliş' : r.need + ' damga'} · ${esc(r.where)}</small></span><span class="tag ${ok ? 'ok' : 'imza'}">${ok ? 'Kazandın' : left ? left + ' damga' : 'Görevler'}</span></div>`; }).join('')}
-    </div></div>
-
-    ${kids() ? '' : `<div class="section"><button class="quiz-card" data-go="#/yarisma">
-      <span class="qc-ico">${ic('trophy')}</span>
-      <span class="txt"><span class="eyebrow" style="color:#ffcf7a">● CANLI BİLGİ YARIŞMASI</span><strong>Sıradaki tur 15.00</strong><small>${untilClock('15.00')} sonra · herkese aynı anda 5 soru</small></span>
-      ${ic('chev')}
-    </button></div>`}
-
+    <div class="section"><div class="section-head"><h2>Hediyeler</h2><span class="sponsor-note">Stokla sınırlı</span></div>
+      <div class="hscroll">${GIFTS[S.fair].map(giftCard).join('')}</div></div>
+    <div class="section"><div class="section-head"><h2>QR noktaları</h2><span class="sponsor-note">${mine}/${all}</span></div>
+      <div class="stamps" style="padding-top:0">${stampsAll().map(stampItem).join('')}</div></div>
     <div class="section"><div class="section-head"><h2>Görevler</h2></div><div class="list">
       ${missions.map(m => `<button class="row mission ${m.done ? 'done' : ''}" data-go="${m.link}"><span class="check ${m.done ? 'on' : ''}">${ic('check', 'xs')}</span><span class="txt"><strong>${esc(m.title)}</strong><small>${esc(m.sub)}</small></span>${ic('chev', 'sm')}</button>`).join('')}
-    </div></div>
-    <p class="muted" style="font-size:11.5px;margin:14px 22px 0">Ödüller ve görevler örnektir; yayınevleri ve sponsorlarla birlikte belirlenir.</p>`
+    </div></div>`;
+  } else if (tab === 'quiz') {
+    body = `
+    <button class="quiz-card" data-go="#/yarisma">
+      <span class="qc-ico">${ic('trophy')}</span>
+      <span class="txt"><span class="eyebrow" style="color:#ffcf7a">● CANLI YARIŞMA · ÖDÜLLÜ</span><strong>Sıradaki tur 15.00</strong><small>${untilClock('15.00')} sonra · herkese aynı anda 5 soru</small></span>
+      ${ic('chev')}
+    </button>
+    <div class="section"><div class="section-head"><h2>Her zaman açık quiz’ler</h2></div>
+      <p class="prose" style="margin:-4px 0 12px;font-size:13px">Dokun, hemen başla. Her oyuncuya sorular havuzdan karışık gelir; her doğru 10 puan.</p>
+      <div class="list">${SOLO.map(qz => { const done = (S.soloDone || {})[qz.id]; return `<button class="row quiz-row" data-solo="${qz.id}"><span class="logo-tile">${qz.pub ? logoHTML(pub(qz.pub)) : qz.author ? `<img src="${A}${author(qz.author).photo}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:8px">` : `<img src="${A}eylul-fuarcilik-logo.png" alt="">`}</span><span class="txt"><strong>${esc(qz.title)}</strong><small>${qz.pool.length} soruluk havuzdan 4 soru · ${done != null ? `Skorun ${done}/4` : '+40 puana kadar'}</small></span><span class="btn sm ${done != null ? 'ghost' : 'primary'}">${done != null ? 'Tekrar' : 'Başla'}</span></button>`; }).join('')}</div>
+    </div>`;
+  } else {
+    const me = myPoints(), rank = myRank();
+    body = `
+    <div class="me-rank">
+      <div><span class="eyebrow" style="color:var(--brand)">SENİN SIRAN</span><b>${rank}.</b><small>${(3184).toLocaleString('tr-TR')} oyuncu arasında</small></div>
+      <div class="pts"><b>${me}</b><small>puan</small></div>
+    </div>
+    <p class="prose" style="margin:12px 0 0;font-size:13px">Her QR 20 puan, her doğru cevap 10 puan. Gün sonunda ilk 10’a imzalı kitap.</p>
+    <div class="section"><div class="section-head"><h2>Bugünün liderleri</h2></div><div class="list">
+      ${LEADERS.map(([n, p], k) => `<div class="lb-row ${k < 3 ? 'top' : ''}"><span class="lb-n">${k + 1}</span><span class="lb-av">${n[0]}</span><strong>${n}</strong><em>${p} puan</em></div>`).join('')}
+      <div class="lb-row me"><span class="lb-n">${rank}</span><span class="lb-av">S</span><strong>Sen</strong><em>${me} puan</em></div>
+    </div></div>`;
+  }
+  return {
+    top: topTitle('Hediyeler', kids() ? 'ŞENLİK PASAPORTU' : 'FUAR PASAPORTU'),
+    html: seg + body + `<p class="muted" style="font-size:11.5px;margin:16px 22px 0">Hediyeler, puanlar ve sıralama örnektir; yayınevleri ve sponsorlarla birlikte belirlenir.</p>`
   };
 };
 
-/* QR okuyucu (demo): kamera görünümü, ardından damga */
+/* QR okuyucu (demo): kamera görünümü, ardından pasaporta eklenir */
 function startScan() {
   const el = $('#scanner');
-  el.innerHTML = `<div class="sc-cam"><div class="sc-frame"><i></i><i></i><i></i><i></i><span class="sc-line"></span></div><p>QR kodu çerçeveye hizala</p><button class="btn light" data-scan-close>Vazgeç</button></div>`;
+  el.innerHTML = `<div class="sc-cam"><div class="sc-frame"><i></i><i></i><i></i><i></i><span class="sc-line"></span></div><p>Stanttaki QR kodu çerçeveye hizala</p><button class="btn light" data-scan-close>Vazgeç</button></div>`;
   el.classList.add('show');
   clearTimeout(scanT);
   scanT = setTimeout(() => {
@@ -838,13 +910,13 @@ function startScan() {
     const id = left[0];
     if (id) { S.stamps[S.fair] = [...stampsMine(), id]; save(); }
     const mine = stampsMine().length, all = stampsAll().length;
-    const won = REWARDS[S.fair].find(r => r.need === mine);
+    const won = GIFTS[S.fair].find(g => g.need === mine);
     const face = !id ? ic('trophy') : kids() ? ic(zone(id).icon) : logoHTML(pub(id));
     el.innerHTML = `<div class="sc-ok">
       <span class="sc-stamp">${face}</span>
-      <h2>${id ? 'Damga eklendi!' : 'Hepsi tamam!'}</h2>
-      <p>${id ? `${kids() ? zone(id).name : pub(id).name} damgası pasaportuna eklendi. ${mine}/${all}` : 'Tüm damgaları zaten topladın.'}</p>
-      ${won ? `<div class="sc-won">${ic('gift', 'sm')} Ödül kazandın: <b>${esc(won.title)}</b></div>` : ''}
+      <h2>${id ? 'QR okutuldu!' : 'Hepsi tamam!'}</h2>
+      <p>${id ? `${kids() ? zone(id).name : pub(id).name} pasaportuna eklendi · ${mine}/${all} QR · +20 puan` : 'Tüm QR’ları zaten topladın.'}</p>
+      ${won ? `<div class="sc-gift"><span class="g-art">${giftArt[won.art]()}</span><span><small>HEDİYE KAZANDIN</small><b>${esc(won.title)}</b><em>${esc(won.where)}</em></span></div>` : ''}
       <button class="btn primary block" data-scan-close>Tamam</button>
     </div>`;
   }, 1800);
@@ -935,7 +1007,7 @@ function quizReveal() {
   setTimeout(() => {
     quiz.i++;
     if (quiz.i < QUIZ.length) return quizQuestion();
-    S.quizBest = quiz.score; save();
+    S.quizBest = quiz.score; S.quizPts = (S.quizPts || 0) + quiz.score * 10; save();
     const perfect = quiz.score === QUIZ.length, won = quiz.score >= 3;
     $('#quiz').innerHTML = `<div class="quiz-hero">${ic(won ? 'trophy' : 'book')}<h2>${quiz.score}/${QUIZ.length} doğru!</h2>
       <p>${perfect ? '5/5 yapan 86 oyuncu arasındasın. İmzalı kitap seti çekilişi 18.30’da; kazananlara bildirimle haber vereceğiz.' : won ? 'Tebrikler! Kitap ayracın Danışma noktasında seni bekliyor. Bu kodu görevliye göster.' : 'Bu tur olmadı. 18.00’deki turda yeniden şansını dene!'}</p>
@@ -944,6 +1016,99 @@ function quizReveal() {
       <button class="btn primary block" data-go="#/hediyeler">Hediyelere dön</button></div>`;
     quiz = null;
   }, 2600);
+}
+
+/* Her zaman açık quiz'ler: her oyuncuya havuzdan karışık 4 soru */
+const SOLO = [
+  { id: 'menetes', title: 'Murat Menteş’i ne kadar tanıyorsun?', author: 'murat', pool: [
+    ['Hangisi Murat Menteş’in romanı?', ['Ruhi Mücerret', 'Menzil', 'Baron İstilası', 'Veda Turtası']],
+    ['“Korkma Ben Varım” kimin kitabı?', ['Murat Menteş', 'Timur Soykan', 'Buket Uzuner', 'Saygı Öztürk']],
+    ['Murat Menteş fuarda hangi yayınevinin standında?', ['Alfa Yayınları', 'Doğan Kitap', 'Can Çocuk', 'Bilgi Yayınevi']],
+    ['“Dublörün Dilemması”nın yazarı kim?', ['Murat Menteş', 'Mustafa Balbay', 'Nehir Yarar', 'Mustafa Gazalcı']],
+    ['Murat Menteş’in imzası bugün saat kaçta?', ['14.00', '10.30', '18.00', '16.30']],
+    ['Hangisi Murat Menteş’in kitabı değildir?', ['İki Yeşil Susamuru', 'Ruhi Mücerret', 'Korkma Ben Varım', 'Dublörün Dilemması']]
+  ] },
+  { id: 'everest', title: 'Everest Yayınları quizi', pub: 'everest', pool: [
+    ['“İki Yeşil Susamuru” kimin romanı?', ['Buket Uzuner', 'Murat Menteş', 'Nehir Yarar', 'Saygı Öztürk']],
+    ['“Kumral Ada Mavi Tuna” hangi yazarın?', ['Buket Uzuner', 'Timur Soykan', 'Mustafa Balbay', 'Mustafa Gazalcı']],
+    ['Everest Yayınları’nın standı nerede?', ['A-410', 'A-504', 'A-104', 'A-305']],
+    ['Buket Uzuner’in söyleşisinin adı ne?', ['Bir roman nasıl doğar?', 'Yayıncılığın yarını', 'Haberden kitaba', 'Masal maratonu']],
+    ['Buket Uzuner bugün saat kaçta imzada?', ['16.30', '13.00', '11.00', '19.00']]
+  ] },
+  { id: 'koy', title: 'Köy Enstitüleri quizi', pub: 'bilgi', pool: [
+    ['“Bozkırdaki Işıklar”ın yazarı kim?', ['Mustafa Gazalcı', 'Mustafa Balbay', 'Timur Soykan', 'Murat Menteş']],
+    ['“Çınarlar Anlatıyor” kaç Köy Enstitüsünü anlatıyor?', ['21', '12', '7', '40']],
+    ['Mustafa Gazalcı’nın kitapları hangi yayınevinden?', ['Bilgi Yayınevi', 'Everest Yayınları', 'Alfa Yayınları', 'Can Çocuk']],
+    ['“Köy Enstitüleri bugün ne söylüyor?” söyleşisi nerede?', ['Söyleşi Salonu', 'Çocuk Atölyesi', 'A-305', 'Danışma']],
+    ['Bilgi Yayınevi’nin standı hangisi?', ['A-305', 'A-208', 'A-707', 'A-111']]
+  ] },
+  { id: 'cocukkitap', title: 'Çocuk kitapları quizi', pub: 'can', pool: [
+    ['“Veda Turtası”nın yazarı kim?', ['Nehir Yarar', 'Buket Uzuner', 'Saygı Öztürk', 'Murat Menteş']],
+    ['“Bir Problem Bin Çözüm” hangi yayınevinden?', ['Can Çocuk', 'Doğan Kitap', 'Ötüken Neşriyat', 'Timaş Yayınları']],
+    ['Çocuk masal saati nerede yapılıyor?', ['Çocuk Atölyesi', 'Söyleşi Salonu', 'A-504', 'Mescit']],
+    ['Nehir Yarar’ın “Çocuklarla birlikte okumak” söyleşisi hangi gün?', ['Pazartesi', 'Cuma', 'Salı', 'Pazar']],
+    ['Can Çocuk’un standı nerede?', ['A-104', 'A-606', 'A-811', 'A-410']]
+  ] },
+  { id: 'fuar', title: 'Fuarı ne kadar tanıyorsun?', pool: [
+    ['24. Ankara Kitap Fuarı nerede yapılıyor?', ['ATO Congresium', 'CerModern', 'Atakule', 'Kızılay Meydanı']],
+    ['Fuar hangi tarihlerde?', ['4–13 Aralık', '1–10 Kasım', '3–12 Nisan', '20–29 Ekim']],
+    ['Fuara en yakın metro durağı hangisi?', ['M2 Söğütözü', 'Kızılay', 'Ulus', 'AŞTİ']],
+    ['Fuar her gün saat kaçta kapanıyor?', ['20.00', '18.00', '22.00', '17.00']],
+    ['Kaybolan eşyalar nereye teslim ediliyor?', ['Danışma', 'Mescit', 'Kafe', 'Söyleşi Salonu']]
+  ] }
+];
+const SOLO_SEC = 10;
+let solo = null;
+const shuffle = arr => arr.map(v => [Math.random(), v]).sort((a, b) => a[0] - b[0]).map(x => x[1]);
+SCREENS.quiz = id => {
+  const qz = SOLO.find(x => x.id === id); if (!qz) return SCREENS.hediyeler();
+  return { top: topBack(qz.title, 'QUIZ'), html: '<div id="quiz"></div>', after: () => soloStart(qz) };
+};
+function soloStart(qz) {
+  // İlk şık doğru cevaptır; şıklar ve sorular her oyuncu için karıştırılır.
+  const qs = shuffle(qz.pool).slice(0, 4).map(([q, a]) => { const opts = shuffle(a.map((t, k) => ({ t, ok: k === 0 }))); return { q, a: opts.map(o => o.t), c: opts.findIndex(o => o.ok) }; });
+  solo = { qz, qs, i: 0, score: 0 };
+  soloQuestion();
+}
+function soloQuestion() {
+  clearInterval(quizTimer);
+  const box = $('#quiz'); if (!box) return;
+  const item = solo.qs[solo.i];
+  solo.left = SOLO_SEC; solo.locked = false;
+  box.innerHTML = `<div class="qz">
+    <div class="qz-head"><span>Soru ${solo.i + 1}/${solo.qs.length}</span><span>Puan ${solo.score * 10}</span><span class="qz-sec" id="qz-sec">${solo.left}</span></div>
+    <div class="qz-bar"><b id="qz-bar" style="width:100%"></b></div>
+    <h2>${esc(item.q)}</h2>
+    <div class="qz-opts">${item.a.map((t, k) => `<button class="qz-opt" data-solo-answer="${k}"><span>${'ABCD'[k]}</span><em>${esc(t)}</em></button>`).join('')}</div>
+    <p class="qz-score">Sorular ve şıklar her oyuncuya karışık gelir.</p>
+  </div>`;
+  quizTimer = setInterval(() => {
+    solo.left -= 1;
+    const sec = $('#qz-sec'), bar = $('#qz-bar'); if (!sec) return clearInterval(quizTimer);
+    sec.textContent = Math.max(0, solo.left); bar.style.width = (Math.max(0, solo.left) / SOLO_SEC * 100) + '%';
+    sec.classList.toggle('hot', solo.left <= 3);
+    if (solo.left <= 0) soloAnswer(-1);
+  }, 1000);
+}
+function soloAnswer(k) {
+  if (!solo || solo.locked) return;
+  solo.locked = true; clearInterval(quizTimer);
+  const item = solo.qs[solo.i];
+  if (k === item.c) solo.score++;
+  document.querySelectorAll('.qz-opt').forEach((b, idx) => b.classList.add(idx === item.c ? 'right' : idx === k ? 'wrong' : 'dim'));
+  setTimeout(() => {
+    solo.i++;
+    if (solo.i < solo.qs.length) return soloQuestion();
+    S.quizPts = (S.quizPts || 0) + solo.score * 10;
+    S.soloDone = { ...(S.soloDone || {}), [solo.qz.id]: solo.score };
+    save();
+    $('#quiz').innerHTML = `<div class="quiz-hero">${ic(solo.score >= 3 ? 'trophy' : 'book')}<h2>${solo.score}/${solo.qs.length} doğru · +${solo.score * 10} puan</h2>
+      <p>${solo.score > 0 ? 'Kitap ayracını Danışma’dan alabilirsin. Puanın sıralamaya eklendi.' : 'Bu sefer olmadı; tekrar denediğinde farklı sorular gelecek.'}</p>
+      <div class="qz-rank">Toplam puanın <b>${myPoints()}</b> · sıran <b>${myRank()}.</b></div>
+      <button class="btn primary block" data-go="#/hediyeler?sekme=sira">Sıralamaya bak</button>
+      <button class="btn light block" style="margin-top:10px" data-go="#/hediyeler?sekme=quiz">Diğer quiz’ler</button></div>`;
+    solo = null;
+  }, 1100);
 }
 
 /* ---------- Duyurular ---------- */
@@ -977,14 +1142,16 @@ function push(n) {
   el.dataset.link = n.link || '#/bildirimler';
   el.classList.remove('show'); void el.offsetWidth; el.classList.add('show');
   clearTimeout(pushT); pushT = setTimeout(() => el.classList.remove('show'), 6500);
-  if (!['ara', 'yarisma'].includes(route.name)) render('none');
+  if (!['ara', 'yarisma', 'quiz'].includes(route.name)) render('none');
 }
 
 /* ---------- Etkileşimler ---------- */
 document.addEventListener('click', e => {
-  const el = e.target.closest('[data-scan],[data-scan-close],[data-quiz-live],[data-quiz-remind],[data-answer],[data-zone],[data-close-book],[data-book],[data-go],[data-back],[data-save],[data-kind],[data-sheet],[data-fair],[data-zoom],[data-stand],#push,#backdrop');
+  const el = e.target.closest('[data-solo],[data-solo-answer],[data-scan],[data-scan-close],[data-quiz-live],[data-quiz-remind],[data-answer],[data-zone],[data-close-book],[data-book],[data-go],[data-back],[data-save],[data-kind],[data-sheet],[data-fair],[data-zoom],[data-stand],#push,#backdrop');
   if (!el) return;
   const d = el.dataset;
+  if (d.solo) return go('#/quiz/' + d.solo);
+  if (d.soloAnswer != null) return soloAnswer(Number(d.soloAnswer));
   if (d.scan != null) return startScan();
   if (d.scanClose != null) return closeScan();
   if (d.quizLive != null) return quizLive();
@@ -1030,12 +1197,14 @@ $('#view').addEventListener('scroll', () => $('#topbar').classList.toggle('scrol
 const seenPush = new Set();
 function onDemoMessage(m) {
   if (!m || typeof m !== 'object') return;
+  if (m.nid) { if (seenPush.has(m.nid)) return; seenPush.add(m.nid); }
   if (m.type === 'go') { closeSheet(); closeBook(); if (m.fair && S.fair !== m.fair) { S.fair = m.fair; save(); } go(m.hash); }
   if (m.type === 'push') {
     if (m.notice && m.notice.nid) { if (seenPush.has(m.notice.nid)) return; seenPush.add(m.notice.nid); }
     const pool = kids() ? KID_PUSHES : LIVE_PUSHES;
     push(m.notice || pool[(pushCursor++) % pool.length]);
   }
+  if (m.type === 'book') { if (route.name !== 'yazar') go('#/yazar/' + book(m.id).author); setTimeout(() => openBook(m.id), 350); }
   if (m.type === 'quiz-live') { closeSheet(); if (S.fair !== 'ankara') { S.fair = 'ankara'; save(); } quizLive(); }
   if (m.type === 'scan') { if (route.name !== 'hediyeler') go('#/hediyeler'); setTimeout(startScan, 350); }
   if (m.type === 'reset') { resetState(); history_ = []; go(m.hash || '#/'); }
