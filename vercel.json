@@ -1,0 +1,7 @@
+{
+  "redirects": [
+    { "source": "/", "destination": "/fuar-rehberi-v2/", "permanent": false },
+    { "source": "/app", "destination": "/fuar-rehberi-v2/app/", "permanent": false },
+    { "source": "/panel", "destination": "/fuar-rehberi-v2/panel.html", "permanent": false }
+  ]
+}
