@@ -110,7 +110,7 @@ $('#dots').innerHTML = SLIDES.map((s, i) => `<button data-dot="${i}" aria-label=
     const q = qrcode(0, 'M'); q.addData(target); q.make();
     box.innerHTML = `<div class="qr">${q.createSvgTag({ cellSize: 6, margin: 0, scalable: true })}</div><p><b>Şimdi telefonunuzda deneyin.</b>Kamerayı QR’a tutun, uygulama tarayıcıda açılır. Kurulum gerekmez.</p>`;
   } else {
-    box.innerHTML = `<p style="max-width:600px"><b>Sorularınızı alalım.</b>Uygulama sağdaki telefonda çalışıyor; dilediğiniz ekranı birlikte açabiliriz. Bağlantıyı toplantıdan sonra paylaşacağız.</p>`;
+    box.innerHTML = `<p style="max-width:600px"><b>Sorularınızı alalım.</b>Uygulama sağdaki telefonda çalışıyor; dilediğiniz ekranı birlikte açabiliriz.</p>`;
   }
 })();
 
