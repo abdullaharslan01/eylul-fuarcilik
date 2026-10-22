@@ -319,3 +319,27 @@ body.light { background: var(--paper); }
 .act.done .a-go svg { display: none; }
 .act.done .a-go::after { content: '✓'; font-weight: 900; font-size: 14px; }
 .nowbar button { max-width: 300px; overflow: hidden; text-overflow: ellipsis; }
+
+/* Tur adımları: sade düzen */
+h1.title.tour { font-size: 70px; margin: 26px 0 14px; }
+.slide .lead { font-size: 22px; max-width: 640px; }
+.feats { list-style: none; margin: 34px 0 0; padding: 0; display: flex; flex-direction: column; gap: 14px; width: 640px; }
+.feats li { display: flex; align-items: center; gap: 16px; font-size: 21px; font-weight: 600; color: var(--ink); }
+.feats .f-ico { width: 44px; height: 44px; border-radius: 13px; display: grid; place-items: center; background: #fdf0d9; color: var(--brand-deep); flex: none; }
+.teal .feats .f-ico { background: #dcf3ec; color: var(--teal); }
+.feats svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+.acts { width: auto; margin-top: 36px; gap: 12px; }
+.act { flex: none; padding: 10px 12px 10px 10px; gap: 12px; }
+.act b { font-size: 16px; margin-right: 6px; }
+.act .a-ico { width: 40px; height: 40px; border-radius: 12px; }
+.act .a-go { width: 30px; height: 30px; }
+
+/* Kapanış: uygulama ortada */
+.device.center { left: 593px; top: 16px; transform: scale(.9); }
+.stage .closing { position: absolute; inset: 0; display: flex; align-items: center; justify-content: space-between; padding: 0 70px; pointer-events: none; font-weight: 700; font-size: 64px; letter-spacing: -.03em; color: #fff; }
+.closing .cl-l { width: 460px; text-align: right; }
+.closing .cl-r { width: 460px; }
+.closing em { font-style: italic; color: var(--brand); }
+.slide:has(.closing) { padding: 0; }
+.slide:has(.closing) .col { width: auto; }
+.stage:has(.device.center) .demo-push { opacity: 0; pointer-events: none; }

@@ -1281,7 +1281,7 @@ const seenPush = new Set();
 function onDemoMessage(m) {
   if (!m || typeof m !== 'object') return;
   if (m.nid) { if (seenPush.has(m.nid)) return; seenPush.add(m.nid); }
-  if (m.type === 'go') { closeSheet(); closeBook(); if (m.fair && S.fair !== m.fair) { S.fair = m.fair; save(); } go(m.hash); }
+  if (m.type === 'go') { closeSheet(); closeBook(); clearTimeout(scanT); $('#scanner').classList.remove('show'); if (m.fair && S.fair !== m.fair) { S.fair = m.fair; save(); } go(m.hash); }
   if (m.type === 'push') {
     if (m.notice && m.notice.nid) { if (seenPush.has(m.notice.nid)) return; seenPush.add(m.notice.nid); }
     const pool = kids() ? KID_PUSHES : LIVE_PUSHES;
@@ -1295,8 +1295,8 @@ function onDemoMessage(m) {
 window.addEventListener('message', e => { if (e.source === parent || e.source === window) onDemoMessage(e.data); });
 try { new BroadcastChannel('eylul-demo').onmessage = e => onDemoMessage(e.data); } catch {}
 if (EMBED) document.addEventListener('keydown', e => {
-  if (e.target.matches('input, textarea')) return;
-  if (['ArrowRight', 'ArrowLeft', 'PageDown', 'PageUp', 'n', 'N', 'f', 'F'].includes(e.key)) parent.postMessage({ type: 'eylul-key', key: e.key }, '*');
+  if (e.target && e.target.matches && e.target.matches('input, textarea')) return;
+  if (['ArrowRight', 'ArrowLeft', 'PageDown', 'PageUp', ' ', 'n', 'N', 'f', 'F'].includes(e.key)) { if (e.key === ' ') e.preventDefault(); parent.postMessage({ type: 'eylul-key', key: e.key }, '*'); }
 });
 
 /* ---------- Başlat ---------- */
