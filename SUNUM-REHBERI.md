@@ -19,7 +19,9 @@ cd ~/Documents/Bulbi/Eylul && python3 -m http.server 4174
 
 Sunum: http://localhost:4174 · Uygulama tek başına: http://localhost:4174/app/
 
-Canlı: https://eylul-fuarcilik.vercel.app (sunum) · https://eylul-fuarcilik.vercel.app/app/ (uygulama). GitHub’a her push otomatik yayına çıkar.
+Canlı (GitHub Pages): https://abdullaharslan01.github.io/eylul-fuarcilik/ (sunum) · https://abdullaharslan01.github.io/eylul-fuarcilik/app/ (uygulama). `main`’e her push birkaç dakikada yayına çıkar.
+
+Vercel kopyası da duruyor (eylul-fuarcilik.vercel.app), ama bazı Türk internet bağlantılarında *.vercel.app adresleri açılmıyor; sunumda GitHub Pages adresini kullan.
 
 İnternet gerekmez; fontlar klasörün içinde.
 
