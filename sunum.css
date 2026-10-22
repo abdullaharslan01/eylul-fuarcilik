@@ -343,3 +343,6 @@ h1.title.tour { font-size: 70px; margin: 26px 0 14px; }
 .slide:has(.closing) { padding: 0; }
 .slide:has(.closing) .col { width: auto; }
 .stage:has(.device.center) .demo-push { opacity: 0; pointer-events: none; }
+
+/* İki cümlelik açıklamalar */
+.slide .stepbar ~ .lead { font-size: 20px; line-height: 1.5; max-width: 660px; color: var(--ink-2); }
