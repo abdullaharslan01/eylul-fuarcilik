@@ -124,11 +124,11 @@ const SLIDES = [
     notes: `<p>“QR okut”: kamera açılır, QR pasaporta eklenir; 3. QR’da “Hediye kazandın: Eylül bez çanta” çıkar.</p>`
   },
   {
-    id: 'quiz', label: 'Quiz ve sıralama', theme: 'light', phone: go('#/hediyeler?sekme=quiz'),
-    html: step(9, 'Quiz', 'Quiz ve sıralama', 'Yazarlar, yayınevleri ve fuar hakkında kısa quiz’ler her an açık. Doğru cevaplar puan kazandırır; günün sıralamasında ilk üç hediye alır.',
+    id: 'quiz', label: 'Yarışmalar ve sıralama', theme: 'light', phone: go('#/hediyeler?sekme=quiz'),
+    html: step(9, 'Yarışmalar', 'Yarışmalar ve sıralama', 'Yazarlar, yayınevleri ve fuar hakkında kısa yarışmalar her an açık. Doğru cevaplar puan kazandırır; günün sıralamasında ilk üç hediye alır.',
       [['book', 'Yazar ve yayınevlerini tanıtır'], ['trophy', 'Sıralama ile rekabet'], ['gift', 'Sponsorlu ödüller']],
-      [['Quiz başlat', m('#/quiz/menetes'), 'star'], ['Sıralama', m('#/hediyeler?sekme=sira'), 'trophy']]),
-    notes: `<p>Bir quiz başlat, birkaç soru cevapla, sonra podyumu göster. Ödüllü canlı yarışma bir sonraki adımda.</p>`
+      [['Yarışma başlat', m('#/quiz/menetes'), 'star'], ['Sıralama', m('#/hediyeler?sekme=sira'), 'trophy']]),
+    notes: `<p>Bir yarışma başlat, birkaç soru cevapla, sonra podyumu göster. Ödüllü canlı yarışma bir sonraki adımda.</p>`
   },
   {
     id: 'duyuru', label: 'Eylül paneli', theme: 'light', layout: 'panel', phone: go('#/'), cls: 'panel-slide',

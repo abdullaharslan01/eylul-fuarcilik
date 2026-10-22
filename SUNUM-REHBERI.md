@@ -40,7 +40,7 @@ Alt menü: **Ana sayfa · Program · Hediyeler · Kroki · Planım**
 - **Program:** 5 günün tamamı dolu; program içinde arama. Etkinlik detayında süre, giriş, etkinlik hakkında yazı, konuşmacılar, “Planıma ekle” ve “Krokide göster”.
 - **Hediyeler:**
   - **QR & Hediyeler:** stantlardaki QR’lar okutulur. 3 QR’da bez çanta, 6 QR’da kitap. Hediyeler görselleri ve stok bilgisiyle listelenir.
-  - **Quiz’ler:** her zaman açık; sorular havuzdan her oyuncuya karışık gelir, her doğru 10 puan.
+  - **Yarışmalar:** her zaman açık; sorular havuzdan her oyuncuya karışık gelir, her doğru 10 puan.
   - **Sıralama:** her QR 20 puan; senin sıran ve günün liderleri.
   - **Görevler.**
   - **Canlı yarışma (ödüllü):** 12.00 · 15.00 · 18.00’de Eylül panelden başlatır; herkese aynı anda 5 soru, her soruya 10 saniye. Süre bitince doğru cevap ve oyuncuların yüzde dağılımı gösterilir.
@@ -65,7 +65,7 @@ Her slaytta sol taraf anlatır, telefon o ekrana geçer. Telefona istediğin an 
 8. **Yayınevi sayfası:** tanıtım, imzalar, kitaplar, web sitesi.
 9. **Kroki:** logolar, hizmet noktaları.
 10. **Hediyeler:** “QR okut”, 3. QR’da bez çanta.
-11. **Quiz ve sıralama:** havuzdan karışık sorular, puan, sıra.
+11. **Yarışmalar ve sıralama:** havuzdan karışık sorular, puan, sıra.
 12. **Eylül paneli:** “Yarışmayı başlat” ile canlı yarışma, “Gönder” ile duyuru.
 13. **Planım.**
 14. **Çocuk Şenliği 2027.**

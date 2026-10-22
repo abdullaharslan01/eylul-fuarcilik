@@ -830,7 +830,7 @@ const giftArt = {
 const GIFTS = {
   ankara: [
     { art: 'canta', title: 'Eylül bez çanta', need: 3, how: '3 QR okut', where: 'Danışma noktasından alınır', stock: 214 },
-    { art: 'ayrac', title: 'Kitap ayracı', quiz: true, how: 'Bir quiz’i bitir', where: 'Danışma noktasından alınır', stock: 640 },
+    { art: 'ayrac', title: 'Kitap ayracı', quiz: true, how: 'Bir yarışmayı bitir', where: 'Danışma noktasından alınır', stock: 640 },
     { art: 'kitap', title: 'Alfa’dan roman hediye', need: 6, how: '6 QR okut', where: 'A-504 standından seçilir', stock: 48 },
     { art: 'set', title: 'İmzalı kitap seti', live: true, how: 'Canlı yarışmada 5/5', where: 'Çekilişle · 13 Aralık', stock: 10 }
   ],
@@ -881,7 +881,7 @@ SCREENS.hediyeler = () => {
   const mine = stampsMine().length, all = stampsAll().length;
   const seg = kids() ? '' : `<div class="seg" style="margin-bottom:14px">
       <button class="${tab === 'qr' ? 'on' : ''}" data-go="#/hediyeler?sekme=qr">QR & Hediyeler</button>
-      <button class="${tab === 'quiz' ? 'on' : ''}" data-go="#/hediyeler?sekme=quiz">Quiz’ler</button>
+      <button class="${tab === 'quiz' ? 'on' : ''}" data-go="#/hediyeler?sekme=quiz">Yarışmalar</button>
       <button class="${tab === 'sira' ? 'on' : ''}" data-go="#/hediyeler?sekme=sira">Sıralama</button>
     </div>`;
   let body = '';
@@ -893,7 +893,7 @@ SCREENS.hediyeler = () => {
     ] : [
       { done: stampsMine().includes('alfa'), title: 'Alfa Yayınları standına uğra', sub: 'A-504 · standdaki QR’ı okut', link: '#/konum/A-504' },
       { done: (S.attended || []).some(id => ev(id) && ev(id).kind === 'soylesi'), title: 'Bir söyleşiye katıl', sub: 'Salon girişindeki QR’ı okut · bugün 15.00', link: '#/etkinlik/e8' },
-      { done: (S.quizPts || 0) > 0, title: 'Bir quiz bitir', sub: 'Kitap ayracı kazandırır', link: '#/hediyeler?sekme=quiz' }
+      { done: (S.quizPts || 0) > 0, title: 'Bir yarışmayı bitir', sub: 'Kitap ayracı kazandırır', link: '#/hediyeler?sekme=quiz' }
     ];
     body = `
     <div class="passport">
@@ -917,7 +917,7 @@ SCREENS.hediyeler = () => {
       <span class="txt"><span class="eyebrow" style="color:#ffcf7a">● CANLI YARIŞMA · ÖDÜLLÜ</span><strong>Sıradaki tur 15.00</strong><small>${untilClock('15.00')} sonra · herkese aynı anda 5 soru</small></span>
       ${ic('chev')}
     </button>
-    <div class="section"><div class="section-head"><h2>Her zaman açık quiz’ler</h2></div>
+    <div class="section"><div class="section-head"><h2>Her zaman açık yarışmalar</h2></div>
       <p class="prose" style="margin:-4px 0 12px;font-size:13px">Dokun, hemen başla. Her oyuncuya sorular havuzdan karışık gelir; her doğru 10 puan.</p>
       <div class="list">${SOLO.map(qz => { const done = (S.soloDone || {})[qz.id]; return `<button class="row quiz-row" data-solo="${qz.id}"><span class="logo-tile">${qz.pub ? logoHTML(pub(qz.pub)) : qz.author ? `<img src="${A}${author(qz.author).photo}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:8px">` : `<img src="${A}eylul-fuarcilik-logo.png" alt="">`}</span><span class="txt"><strong>${esc(qz.title)}</strong><small>${qz.pool.length} soruluk havuzdan 4 soru · ${done != null ? `Skorun ${done}/4` : '+40 puana kadar'}</small></span><span class="btn sm ${done != null ? 'ghost' : 'primary'}">${done != null ? 'Tekrar' : 'Başla'}</span></button>`; }).join('')}</div>
     </div>`;
@@ -1089,21 +1089,21 @@ const SOLO = [
     ['Murat Menteş’in imzası bugün saat kaçta?', ['14.00', '10.30', '18.00', '16.30']],
     ['Hangisi Murat Menteş’in kitabı değildir?', ['İki Yeşil Susamuru', 'Ruhi Mücerret', 'Korkma Ben Varım', 'Dublörün Dilemması']]
   ] },
-  { id: 'everest', title: 'Everest Yayınları quizi', pub: 'everest', pool: [
+  { id: 'everest', title: 'Everest Yayınları yarışması', pub: 'everest', pool: [
     ['“İki Yeşil Susamuru” kimin romanı?', ['Buket Uzuner', 'Murat Menteş', 'Nehir Yarar', 'Saygı Öztürk']],
     ['“Kumral Ada Mavi Tuna” hangi yazarın?', ['Buket Uzuner', 'Timur Soykan', 'Mustafa Balbay', 'Mustafa Gazalcı']],
     ['Everest Yayınları’nın standı nerede?', ['A-410', 'A-504', 'A-104', 'A-305']],
     ['Buket Uzuner’in söyleşisinin adı ne?', ['Bir roman nasıl doğar?', 'Yayıncılığın yarını', 'Haberden kitaba', 'Masal maratonu']],
     ['Buket Uzuner bugün saat kaçta imzada?', ['16.30', '13.00', '11.00', '19.00']]
   ] },
-  { id: 'koy', title: 'Köy Enstitüleri quizi', pub: 'bilgi', pool: [
+  { id: 'koy', title: 'Köy Enstitüleri yarışması', pub: 'bilgi', pool: [
     ['“Bozkırdaki Işıklar”ın yazarı kim?', ['Mustafa Gazalcı', 'Mustafa Balbay', 'Timur Soykan', 'Murat Menteş']],
     ['“Çınarlar Anlatıyor” kaç Köy Enstitüsünü anlatıyor?', ['21', '12', '7', '40']],
     ['Mustafa Gazalcı’nın kitapları hangi yayınevinden?', ['Bilgi Yayınevi', 'Everest Yayınları', 'Alfa Yayınları', 'Can Çocuk']],
     ['“Köy Enstitüleri bugün ne söylüyor?” söyleşisi nerede?', ['Söyleşi Salonu', 'Çocuk Atölyesi', 'A-305', 'Danışma']],
     ['Bilgi Yayınevi’nin standı hangisi?', ['A-305', 'A-208', 'A-707', 'A-111']]
   ] },
-  { id: 'cocukkitap', title: 'Çocuk kitapları quizi', pub: 'can', pool: [
+  { id: 'cocukkitap', title: 'Çocuk kitapları yarışması', pub: 'can', pool: [
     ['“Veda Turtası”nın yazarı kim?', ['Nehir Yarar', 'Buket Uzuner', 'Saygı Öztürk', 'Murat Menteş']],
     ['“Bir Problem Bin Çözüm” hangi yayınevinden?', ['Can Çocuk', 'Doğan Kitap', 'Ötüken Neşriyat', 'Timaş Yayınları']],
     ['Çocuk masal saati nerede yapılıyor?', ['Çocuk Atölyesi', 'Söyleşi Salonu', 'A-504', 'Mescit']],
@@ -1123,7 +1123,7 @@ let solo = null;
 const shuffle = arr => arr.map(v => [Math.random(), v]).sort((a, b) => a[0] - b[0]).map(x => x[1]);
 SCREENS.quiz = id => {
   const qz = SOLO.find(x => x.id === id); if (!qz) return SCREENS.hediyeler();
-  return { top: topBack(qz.title, 'QUIZ'), html: '<div id="quiz"></div>', after: () => soloStart(qz) };
+  return { top: topBack(qz.title, 'YARIŞMA'), html: '<div id="quiz"></div>', after: () => soloStart(qz) };
 };
 function soloStart(qz) {
   // İlk şık doğru cevaptır; şıklar ve sorular her oyuncu için karıştırılır.
@@ -1167,7 +1167,7 @@ function soloAnswer(k) {
       <p>${solo.score > 0 ? 'Kitap ayracını Danışma’dan alabilirsin. Puanın sıralamaya eklendi.' : 'Bu sefer olmadı; tekrar denediğinde farklı sorular gelecek.'}</p>
       <div class="qz-rank">Toplam puanın <b>${myPoints()}</b> · sıran <b>${myRank()}.</b></div>
       <button class="btn primary block" data-go="#/hediyeler?sekme=sira">Sıralamaya bak</button>
-      <button class="btn light block" style="margin-top:10px" data-go="#/hediyeler?sekme=quiz">Diğer quiz’ler</button></div>`;
+      <button class="btn light block" style="margin-top:10px" data-go="#/hediyeler?sekme=quiz">Diğer yarışmalar</button></div>`;
     solo = null;
   }, 1100);
 }
