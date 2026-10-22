@@ -70,64 +70,64 @@ const SLIDES = [
   },
   {
     id: 'ana', label: 'Ana sayfa', theme: 'light', phone: go('#/'),
-    html: step(1, 'Ana sayfa', 'Ana sayfa', 'Okur uygulamayı açınca fuarın o günkü özetini görür.',
-      [['layers', 'Öne çıkanlar'], ['pen', 'Bugün imzada olan yazarlar'], ['book', 'Popüler yayınevleri']],
+    html: step(1, 'Ana sayfa', 'Ana sayfa', 'Ziyaretçi uygulamayı açtığında fuarın o gününü görür.',
+      [['cal', 'Ziyaretçi gününü önceden planlar'], ['pen', 'İmza saatleri kaçırılmaz'], ['book', 'Katılımcılar daha çok görünür']],
       [['Duyuruları aç', m('#/bildirimler'), 'bell']]),
     notes: `<p>Banner’ın kendi kendine döndüğünü ve “Bugün imzada” şeridinin kaydığını göster. Aşağı kaydırıp popüler yayınevlerini göster.</p>`
   },
   {
     id: 'ara', label: 'Arama', theme: 'light', phone: go('#/ara'),
-    html: step(2, 'Arama', 'Arama', 'Yazar ya da yayınevi adını yazmak yeterli.',
-      [['search', 'Türkçe karakter gerekmez'], ['users', 'Yazar ve yayınevi filtresi'], ['tag', '27 yayınevinin tam listesi']],
+    html: step(2, 'Arama', 'Arama', 'Aranan yazar ya da yayınevi saniyeler içinde bulunur.',
+      [['info', 'Danışmaya gelen soru azalır'], ['users', 'Her katılımcı aranabilir'], ['search', 'Yazım hatasında bile sonuç verir']],
       [['“Menteş” ara', m('#/ara?q=mentes'), 'search']]),
     notes: `<p>“mentes” diye ş olmadan yazıldığında bile Murat Menteş’in çıktığını göster.</p>`
   },
   {
     id: 'program', label: 'Program', theme: 'light', phone: go('#/program'),
-    html: step(3, 'Program', 'Program', 'Fuarın beş günlük imza, söyleşi ve çocuk etkinlikleri.',
-      [['cal', 'Gün ve türe göre filtre'], ['clock', 'O an süren etkinlik'], ['search', 'Program içinde arama']],
+    html: step(3, 'Program', 'Program', 'Fuarın tüm programı tek yerde ve her an güncel.',
+      [['book', 'Basılı programa gerek kalmaz'], ['bell', 'Değişiklik anında herkese ulaşır'], ['heart', 'Ziyaretçi ilgisine göre seçer']],
       [['Söyleşileri göster', m('#/program?tur=soylesi'), 'cal']]),
     notes: `<p>Kırmızı “şimdi” çizgisini göster, başka bir güne dokun. Sonra söyleşileri süz.</p>`
   },
   {
     id: 'etkinlik', label: 'Etkinlik detayı', theme: 'light', phone: go('#/etkinlik/e8'),
-    html: step(4, 'Etkinlik detayı', 'Etkinlik detayı', 'Her etkinliğin saati, yeri ve konuşmacıları.',
-      [['info', 'Süre ve giriş bilgisi'], ['users', 'Konuşmacılar'], ['qr', 'Salonda QR ile katılım']],
+    html: step(4, 'Etkinlik detayı', 'Etkinlik detayı', 'Her etkinliğin bilgisi tek ekranda.',
+      [['users', 'Söyleşi salonları daha dolu'], ['qr', 'Katılım QR ile ölçülür'], ['pen', 'Konuşmacılar öne çıkar']],
       [['Krokide göster', m('#/konum/A-504'), 'map']]),
     notes: `<p>Söyleşi detayında “Etkinlik hakkında” ve “Konuşmacılar”ı göster. “Krokide göster” ayrı bir ekranda açılır; geri tuşu etkinliğe döndürür.</p>`
   },
   {
     id: 'yazar', label: 'Yazar ve kitaplar', theme: 'light', phone: go('#/yazar/murat'),
-    html: step(5, 'Yazar', 'Yazar ve kitapları', 'Biyografi, fuardaki imza günleri ve kitaplar.',
-      [['pen', 'İmza günleri'], ['book', 'Tam ekran kitap sayfası'], ['map', 'Yayınevine yönlendirme']],
+    html: step(5, 'Yazar', 'Yazar ve kitapları', 'Okur yazarı ve kitaplarını fuardan önce tanır.',
+      [['pen', 'İmza günlerine katılım artar'], ['book', 'Kitaplar standa yönlendirilir'], ['star', 'Yazarlar uygulamada görünür']],
       [['Kitabı aç', { type: 'book', id: 'korkma' }, 'book']]),
     notes: `<p>“Kitabı aç”: büyük kapak, tanıtım yazısı ve yazarın diğer kitapları.</p>`
   },
   {
     id: 'yayinevi', label: 'Yayınevi sayfası', theme: 'light', phone: go('#/yayinevi/alfa'),
-    html: step(6, 'Yayınevi', 'Yayınevi sayfası', 'Her katılımcının uygulamada kendi vitrini var.',
-      [['tag', 'Tanıtım ve türler'], ['pen', 'Standdaki imzalar'], ['link', 'Web sitesi bağlantısı']],
+    html: step(6, 'Yayınevi', 'Yayınevi sayfası', 'Her katılımcının uygulamada kendi vitrini olur.',
+      [['tag', 'Katılımcıya ek görünürlük'], ['pin', 'Ziyaretçi standa yönlendirilir'], ['star', 'Satılabilir vitrin alanı']],
       [['Everest’i aç', m('#/yayinevi/everest'), 'book']]),
     notes: `<p>Yayınevleri için mesaj: “Okur standa gelmeden yayınevini tanıyor.” Web sitesi butonu yayınevinin kendi sitesini açar.</p>`
   },
   {
     id: 'kroki', label: 'Kroki', theme: 'light', phone: go('#/harita'),
-    html: step(7, 'Kroki', 'Fuar krokisi', 'Stantlar numara yerine yayınevi logolarıyla görünür.',
-      [['map', '27 yayınevi logosu'], ['pin', 'Logoya dokun, yayınevini aç'], ['info', 'WC, kafe, mescit ve diğerleri']],
+    html: step(7, 'Kroki', 'Fuar krokisi', 'Ziyaretçi aradığı standı kolayca bulur.',
+      [['map', 'Yayınevleri logolarıyla görünür'], ['info', '“Nerede?” soruları azalır'], ['pin', 'WC, kafe, danışma tek dokunuşta']],
       [['Everest’i bul', m('#/harita?stand=A-410'), 'pin'], ['WC’yi göster', m('#/harita?yer=wc'), 'info']]),
     notes: `<p>“Krokiyi sıfırdan çizmedik, sizin 23. fuar krokinizden yaptık.” Hizmet noktalarını göster.</p>`
   },
   {
     id: 'hediyeler', label: 'Hediyeler', theme: 'light', phone: go('#/hediyeler'),
-    html: step(8, 'Hediyeler', 'QR ile hediye', 'Okur stantlardaki QR’ları okutur, hediyesini Danışma’dan alır.',
-      [['qr', 'Her stantta bir QR kod'], ['gift', '3 QR’da çanta, 6 QR’da kitap'], ['star', 'Görevler']],
+    html: step(8, 'Hediyeler', 'QR ile hediye', 'Ziyaretçi stant stant gezer, hediyesini alır.',
+      [['users', 'Her stant daha çok ziyaret alır'], ['gift', 'Sponsorlar hediyeyle görünür'], ['qr', 'Ziyaretler ölçülür']],
       [['QR okut', { type: 'scan' }, 'qr']]),
     notes: `<p>“QR okut”: kamera açılır, QR pasaporta eklenir; 3. QR’da “Hediye kazandın: Eylül bez çanta” çıkar.</p>`
   },
   {
     id: 'quiz', label: 'Quiz ve sıralama', theme: 'light', phone: go('#/hediyeler?sekme=quiz'),
-    html: step(9, 'Quiz', 'Quiz ve sıralama', 'Sorular her oyuncuya karışık gelir; puanlar sıralamaya yazılır.',
-      [['star', 'Yazar ve yayınevi quiz’leri'], ['trophy', 'QR ve doğru cevaplarla puan'], ['users', 'İlk üçe hediye']],
+    html: step(9, 'Quiz', 'Quiz ve sıralama', 'Ziyaretçi fuarda daha uzun kalır.',
+      [['book', 'Yazar ve yayınevlerini tanıtır'], ['trophy', 'Sıralama ile rekabet'], ['gift', 'Sponsorlu ödüller']],
       [['Quiz başlat', m('#/quiz/menetes'), 'star'], ['Sıralama', m('#/hediyeler?sekme=sira'), 'trophy']]),
     notes: `<p>Bir quiz başlat, birkaç soru cevapla, sonra podyumu göster. Ödüllü canlı yarışma bir sonraki adımda.</p>`
   },
@@ -141,14 +141,14 @@ const SLIDES = [
   },
   {
     id: 'planim', label: 'Planım', theme: 'light', phone: go('#/planim'),
-    html: step(11, 'Planım', 'Planım', 'Okurun kaydettiği etkinlikler, gün gün.',
-      [['heart', 'Kayıtlı etkinlikler'], ['clock', 'Sıradaki etkinlik'], ['bell', '15 dakika önce hatırlatma']]),
+    html: step(11, 'Planım', 'Planım', 'Ziyaretçi kendi fuar programını oluşturur.',
+      [['bell', 'Hatırlatmayla katılım artar'], ['heart', 'Hangi etkinliğe ilgi var, görülür'], ['clock', 'Sıradaki etkinlik hep elinde']]),
     notes: `<p>Sıradaki etkinliği ve gün gün planı göster.</p>`
   },
   {
     id: 'cocuk', label: 'Çocuk Şenliği', theme: 'light', extra: 'teal', phone: go('#/', 'cocuk'),
-    html: step(12, '2027 · Çocuk Şenliği', 'Çocuk Şenliği', 'Aynı uygulama, Eylül’ün bir sonraki etkinliğinde.',
-      [['kid', 'Atölye ve gösteri programı'], ['users', '11 katılımcı'], ['map', 'Şenlik haritası']],
+    html: step(12, '2027 · Çocuk Şenliği', 'Çocuk Şenliği', 'Aynı uygulama Eylül’ün bütün etkinliklerinde kullanılır.',
+      [['layers', 'Her etkinlik için yeni uygulama gerekmez'], ['users', 'Ziyaretçi kitlesi büyür'], ['kid', 'Atölye ve alanlar tek yerde']],
       [['Programı göster', m('#/program', 'cocuk'), 'cal'], ['Haritayı göster', m('#/harita', 'cocuk'), 'map']]),
     notes: `<p>Aynı uygulama, fuar değişince içerik de değişiyor. Bir kez indirilen uygulama Eylül’ün bütün etkinliklerinde kullanılır.</p>`
   },
