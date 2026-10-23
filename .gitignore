@@ -2,3 +2,10 @@
 /graft/
 .vercel
 .env*
+
+# iOS uygulaması ayrı repoda: github.com/abdullaharslan01/fuar_iOS
+ios/
+
+# Backend + panel ve Android ayrı repolarda: fuar_web, fuar_android
+backend/
+android/
