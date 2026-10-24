@@ -24,7 +24,8 @@ tanıtım sayfası ve yasal metinler. Her repoda ayrı commit ve push.
   Türkçe kalır; yalnızca uygulamanın kendi metinleri çevrilir.
 - **Bildirimler:** yerelde `PUSH_TOPIC_PREFIX=test-`; test bildirimi yalnızca Debug derlemelere gider.
   Mağaza derlemesine ya da gerçek kullanıcılara test bildirimi gönderme.
-- **Mağaza:** TestFlight'a test kullanıcısı ya da grup ekleme; onaysız incelemeye gönderme. Mağaza
-  derlemeleri sunucu yokken de çalışan çevrimdışı demo veriyle çıkar.
+- **Mağaza:** TestFlight'a test kullanıcısı ya da grup ekleme; onaysız incelemeye gönderme.
+- **Sunucusuz / demo mod yok:** uygulamalar her şeyi panelden (API) alır; ağ yoksa yalnızca son indirilen kopya
+  gösterilir. Mağaza derlemesi canlı sunucu adresi olmadan çıkmaz (iOS ve Android derlemesi durur).
 - Gizli dosyalar repoya girmez: `backend/secrets/`, `android/signing/`.
 - Saatler fuar saatiyle (Europe/Istanbul) gösterilir ve girilir.
