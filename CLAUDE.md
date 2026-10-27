@@ -20,7 +20,7 @@ tanıtım sayfası ve yasal metinler. Her repoda ayrı commit ve push.
 - **iOS ve Android aynı görünür ve aynı davranır** (yalnızca platformun kendi öğeleri farklı). Bir tarafta
   ekran değişirse diğerinde de değişir; ikisi yan yana karşılaştırılır.
 - **Her şey panelden yönetilir;** panelde yapılan değişiklik uygulamalarda bir dakika içinde görünür.
-- Panelden gelen etiketler (program kategorileri, etkinlik durumları, duyuru türleri) İngilizce modda da
+- Panelden gelen etiketler (program kategorileri, etkinlik durumları) İngilizce modda da
   Türkçe kalır; yalnızca uygulamanın kendi metinleri çevrilir.
 - **Bildirimler:** yerelde `PUSH_TOPIC_PREFIX=test-`; test bildirimi yalnızca Debug derlemelere gider.
   Mağaza derlemesine ya da gerçek kullanıcılara test bildirimi gönderme.
