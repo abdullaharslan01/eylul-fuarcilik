@@ -3,6 +3,9 @@
 Klasörler ayrı repolar: `ios/` (fuar_iOS), `android/` (fuar_android), `backend/` (fuar_web: API + panel). Kök repo
 tanıtım sayfası ve yasal metinler. Her repoda ayrı commit ve push.
 
+Bütün mimari, özellik → dosya haritası, API ve bilinen sorunlar: `AGENTS.md` (başka yapay zekâ ajanları için de).
+"Test yap" denince: `TEST.md`'deki liste baştan sona, her seferinde aynısı (backend, panel, iOS, Android, ikisi birlikte).
+
 ## Çalışma kuralları
 
 1. **Önce düşün.** Belirsiz bir şey varsa varsayımı açıkça söyle; iki yorum mümkünse sessizce birini seçme.
