@@ -209,6 +209,7 @@ ayrı commit ve push yapılır.
 - `POST /v1/fairs/:id/ping`.
 - `GET /q/:kod`: uygulamayı ya da mağazayı açan sayfa.
 - `GET /indir`: baskıdaki QR'ın adresi, **hiç değişmez** (`baski/uygulama-indir/`). iPhone/iPad App Store'a, Android Google Play'e 302; öteki cihazlar iki bağlantı. Mağaza adresi panelde Uygulama güncellemesi'nden.
+- `POST /v1/me/phone/otp`: kendi numarası `phone_unchanged`, başkasının `phone_in_use` (409); kod gitmez.
 - `GET /v1/staff/fairs/:id/gift-list?status=&q=`, `POST .../gift-list/notify`: Kazananlar (Kazanan / Alan / Almayan), panelle aynı liste; görevli bildirimi fuar başına 5 dakikada bir.
 - Taslak fuar her yerde 404 döner.
 
