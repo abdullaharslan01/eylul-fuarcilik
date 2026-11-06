@@ -182,7 +182,7 @@ ayrı commit ve push yapılır.
 | `src/scaling.js` | Paneldeki "Sunucu" sayfası: mod (normal / fuar / büyük), ECS ve RDS ayarı |
 
 **`src/routes/` (uçlar):**
-- `public.js`: fuar listesi, katalog, canlı bilgi, stok, ping, `/q/:kod`.
+- `public.js`: fuar listesi, katalog, canlı bilgi, stok, ping, `/q/:kod`, `/indir`.
 - `contest.js`: giriş, hesap, fuara katılım, okutma, puan durumu, hediye QR'ı, görevli uçları.
 - `admin.js`: panel API'si.
 - `adminAuth.js`: panel girişi, organizasyonlar, kullanıcılar.
@@ -208,6 +208,8 @@ ayrı commit ve push yapılır.
 - `GET /v1/fairs/:id/catalog | live | stock`: ETag ve `X-Content-Version` ile.
 - `POST /v1/fairs/:id/ping`.
 - `GET /q/:kod`: uygulamayı ya da mağazayı açan sayfa.
+- `GET /indir`: baskıdaki QR'ın adresi, **hiç değişmez** (`baski/uygulama-indir/`). iPhone/iPad App Store'a, Android Google Play'e 302; öteki cihazlar iki bağlantı. Mağaza adresi panelde Uygulama güncellemesi'nden.
+- `GET /v1/staff/fairs/:id/gift-list?status=&q=`, `POST .../gift-list/notify`: Kazananlar (Kazanan / Alan / Almayan), panelle aynı liste; görevli bildirimi fuar başına 5 dakikada bir.
 - Taslak fuar her yerde 404 döner.
 
 **Giriş ve hesap (`auth`):**
