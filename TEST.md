@@ -66,7 +66,9 @@ iOS sürümleri: **17, 18, 26, 27** (simülatör; 18 indirilemiyorsa raporda yaz
 | C6 | Program: gün, tür süzgeci, "şimdi" çizgisine kaydırma, canlı / iptal / saat değişti etiketleri | `eylulrehber://program` + `eylul.now` |
 | C7 | Etkinlik, yayınevi, yazar, kitap sayfaları (uzun ad / başlık) | `eylulrehber://event/<id>`, `publisher/`, `author/`, `book/` |
 | C8 | Arama (sayılar "1.508" biçiminde, sonuç yok durumu) | `eylulrehber://search` |
-| C9 | Kroki: stantlar, tesis simgeleri (iOS 17'de WC), yakınlaştırma | `eylulrehber://map` |
+| C9 | Kroki: bütün plan görünür, yayınevi adları stantların içinde, yakınlaşıp uzaklaşınca ad kaybolmaz; dokununca seçim ve yakınlaşma; boş stant; tesis simgeleri (iOS 17'de WC) | `eylulrehber://map` |
+| C9a | Konuk ülke listesi ve detay: afiş, dönen görsel, konuk → yazar sayfası, yayınevi → web | `eylulrehber://editions` |
+| C9b | Takvimde etkinliksiz gün: çip yok, ortada yer tutucu; ⓘ'ye iki kez basınca tek sayfa | `eylul.now 2026-12-07T13:42:00+03:00` |
 | C10 | Duyurular ve duyuru sayfası | `eylulrehber://notices` |
 | C11 | Planım (boş ve dolu), çakışma uyarısı | `eylulrehber://plan` |
 | C12 | Hediyeler (girişsiz, girişli, yarışma kapalı) | `eylulrehber://gifts` |
@@ -93,6 +95,7 @@ ile metne göre (koordinat tahmini yok).
 | D4 | Konum kuralı: yarışma konum istemiyorsa izinsiz okutulur; istiyorsa izin / uzaklık kontrolü | panel ayarıyla aynı davranış |
 | D5 | Eşik geçilince "Hediye kazandın", Hediye QR'ım (dakikada değişir) | QR açılır |
 | D6 | Görevli: panelden telefonla eklenir, uygulamada görevli modu, hediye QR'ı okutup teslim, ikinci teslim reddedilir, geri al | bakiye ve stok doğru |
+| D6a | Görevli duyurusu "Bildirim olarak da gönder": bildirim yalnızca `test-` konusuna; gitmezse duyuru yayında, uyarı çıkar | uyarı doğru |
 | D7 | Stoğu biten hediye "Tükendi", sıradaki hedef onu atlar | kartta Tükendi |
 | D8 | Panelden duyuru → uygulamanın duyurularında (en geç 1 dk); bildirim yalnızca `test-` konusuna | görünür |
 | D9 | Panelden etkinlik durumu (canlı / iptal / saat değişti) → programda etiket | görünür |

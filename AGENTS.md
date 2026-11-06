@@ -2,7 +2,7 @@
 
 > Bu belge, projeyi hiç görmemiş bir yapay zekâ ajanının (Claude, Codex, Cursor, Gemini…) tek okumada projenin ne
 > olduğunu, kodun nerede durduğunu ve hangi kurallara uyacağını anlaması için yazıldı.
-> Son güncelleme: **1 Kasım 2026**. Kod durumu: backend `38468bb`, iOS `8259eb6`, Android `374be72` (hepsi `cok-fuar` dalı).
+> Son güncelleme: **6 Kasım 2026**. Hepsi `cok-fuar` dalı.
 > Kodla belge çelişirse **kod doğrudur**; çelişkiyi bu belgeye işle.
 
 ---
@@ -32,17 +32,19 @@
   - duyuruları okumak;
   - **Planım**'a etkinlik eklemek (hatırlatma ve widget);
   - fuar bilgilerine bakmak (ⓘ: tanıtım, saatler, SSS, konum);
-  - **Hediyeler** yarışmasına katılmak: stanttaki gizli QR'ları okutup puan toplar, puan eşiğine gelince hediye
-    kazanır, Danışma'da görevli kişinin "Hediye QR'ını" okutup hediyeyi teslim eder.
+  - **Hediyeler** yarışmasına katılmak: stanttaki gizli QR'ları okutup puan toplar, puanı yeten hediyeyi uygulamada
+    **alır** (puan ve stok o anda düşer, hediye Kazandıklarım'a geçer), Danışma'da görevli "Hediye QR'ını" okutup teslim eder.
 - **Temel ilke: her şey panelden yönetilir.** Panelde yapılan değişiklik uygulamalarda yaklaşık 1 dakika içinde görünür.
   Uygulamada sabit içerik ya da sunucusuz/demo mod yoktur. Ağ yoksa yalnızca son indirilen kopya gösterilir.
 - Ölçek hedefi: fuar başına günde 100 bin – 700 bin ziyaretçi. Saatler her zaman fuar saatiyle (Europe/Istanbul).
 - **Canlı:** API ve panel `https://fuar.bulbi.co` (panel `/panel/`). Uygulamalar mağazada **1.3** (iOS build 12,
   Android versionCode 7; ikisi de 30–31 Ekim 2026'da yayına alındı).
-- **Canlıdaki fuarlar (örnek veriyle):**
-  - `sanliurfa-2026`: 9. Şanlıurfa Kitap Fuarı, 20–29 Kasım.
-  - `ankara-2026`: 24. Ankara Kitap Fuarı, ATO Congresium, 4–13 Aralık.
-  - İkisinin de 10 günlük programı **örnek veridir**. Eylül gerçek programı gönderince panelden değişecek.
+- **Fuarlar:**
+  - `ankara-2026`: 24. Ankara Kitap Fuarı, ATO Congresium, 4–13 Aralık. Kaynak `backend/seed/catalog.json`: program, SSS ve
+    iletişim ankarakitapfuari.org.tr'den (6 Kasım); `scripts/fuar-yukle.mjs` sunucuya yükler ve eski demoyu temizler
+    (kampanya ve basılı QR'lar değişmez). Yayınevi–stant eşleşmesi sitede yok: **Eylül'ün listesiyle doğrulanmalı.**
+    Kroki 3–12 Nisan planından çıkarıldı (sitedeki görsel "Güncelleniyor"): yeni plan gelince koordinatlar değişir.
+  - `sanliurfa-2026`: 9. Şanlıurfa Kitap Fuarı, 20–29 Kasım; programı örnek veridir.
 
 ---
 
@@ -126,7 +128,8 @@ ayrı commit ve push yapılır.
   4. Hediye ekranında 30 sn'de bir `/stock`.
   5. 5 dakikada bir `POST /ping` (aktif cihaz sayımı).
   - **Arama telefonda** yapılır; sunucuya yük yoktur.
-- **Önbellek katmanları:** telefon diski → CloudFront (`s-maxage`: katalog 30 sn, canlı 15 sn, stok 3 sn) → sunucu
+- **Açılış:** uygulama cihazdaki kopyayı yükler, açılış ekranı sürerken (en çok 3 sn) yenisini alır; kullanıcı güncel içerikle başlar.
+- **Önbellek katmanları:** telefon diski → CloudFront (`s-maxage`: katalog 10 sn, canlı 5 sn, stok 3 sn) → sunucu
   belleği (katalog bir kez kurulur; panel kaydedince geçersiz olur). Katalog ve fuar listesi S3'e yedeklenir.
 - **Kimlik:**
   - Ziyaretçi SMS koduyla, Apple ile (yalnızca iOS) ya da Google ile girer.
@@ -170,7 +173,7 @@ ayrı commit ve push yapılır.
 | `src/auth.js` | Ziyaretçi tokeni (HMAC), telefon biçimi, dakikada bir değişen hediye QR kodu, mesafe |
 | `src/adminUsers.js` | Panel kullanıcıları (scrypt), 12 saatlik token |
 | `src/otp.js` | SMS kodu: 6 hane, 5 deneme, yeniden gönderme 60 sn, saatte 5 |
-| `src/sms.js` | SMS gönderiminin sağlayıcıya bağlı kısmı (`log` / `mobildev` / `none`): organizasyonun kendi hesabı ve `{OTP}` şablonu, yoksa Bulbi'ninki |
+| `src/sms.js` | SMS gönderiminin sağlayıcıya bağlı kısmı (`log` / `mobildev` / `netgsm` / `none`): organizasyonun kendi hesabı (panel › Organizasyonlar › SMS; Netgsm OTP Türkçe karaktersiz, dakikada 100) ve `{OTP}` şablonu, yoksa Bulbi'ninki. `SMS_PROVIDER=log` iken gerçek SMS hiç gitmez |
 | `src/identity.js` | Apple ve Google kimlik tokeni doğrulama |
 | `src/push.js` | Firebase Cloud Messaging. Konular `fair-<fuar>`, `event-<fuar>-<etkinlik>`, `visitor-<id>`; başlarına `PUSH_TOPIC_PREFIX` eklenir |
 | `src/deletion.js` | Hesap silme: hesap hemen kapanır, 30 gün sonra temizlenir; aynı kimliğin yeniden hediye toplamasını engelleyen kayıt kalır |
@@ -279,8 +282,12 @@ ayrı commit ve push yapılır.
   - Görevler `tasks[]`:
     - tür `publishers` (yayınevi stantları, yayınevi başına gizli QR) ya da `qr` (özel QR);
     - tekrar `once` ya da `daily`.
-  - Hediyeler `gifts[{requiredPoints, stock}]`.
-  - **Puan harcanır:** teslim edilen hediyenin puanı bakiyeden düşer.
+  - Hediyeler `gifts[{requiredPoints, stock}]`, teslim metni `deliveredMessage`.
+  - **Hediye alma (6 Kasım):** kişi `POST /fairs/:id/gifts/:hediye/take` ile alır; puan ve stok tek işlemde düşer
+    (`claimGift`), stok yoksa hiçbir şey değişmez, yeniden deneme güvenli. `gift_claims` = alınan, `gift_deliveries` = teslim
+    edilen. Geri alma iki adım: teslimi kaldırır, sonra iptal edip puan ve stoğu döndürür. Stok alınan adetin altına inemez
+    (panel ve görevli). Hesap silinince teslim alınmamış hediyeler stoğa döner. Teslimde kişiye bildirim, ticari ileti izni
+    varsa SMS gider (`notifyDelivered`). Yük testi: 100 kişi, 300 eşzamanlı istek, 25 stok: tam 25 kişi aldı.
 - `appUpdate` ve `appInfo` bütün fuarlarda aynıdır (`settings` tablosu).
 
 ### 5.5 Veri modeli (`db/schema.sql`)
@@ -455,24 +462,25 @@ iOS yolları `ios/EylulRehber/`'a, Android yolları `android/app/src/main/java/c
 | Fuar seçimi, fuar değiştir | `Features/Account/FairPickerView.swift`, `Core/Data/FairDirectory.swift` | `ui/FairPicker.kt`, `core/Fairs.kt` | `Fairs.jsx` (durum: taslak / yayında) | `GET /v1/fairs?q=` |
 | Açılış ekranı | `App/SplashView.swift` | `ui/SplashScreen.kt` | — | `fair.summary`, `FairStore.dayStatus` |
 | İlk açılış turu | `Features/Home/AppTour.swift` | `ui/AppTour.kt` | — | `eylul.tour.done` |
-| Ana sayfa (bannerlar, bugünkü imzalar, popüler yayınevleri, arama) | `Features/Home/HomeView.swift` | `ui/home/HomeScreen.kt` | `Banners.jsx`, `content.jsx` (ana sayfa yayınevleri) | `banners`, `fair.homePublishers` |
+| Ana sayfa (bannerlar, program bölümü: kalan etkinlikler sırayla `count` kadar, yoksa bölüm yok; popüler yayınevleri, arama) | `Features/Home/HomeView.swift` | `ui/home/HomeScreen.kt` | Ana ekran sayfası, `Banners.jsx` | `banners`, `fair.homeProgram`, `fair.homePublishers`, `fair.sponsors`, `fair.ticketUrl` |
 | **Fuar bilgileri (ⓘ)**: tanıtım, tarih, saat, SSS, konum, Hakkımızda bağlantısı | `Features/Home/FairInfo.swift` | `ui/home/FairInfo.kt` | `FairSettings.jsx` (Genel, Sık sorulan sorular) | `fair.summary`, `fair.cover`, `fair.faq`, `fair.location` |
 | Gerçek harita, uzaklık, yol tarifi | `Features/Home/VenueMap.swift` (MapKit, Apple / Google Haritalar) | `ui/home/VenueMap.kt` (MapLibre, Google Haritalar / `geo:`) | `FairSettings.jsx` (`components/LocationPicker.jsx`) | `fair.location` |
 | Arama (yazar, yayınevi) | `Features/Search/SearchView.swift` | `ui/search/SearchScreen.kt` | — | telefonda |
 | Yayınevi, yazar, kitap | `Features/People/PublisherDetailView.swift`, `AuthorDetailView.swift`, `BookDetailSheet.swift`, `BooksView.swift` | `ui/people/PeopleScreens.kt`, `PeopleShared.kt` | `content.jsx` (kütüphane) | `publishers`, `authors`, `books` |
 | Program (gün, tür süzgeci, canlı, iptal / erteleme) | `Features/Program/ProgramView.swift`, `EventDetailView.swift` | `ui/program/ProgramScreen.kt`, `ProgramShared.kt`, `EventDetailScreen.kt` | `Events.jsx` | `events`, `eventKinds`, `liveStatus`, `update` |
-| Kroki (stant planı, tesisler) | `Features/Map/FloorPlanScreen.swift`, `FloorPlanCanvas.swift`, `FloorPlanViewport.swift` | `ui/map/MapScreens.kt` | `MapEditor.jsx` | `venueMap`, `facilities` |
+| Kroki (stant planı, tesisler). Tek Canvas, stant başına ad stanta sığdırılır, yakınlığa göre gizlenmez; hareket yeniden çizim yapmaz (iOS `scaleEffect`+Equatable, Android `graphicsLayer`); yazı yerleşim formülü iki platformda aynı (`FloorStand.layout`) | `Features/Map/FloorPlanScreen.swift`, `FloorPlanCanvas.swift`, `FloorPlanViewport.swift` | `ui/map/MapScreens.kt` | `MapEditor.jsx` | `venueMap`, `facilities` |
+| Konuk ülke (afişli sade liste, detay sayfası, konuk = yazar) | `Features/Home/FairInfo.swift › EditionsView, EditionDetailView, ImageCarousel` | `ui/home/FairInfo.kt` | `FairSettings.jsx` (Konuk Ülke) | `fair.editions` (`guests`, `partners`, `gallery`) |
 | Duyurular ve bildirim | `Features/Notices/NoticesView.swift`, `NoticeDetailView.swift` | `ui/notices/NoticesScreens.kt` | `content.jsx` (duyurular), `components/PushButton.jsx` | `notices`, push `fair-<fuar>` |
 | Planım, hatırlatma, widget | `Features/Plan/PlanView.swift`, `Core/Session/ReminderScheduler.swift`, `PlanWidgetSync.swift`, `EylulWidget/` | `ui/plan/PlanScreen.kt`, `core/Reminders.kt`, `core/PlanTracking.kt` | — | cihazda |
-| Hediyeler: görevler, puan, hediyeler | `Features/Gifts/GiftsView.swift`, `TaskDetailView.swift`, `GiftDetailView.swift` | `ui/gifts/GiftsScreens.kt`, `TaskDetail.kt`, `ContestScreens.kt` | `Contest.jsx` | `giftCampaign`, `/progress`, `/stock` |
+| Hediyeler: görevler, puan, hediye alma, Kazandıklarım | `Features/Gifts/GiftsView.swift`, `TaskDetailView.swift`, `GiftDetailView.swift` | `ui/gifts/GiftsScreens.kt`, `TaskDetail.kt`, `ContestScreens.kt` | `Contest.jsx` (Hediye alanlar sekmesi, stok) | `giftCampaign`, `/progress` (`wins`), `/stock`, `/gifts/:id/take` |
 | QR okutma | `Features/Gifts/QRScannerView.swift` (VisionKit) | `ui/gifts/QRScanner.kt` (Google Code Scanner) | `Contest.jsx` (QR kartları) | `POST /scans` |
 | Hediye QR'ım (dakikada bir değişir) | `Features/Gifts/RedeemQRView.swift` | `ui/gifts/ContestScreens.kt › RedeemQrLayer` | — | `GET /redeem-code` |
 | Yarışma kapalı ekranı | `Features/Gifts/GiftsOffView.swift` | `ui/gifts/GiftsOffScreen.kt` | `FairSettings.jsx` (Bölümler ve adlar) | `fair.modules.contest`, `fair.giftsOff` |
-| Görevli modu (teslim, saha) | `Features/Staff/StaffShell.swift`, `StaffFieldView.swift` | `ui/staff/StaffApp.kt`, `FieldTab.kt` | `Staff.jsx` (Hediyeler › Görevliler) | `/v1/staff/…` |
+| Görevli modu (teslim, saha, duyuru + bildirim, stok, bekleyen iptali) | `Features/Staff/StaffShell.swift`, `StaffFieldView.swift`, `StaffGifts.swift` | `ui/staff/StaffApp.kt`, `FieldTab.kt` | `Staff.jsx` (Hediyeler › Görevliler) | `/v1/staff/…` |
 | Giriş (SMS, Apple, Google) ve **üyelik onayları** (KVKK + Kullanıcı Sözleşmesi zorunlu; Açık Rıza ve İYS isteğe bağlı) | `Features/Gifts/SignInView.swift`, `KVKKView.swift` (`LegalDoc`) | `ui/gifts/SignInSheet.kt` (`LegalDoc`, `LegalSheet`) | `FairSettings.jsx` (Giriş ekranı, Sözleşmeler), `Companies.jsx` | `/v1/auth/*`, `legal`, `PATCH /v1/me` |
 | Profil, telefon değiştirme, hesap silme | `Features/Gifts/ProfileView.swift` | `ui/gifts/ContestScreens.kt › ProfileScreen` | `Deletions.jsx` | `/v1/me`, `DELETE /v1/me` |
 | Yan menü (Fuar bilgileri, Hakkımızda, Sözleşmeler ve Politikalar, Ayarlar, Fuar değiştir, Bulbi satırı) | `Features/Account/SideMenu.swift` | `ui/SideMenu.kt` | `AppUpdate.jsx` (Bulbi satırı) | `appInfo` |
-| Hakkımızda ve iletişim | `Features/Account/ContactView.swift › AboutView` | `ui/SideMenu.kt › AboutScreen` | `Companies.jsx`, `FairSettings.jsx` (Görünüm) | `fair.brand.about`, telefon, e-posta, web, adres |
+| Hakkımızda ve iletişim | `Features/Account/ContactView.swift › AboutView` | `ui/SideMenu.kt › AboutScreen` | `Companies.jsx`, `FairSettings.jsx` (Görünüm) | `fair.brand.about`, telefon, e-posta, web, adres, `images`, `contactTitle`, `contactUrl`, `socials` |
 | Sözleşmeler ve Politikalar | `Features/Account/SideMenu.swift › AgreementsView` | `ui/SideMenu.kt › AgreementsScreen` | `FairSettings.jsx` (Sözleşmeler), `Companies.jsx` | `legal` |
 | Ayarlar (dil, görünüm, bildirim) | `SideMenu.swift › SettingsView`, `LanguageView`, `AppearanceView` | `ui/SideMenu.kt › SettingsScreen`, `LanguageScreen`, `AppearanceScreen` | — | cihazda |
 | Uygulama güncellemesi (zorunlu / önerilen) | `Core/Models/AppUpdate.swift`, `App/UpdateRequiredView.swift` | `core/AppUpdate.kt`, `ui/UpdateScreens.kt` | `AppUpdate.jsx` | `appUpdate` |
@@ -529,6 +537,8 @@ her seferinde aynı adımlar, rapor `docs/test-sonuclari/`). Aşağısı araçla
 
 - **Backend / panel:** `cok-fuar`'da çalış, sonra kullanıcının onayıyla `main`'e birleştir ve push et. GitHub Actions
   test eder ve AWS'ye yayınlar. Şema değiştiyse canlı veritabanına `ALTER` gerekir (§5.5).
+- **Toplu veri yükleme:** `API=… EMAIL=… node scripts/fuar-yukle.mjs` (`backend/` içinde; şifre gizli sorulur). Görselleri yükler, fuarı `seed/catalog.json`'la değiştirir, kampanyayı ve QR'ları korur, eski demo yazar/kitapları siler.
+- **Mağaza uyumu:** görevli teslimi artık QR kodu ister (`gift-claims` gövdesinde `code`), hediye alma yeni uygulamada: bu backend'le 1.3 uygulamadaki görevli teslim edemez. Fuar başlamadan iOS 13 / Android 8 yayınlanmalı.
 - **Canlı içerik** (fuar, program, metin): panelden, ya da panelin oturumuyla `/v1/admin` API'sinden. Değişiklik
   uygulamaya 1 dakika içinde yansır; CloudFront önbelleği 30 sn'ye kadar eski kopya verebilir.
 - **Mağaza:**
@@ -588,6 +598,21 @@ her seferinde aynı adımlar, rapor `docs/test-sonuclari/`). Aşağısı araçla
 **1 Kasım tam test (TEST.md, rapor `docs/test-sonuclari/2026-11-01.md`):** yarışma sıralaması ve özet 1 milyon kişide
 15 sn zaman aşımına düşüyordu (`notDeleting` `NOT IN` → `NOT EXISTS`, backend `38468bb`). `kontrol.mjs` 1.3'e uyduruldu;
 `fuar_big` test veritabanının şeması elle tamamlandı (göç yok: yerel test veritabanları da elle güncellenir).
+
+**iOS 27 açılış çökmesi (6 Kasım, düzeltildi):** `EylulRehberApp` sahne kapanışı gözlenen değer okuyordu; SwiftUI sahneyi
+`AsyncRenderer` iş parçacığında yeniden kurunca ana iş parçacığı denetiminde `EXC_BREAKPOINT` (4 açılışta 1). İçerik `AppContent`
+View'una taşındı: 12 temiz açılışta 0 çökme. Mağazadaki 1.3 etkilenir, iOS'un sonraki derlemesiyle gider.
+
+**6 Kasım (başka bir ajanın değişikliklerinin denetimi ve QR testi):**
+- `server.js`'teki açılış geçişi kaldırıldı: her `admin` açılışında canlıya `importCatalog` yapıyor, fuar ayarlarını
+  (`contest`, `modules`, `status`) ve paneldeki kampanyayı siliyor, `items`/`library` silmeleri fuara bağlı değildi.
+  **Canlıda çalıştıysa** yarışma ayarları panelden yeniden girilmeli (konum kuralı, bir telefon bir hesap). Tek seferlik işler
+  betikle yapılır, açılışa yazılmaz. `importCatalog` artık fuar kaydını birleştirir, dosyada olmayan ayar kayıtlarını silmez.
+- Düzeltilenler: pasif hesaba hediye teslimi; stoğu 0 hediyede ilk teslim; görevli ekranının 2 dakikada donması
+  (`refresh=1` 60 dk'lık kodu kabul eder); SMS gitmeyince gönderim hakkı iade; iOS'ta 5xx'te "Tekrar dene".
+- Bırakılanlar: cevap kaybolup yeniden denenince "Zaten okutmuştun" (puan güvende); fuar tarihi dışında okutma açık
+  (mağaza inceleme QR'ları için); `copy-from` yarışma konum ayarını taşımıyor.
+- iOS `URL?` alanları yalnızca http(s) okur (`decodeIfPresent(URL.Type)`): `tel:` taşıyan alan `String` olmalı.
 
 **Büyük fuar için bilinen, düzeltilmemiş backend borçları** (kod incelemesi, 1 Kasım):
 - Kütüphane kaydı `invalidateAll` ile her organizasyonun fuarlarını eskitir; yalnızca o organizasyonunki yeter
