@@ -48,6 +48,10 @@ sorunlar ve düzeltmeler). Mimari ve dosya haritası: `AGENTS.md`. Backend'in ay
 | B2 | Organizatör hesabıyla her sayfa açılır (Özet, Program, Duyurular, Bannerlar, Yayınevleri, Yazarlar, Kitaplar, Kroki, Hediyeler: Görevler / Hediyeler / Katılımcılar / Görevliler, Kişiler, Fuar ayarları: 7 sekme) | konsolda hata yok; başka organizasyonun fuarı görünmez |
 | B3 | Fuar ayarları önizlemesi: her sekmede telefon önizlemesi, Sözleşmeler'in 4 alt sekmesi | önizleme uygulamayla aynı |
 | B4 | Büyük fuarda kütüphane sayfaları, arama, seçiciler | takılmadan açılır |
+| B5 | Ana ekran: sponsor ve popüler yayınevi sırası oklarla, hepsi silinince bölüm kalkar; program bölümünde Öne çıkanlar ve Ana ekranda gösterme | uygulamada aynı sıra |
+| B6 | Hediyeler › Kazananlar: Kazanan / Alan / Almayan süzgeci ve sayıları, Bildirim gönder penceresi doğru grupla açılır | sayılar listeyle aynı |
+| B7 | Organizasyon › SMS: iki hesap, aktif servis, Test OTP gönder (yerelde "SMS gitmedi", yanlış numara hatası) | hata metni görünür |
+| B8 | Panel açıkken yeni sürüm yayınlanınca sekme değiştirmek ekranı boş bırakmaz | sayfa bir kez yenilenir |
 
 ## C. Uygulamalar: ekranlar (iOS ve Android yan yana)
 
@@ -67,6 +71,8 @@ iOS sürümleri: **17, 18, 26, 27** (simülatör; 18 indirilemiyorsa raporda yaz
 | C7 | Etkinlik, yayınevi, yazar, kitap sayfaları (uzun ad / başlık) | `eylulrehber://event/<id>`, `publisher/`, `author/`, `book/` |
 | C8 | Arama (sayılar "1.508" biçiminde, sonuç yok durumu) | `eylulrehber://search` |
 | C9 | Kroki: bütün plan görünür, yayınevi adları stantların içinde, yakınlaşıp uzaklaşınca ad kaybolmaz; dokununca seçim ve yakınlaşma; boş stant; tesis simgeleri (iOS 17'de WC) | `eylulrehber://map` |
+| C9c | Kroki panel ile aynı (stant köşesi, çizgi, renk, GİRİŞ etiketi); tam ekrandan profile gidip dönünce yakınlık, seçim ve tam ekran korunur; "Tam ekran" düğmesi bütün planla açar | panel Kroki sayfası yan yana |
+| C9d | Takvim: gün çizgisi ve tür zemini kayarak geçer, bugün kutu içinde; etkinlik görseli ana ekran kartı, takvim yuvarlağı ve etkinlik sayfasında | `eylulrehber://program` + `eylul.now` |
 | C9a | Konuk ülke listesi ve detay: afiş, dönen görsel, konuk → yazar sayfası, yayınevi → web | `eylulrehber://editions` |
 | C9b | Takvimde etkinliksiz gün: çip yok, ortada yer tutucu; ⓘ'ye iki kez basınca tek sayfa | `eylul.now 2026-12-07T13:42:00+03:00` |
 | C10 | Duyurular ve duyuru sayfası | `eylulrehber://notices` |
@@ -104,6 +110,11 @@ ile metne göre (koordinat tahmini yok).
 | D12 | Fuar değiştir: başka organizasyonun fuarı, katılım için o fuarın KVKK'sı | doğru fuar, doğru marka |
 | D13 | Çevrimdışı: ağ yokken son indirilen katalog açılır | uygulama açılır |
 | D14 | Telefon değiştirme ve hesap silme (ayrılan hediye stoğa döner) | panelde Hesap silme'de görünür |
+| D14a | Telefon değiştirme tam ekran; kendi numarası "zaten kayıtlı", başka hesabın numarası "kayıtlı bir hesap var" | kod gitmez |
+| D14b | Android: QR okut açılıp geri tuşuyla çıkılınca hata yazısı çıkmaz | Hediyeler'e döner |
+| D14c | Görevli › Kazananlar: süzgeç, arama, almayanı iptal (puan ve stok döner), listeye bildirim; sahadan 5 dakikada bir | iki platformda aynı |
+| D14d | Eksik etkinlik: yayınevi, kitap ve görseli olmayan imza iki uygulamada bozulmadan açılır | tasarım bozulmaz |
+| D14e | `/indir`: iPhone App Store'a, Android Google Play'e, bilgisayar QR'lı sayfaya gider | canlıda `curl -A` ile |
 | D15 | "Bir telefon bir hesap": aynı cihazda ikinci hesap `device_in_use` (fuar ayarı açıkken) | red mesajı |
 | D16 | Taslak fuar uygulamada ve API'de görünmez | 404 / listede yok |
 | D17 | Eksik veri: `backend/scripts/eksik-fuar.py` ile `bos-test` ve `eksik-test` kur (dosyanın başındaki komutlar); iki uygulamada ana sayfa, Program, Kroki, Hediyeler, yazar, yayınevi, kitap, etkinlik; sonra `eksik-fuar.sql` ile sil | `bos-test`: her sekmede "yakında"; `eksik-test`: kayıtlar yer tutucuyla, boş "Hakkında" ve geçersiz web sitesi yok, saatsiz etkinlik "bulunamadı"; fuar listesi 200 |
