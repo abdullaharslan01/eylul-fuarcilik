@@ -173,7 +173,7 @@ ayrı commit ve push yapılır.
 | `src/auth.js` | Ziyaretçi tokeni (HMAC), telefon biçimi, dakikada bir değişen hediye QR kodu, mesafe |
 | `src/adminUsers.js` | Panel kullanıcıları (scrypt), 12 saatlik token |
 | `src/otp.js` | SMS kodu: 6 hane, 5 deneme, yeniden gönderme 60 sn, saatte 5 |
-| `src/sms.js` | SMS gönderiminin sağlayıcıya bağlı kısmı (`log` / `mobildev` / `netgsm` / `none`): organizasyonun kendi hesabı (panel › Organizasyonlar › SMS; Netgsm OTP Türkçe karaktersiz, dakikada 100) ve `{OTP}` şablonu, yoksa Bulbi'ninki. `SMS_PROVIDER=log` iken gerçek SMS hiç gitmez |
+| `src/sms.js` | SMS gönderiminin sağlayıcıya bağlı kısmı (`log` / `mobildev` / `netgsm` / `none`): organizasyonun iki hesabı (MobilDev, Netgsm; panel › Organizasyonlar › SMS'te aktif olan seçilir, `POST /companies/:id/sms/test` servisin hata kodunu gösterir; Netgsm OTP Türkçe karaktersiz, dakikada 100) ve `{OTP}` şablonu, yoksa Bulbi'ninki. `SMS_PROVIDER=log` iken gerçek SMS hiç gitmez |
 | `src/identity.js` | Apple ve Google kimlik tokeni doğrulama |
 | `src/push.js` | Firebase Cloud Messaging. Konular `fair-<fuar>`, `event-<fuar>-<etkinlik>`, `visitor-<id>`; başlarına `PUSH_TOPIC_PREFIX` eklenir |
 | `src/deletion.js` | Hesap silme: hesap hemen kapanır, 30 gün sonra temizlenir; aynı kimliğin yeniden hediye toplamasını engelleyen kayıt kalır |
