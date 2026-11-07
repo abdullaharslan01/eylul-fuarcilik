@@ -71,6 +71,7 @@ iOS sürümleri: **17, 18, 26, 27** (simülatör; 18 indirilemiyorsa raporda yaz
 | C7 | Etkinlik, yayınevi, yazar, kitap sayfaları (uzun ad / başlık) | `eylulrehber://event/<id>`, `publisher/`, `author/`, `book/` |
 | C8 | Arama (sayılar "1.508" biçiminde, sonuç yok durumu) | `eylulrehber://search` |
 | C9 | Kroki: bütün plan görünür, yayınevi adları stantların içinde, yakınlaşıp uzaklaşınca ad kaybolmaz; dokununca seçim ve yakınlaşma; boş stant; tesis simgeleri (iOS 17'de WC) | `eylulrehber://map` |
+| C10b | QR okutma beklerken kitap sayfası çevrilir; yazı "QR okunuyor" → 2 sn "Puanın işleniyor" → 5 sn sonra "Fuar şu an çok kalabalık" ve açıklama; "Vazgeç" kapatır. Sunucu 5xx verirse kişi hata görmeden 3 kez yeniden denenir | yavaş sunucu (ör. canlı yük testi sırasında) |
 | C9b2 | Krokideki aramada yalnızca yayınevleri çıkar; yayınevine dokununca stantı krokide seçili ve ortalanmış açılır (detay değil); geri aramaya döner. İki parmakla istenen noktaya yakınlaşılır, en yakında yazılar net (normal ve tam ekran) | `eylulrehber://map` |
 | C9c | Kroki panel ile aynı (stant köşesi, çizgi, renk, GİRİŞ etiketi); tam ekrandan profile gidip dönünce yakınlık, seçim ve tam ekran korunur; "Tam ekran" düğmesi bütün planla açar | panel Kroki sayfası yan yana |
 | C9d | Takvim: gün çizgisi ve tür zemini kayarak geçer, bugün kutu içinde; etkinlik görseli ana ekran kartı, takvim yuvarlağı ve etkinlik sayfasında | `eylulrehber://program` + `eylul.now` |
