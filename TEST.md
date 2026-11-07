@@ -73,6 +73,8 @@ iOS sürümleri: **17, 18, 26, 27** (simülatör; 18 indirilemiyorsa raporda yaz
 | C9 | Kroki: bütün plan görünür, yayınevi adları stantların içinde, yakınlaşıp uzaklaşınca ad kaybolmaz; dokununca seçim ve yakınlaşma; boş stant; tesis simgeleri (iOS 17'de WC) | `eylulrehber://map` |
 | C10b | QR okutma beklerken kitap sayfası çevrilir; yazı "QR okunuyor" → 2 sn "Puanın işleniyor" → 5 sn sonra "Fuar şu an çok kalabalık" ve açıklama; "Vazgeç" kapatır. Sunucu 5xx verirse kişi hata görmeden 3 kez yeniden denenir | yavaş sunucu (ör. canlı yük testi sırasında) |
 | C9b2 | Krokideki aramada yalnızca yayınevleri çıkar; yayınevine dokununca stantı krokide seçili ve ortalanmış açılır (detay değil); geri aramaya döner. İki parmakla istenen noktaya yakınlaşılır, en yakında yazılar net (normal ve tam ekran) | `eylulrehber://map` |
+| C9e | Krokide salonun zemini boyalı: stantların arası yol olarak seçilir (açık ve koyu), panelde de aynı renk | `eylulrehber://map` |
+| C9f | Sıra yoğunluğu ve tahmini bekleme: takvimde ve etkinlik sayfasında etkinlik bitene kadar "Yoğun sıra · ~20 dk", yalnızca süre girildiyse "~10 dk bekleme" (iki dil) | panel ya da görevli girer, `eylul.now` etkinlikten önce / sırasında |
 | C9c | Kroki panel ile aynı (stant köşesi, çizgi, renk, GİRİŞ etiketi); tam ekrandan profile gidip dönünce yakınlık, seçim ve tam ekran korunur; "Tam ekran" düğmesi bütün planla açar | panel Kroki sayfası yan yana |
 | C9d | Takvim: gün çizgisi ve tür zemini kayarak geçer, bugün kutu içinde; etkinlik görseli ana ekran kartı, takvim yuvarlağı ve etkinlik sayfasında | `eylulrehber://program` + `eylul.now` |
 | C9a | Konuk ülke listesi ve detay: afiş, dönen görsel, konuk → yazar sayfası, yayınevi → web | `eylulrehber://editions` |
@@ -103,12 +105,14 @@ ile metne göre (koordinat tahmini yok).
 | D4 | Konum kuralı: yarışma konum istemiyorsa izinsiz okutulur; istiyorsa izin / uzaklık kontrolü | panel ayarıyla aynı davranış |
 | D5 | Eşik geçilince "Hediye kazandın", Hediye QR'ım (dakikada değişir) | QR açılır |
 | D6 | Görevli: panelden telefonla eklenir, uygulamada görevli modu, hediye QR'ı okutup teslim, ikinci teslim reddedilir, geri al. Ziyaretçinin açık Hediye QR'ım ekranı teslimden sonra "Hediyen teslim edildi" der (kırmızı hata ve "Tekrar dene" yok) | bakiye ve stok doğru; iki uygulamada aynı ekran |
+| D6b | Görevli › Saha üç bölüm (Durum, Duyurular, Program); etkinliğe dokun › "Sıra ve bekleme süresi…": yoğunluk, hazır süre ya da Özel (1–300 dk), Kaydet tek istek | iki platformda aynı, sunucuda kayıtlı |
 | D6a | Görevli duyurusu "Bildirim olarak da gönder": bildirim yalnızca `test-` konusuna; gitmezse duyuru yayında, uyarı çıkar | uyarı doğru |
 | D7 | Stoğu biten hediye "Tükendi", sıradaki hedef onu atlar | kartta Tükendi |
-| D8 | Panelden duyuru → uygulamanın duyurularında (en geç 1 dk); bildirim yalnızca `test-` konusuna | görünür |
+| D8 | Panelden duyuru → uygulamanın duyurularında (en geç 1 dk, uygulama açıkken yeniden başlatmadan); yeni duyuruda "Herkese bildirim gönder" işaretli gelir, kaydedince sormadan gönderilir (yerelde yalnızca `test-` konusuna) | görünür |
 | D9 | Panelden etkinlik durumu (canlı / iptal / saat değişti) → programda etiket | görünür |
 | D10 | Panelden fuar ayarı: SSS, Hakkımızda, iletişim, sözleşme metni, bölüm kapatma (hediyeler kapalı ekranı), ana sayfa yayınevleri **ve sırası** (Yayınevleri › Ana sayfada), banner | uygulamada görünür, sıra paneldeki gibi |
 | D11 | Uygulama güncellemesi: önerilen (kapatılabilir) ve zorunlu ekran | ikisi de çıkar, sonra eski hâline al |
+| D11a | Hediyeler sayfasının üstü sabit: panelde ayar yok, uygulamada "QR okut › Puan topla › Hediyeni al" ve "Görevleri tamamla, hediye kazan"; teslim bildirimi "… teslim edildi. İyi günlerde kullan!" | iki uygulamada aynı |
 | D12 | Fuar değiştir: başka organizasyonun fuarı, katılım için o fuarın KVKK'sı | doğru fuar, doğru marka |
 | D13 | Çevrimdışı: ağ yokken son indirilen katalog açılır | uygulama açılır |
 | D14 | Telefon değiştirme ve hesap silme (ayrılan hediye stoğa döner) | panelde Hesap silme'de görünür |
