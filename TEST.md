@@ -102,7 +102,7 @@ ile metne göre (koordinat tahmini yok).
 | D3 | QR okut (`eylul.scan`): "+10 puan" → ikinci kez "Zaten okutmuştun" → bilinmeyen kod | puan bir kez artar |
 | D4 | Konum kuralı: yarışma konum istemiyorsa izinsiz okutulur; istiyorsa izin / uzaklık kontrolü | panel ayarıyla aynı davranış |
 | D5 | Eşik geçilince "Hediye kazandın", Hediye QR'ım (dakikada değişir) | QR açılır |
-| D6 | Görevli: panelden telefonla eklenir, uygulamada görevli modu, hediye QR'ı okutup teslim, ikinci teslim reddedilir, geri al | bakiye ve stok doğru |
+| D6 | Görevli: panelden telefonla eklenir, uygulamada görevli modu, hediye QR'ı okutup teslim, ikinci teslim reddedilir, geri al. Ziyaretçinin açık Hediye QR'ım ekranı teslimden sonra "Hediyen teslim edildi" der (kırmızı hata ve "Tekrar dene" yok) | bakiye ve stok doğru; iki uygulamada aynı ekran |
 | D6a | Görevli duyurusu "Bildirim olarak da gönder": bildirim yalnızca `test-` konusuna; gitmezse duyuru yayında, uyarı çıkar | uyarı doğru |
 | D7 | Stoğu biten hediye "Tükendi", sıradaki hedef onu atlar | kartta Tükendi |
 | D8 | Panelden duyuru → uygulamanın duyurularında (en geç 1 dk); bildirim yalnızca `test-` konusuna | görünür |
