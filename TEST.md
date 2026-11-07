@@ -45,7 +45,7 @@ sorunlar ve düzeltmeler). Mimari ve dosya haritası: `AGENTS.md`. Backend'in ay
 | # | Adım | Geçer |
 |---|---|---|
 | B1 | Bulbi hesabıyla Bulbi alanındaki her sayfa açılır (Fuarlar, Organizasyonlar, Genel bannerlar, Kişiler, Hesap silme, Panel kullanıcıları, Uygulama güncellemesi, Sunucu) | konsolda hata yok |
-| B2 | Organizatör hesabıyla her sayfa açılır (Özet, Program, Duyurular, Bannerlar, Yayınevleri, Yazarlar, Kitaplar, Kroki, Hediyeler: Görevler / Hediyeler / Katılımcılar / Görevliler, Kişiler, Fuar ayarları: 7 sekme) | konsolda hata yok; başka organizasyonun fuarı görünmez |
+| B2 | Organizatör hesabıyla her sayfa açılır (Özet, Program, Duyurular, Bannerlar, Yayınevleri, Yazarlar, Kitaplar, Kroki, Konuk Ülke, Hediyeler: Görevler / Hediyeler / Katılımcılar / Görevliler, Kişiler, Fuar ayarları: Fuar, Görünüm, Uygulama, Sık sorulan sorular, Sözleşmeler, Yedek). Fuar ayarlarında ve Konuk Ülke'de değişiklik olunca altta "Kaydedilmemiş değişiklik var · Vazgeç · Kaydet" çubuğu çıkar | konsolda hata yok; başka organizasyonun fuarı görünmez |
 | B3 | Fuar ayarları önizlemesi: her sekmede telefon önizlemesi, Sözleşmeler'in 4 alt sekmesi | önizleme uygulamayla aynı |
 | B4 | Büyük fuarda kütüphane sayfaları, arama, seçiciler | takılmadan açılır |
 | B5 | Ana ekran: sponsor ve popüler yayınevi sırası oklarla, hepsi silinince bölüm kalkar; program bölümünde Öne çıkanlar ve Ana ekranda gösterme | uygulamada aynı sıra |
