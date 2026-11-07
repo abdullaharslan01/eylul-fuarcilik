@@ -110,7 +110,7 @@ ile metne göre (koordinat tahmini yok).
 | D7 | Stoğu biten hediye "Tükendi", sıradaki hedef onu atlar | kartta Tükendi |
 | D8 | Panelden duyuru → uygulamanın duyurularında (en geç 1 dk, uygulama açıkken yeniden başlatmadan); yeni duyuruda "Herkese bildirim gönder" işaretli gelir, kaydedince sormadan gönderilir (yerelde yalnızca `test-` konusuna) | görünür |
 | D9 | Panelden etkinlik durumu (canlı / iptal / saat değişti) → programda etiket | görünür |
-| D10 | Panelden fuar ayarı: SSS, Hakkımızda, iletişim, sözleşme metni, bölüm kapatma (hediyeler kapalı ekranı), ana sayfa yayınevleri **ve sırası** (Yayınevleri › Ana sayfada), banner | uygulamada görünür, sıra paneldeki gibi |
+| D10 | Panelden fuar ayarı: SSS, Hakkımızda, iletişim, sözleşme metni, bölüm kapatma (Hediyeler kapalıysa sekme, giriş ekranındaki yarışma adımları ve menüdeki Hediye QR'ım kalkar; E-bilet kapalıysa ana sayfa kartındaki ve yan menüdeki E-Bilet Al kalkar), ana sayfa yayınevleri **ve sırası** (Yayınevleri › Ana sayfada), banner | uygulamada görünür, sıra paneldeki gibi |
 | D11 | Uygulama güncellemesi: önerilen (kapatılabilir) ve zorunlu ekran | ikisi de çıkar, sonra eski hâline al |
 | D11a | Hediyeler sayfasının üstü sabit: panelde ayar yok, uygulamada "QR okut › Puan topla › Hediyeni al" ve "Görevleri tamamla, hediye kazan"; teslim bildirimi "… teslim edildi. İyi günlerde kullan!" | iki uygulamada aynı |
 | D12 | Fuar değiştir: başka organizasyonun fuarı, katılım için o fuarın KVKK'sı | doğru fuar, doğru marka |
