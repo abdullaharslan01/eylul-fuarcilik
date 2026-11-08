@@ -6,12 +6,6 @@ paper, ink, soft, line, brand, deep = map(rgb, ('FAF6EF','1A1712','5B5346','E8E0
 lora = root+'/ios/EylulRehber/Resources/Fonts/Lora-Bold.ttf'
 arial='/System/Library/Fonts/Supplemental/Arial.ttf'; bold='/System/Library/Fonts/Supplemental/Arial Bold.ttf'
 FONT={'lora':lora,'arial':arial,'bold':bold}
-def rounded_mask():
-    d=fitz.open(); pg=d.new_page(width=1320,height=2868)
-    pg.draw_rect(pg.rect,fill=(0,0,0),color=None)
-    pg.draw_rect(pg.rect,fill=(1,1,1),color=None,radius=.125)
-    return pg.get_pixmap(colorspace=fitz.csGRAY).tobytes('png')
-MASK=rounded_mask()
 class P:
     def __init__(s,W,H,bleed):
         s.W,s.H,s.bleed=W,H,bleed
@@ -28,7 +22,7 @@ class P:
         for i in range(8,0,-1):
             e=w*.012*i
             s.rect(x-b-e*.5,y-b+e*.7,w+2*b+e,h+2*b+e*.6,(0,0,0),radius=.15,opacity=.022)
-        s.page.insert_image(fitz.Rect(x*MM,y*MM,(x+w)*MM,(y+h)*MM),filename=shots+'/'+shot+'.png',mask=MASK)
+        s.page.insert_image(fitz.Rect(x*MM,y*MM,(x+w)*MM,(y+h)*MM),filename=shots+'/'+shot+'.png')
         sh=s.page.new_shape()
         sh.draw_rect(fitz.Rect((x-b)*MM,(y-b)*MM,(x+w+b)*MM,(y+h+b)*MM),radius=.155)
         sh.draw_rect(fitz.Rect(x*MM,y*MM,(x+w)*MM,(y+h)*MM),radius=.125)
