@@ -367,7 +367,8 @@ ayrı commit ve push yapılır.
 | Push | `Core/Session/PushService.swift` (Firebase Messaging) | `core/Push.kt` |
 | Konum | `Core/Session/LocationService.swift` | `core/Location.kt` |
 | Yerel hatırlatma | `Core/Session/ReminderScheduler.swift` (etkinlikten 15 dk önce) | `core/Reminders.kt` |
-| Widget | `EylulWidget/PlanWidget.swift` + `Shared/PlanSnapshot.swift` + `Core/Session/PlanWidgetSync.swift` | `core/PlanTracking.kt` + `res/xml/plan_widget_info.xml` (ayrıca yalnızca Android'de "Program takibi" süreli bildirimi) |
+| Widget | `EylulWidget/PlanWidget.swift` + `Shared/PlanSnapshot.swift` + `Core/Session/PlanWidgetSync.swift` | `core/PlanTracking.kt` + `res/xml/plan_widget_info.xml` |
+| Canlı etkinlik (etkinlikten 1 saat önce, geri sayım, "Kapat") | Live Activity + Dynamic Island: `EylulWidget/PlanLiveActivity.swift`, `Shared/PlanActivity.swift`, `PlanWidgetSync.syncLiveActivity` (uygulama açıkken başlar; etkinlik başına bir kez) | "Program takibi" bildirimi (Android 16'da durum çubuğunda canlı): `core/PlanTracking.kt`, "Kapat" düğmesi |
 | Kısayollar | `Config/Info.plist › UIApplicationShortcutItems` | `res/xml/shortcuts.xml` |
 
 - **Yoklama:**
@@ -650,7 +651,7 @@ View'una taşındı: 12 temiz açılışta 0 çökme. Mağazadaki 1.3 etkilenir,
 **Uygulama tarafı:**
 - **Farklar (bilinçli):**
   - Android'de Apple girişi yok;
-  - Android'de "Program takibi" süreli bildirimi var, iOS'ta yok;
+  - canlı etkinlik: iOS'ta Live Activity yalnızca uygulama açıkken başlar (sunucu bildirimi olmadan iOS izin vermez), Android'de alarmla kendiliğinden;
   - harita: iOS MapKit, Android MapLibre;
   - QR okuyucu: iOS kendi kamera ekranı, Android Google Code Scanner.
 - **Farklar (bilinçsiz):**
