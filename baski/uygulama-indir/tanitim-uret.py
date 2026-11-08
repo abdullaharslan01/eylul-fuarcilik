@@ -25,7 +25,8 @@ class P:
         s.page.insert_image(fitz.Rect(x*MM,y*MM,(x+w)*MM,(y+h)*MM),filename=shots+'/'+shot+'.png')
         sh=s.page.new_shape()
         sh.draw_rect(fitz.Rect((x-b)*MM,(y-b)*MM,(x+w+b)*MM,(y+h+b)*MM),radius=.155)
-        sh.draw_rect(fitz.Rect(x*MM,y*MM,(x+w)*MM,(y+h)*MM),radius=.125)
+        i=w*.004
+        sh.draw_rect(fitz.Rect((x+i)*MM,(y+i)*MM,(x+w-i)*MM,(y+h-i)*MM),radius=.125)
         sh.finish(color=None,fill=ink,even_odd=True,width=0); sh.commit()
     def qr(s,x,y,card):
         s.rect(x,y,card,card,(1,1,1),radius=.06)

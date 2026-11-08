@@ -1,6 +1,7 @@
-# Girişteki "uygulamayı indir" posterleri: 6 tasarım, A3 (297×420 mm, 3 mm taşma; A1/A0 ve 70×100'e ölçeklenir).
+# Girişteki "uygulamayı indir" posterleri: 10 tasarım, A3 (297×420 mm, 3 mm taşma; A1/A0 ve 70×100'e ölçeklenir).
 # Kullanım: python poster-uret.py <kök> <ekran-klasörü> <çıktı-klasörü>
-# Ekran klasörü: home, program, event, author, map, plan, gifts .png (1320×2868, yalnızca demo veri).
+# Ekran klasörü: home, program, event, author, map, plan, gifts .png (1320×2868, yalnızca demo veri), köşeleri
+# yuvarlatılmış ve şeffaf (RGB + alfa). Ayrı maske verilmez: Apple Önizleme maskeli görseli çizmiyor.
 import fitz, segno, sys
 root, shots, out = sys.argv[1:4]
 MM = 72/25.4
@@ -35,7 +36,8 @@ class P:
         s.page.insert_image(fitz.Rect(x*MM, y*MM, (x+w)*MM, (y+h)*MM), filename=f'{shots}/{shot}.png')
         sh = s.page.new_shape()
         sh.draw_rect(fitz.Rect((x-b)*MM, (y-b)*MM, (x+w+b)*MM, (y+h+b)*MM), radius=.155)
-        sh.draw_rect(fitz.Rect(x*MM, y*MM, (x+w)*MM, (y+h)*MM), radius=.125)
+        i = w*.004  # çerçeve ekranın kenarına biraz biner, arada boşluk kalmaz
+        sh.draw_rect(fitz.Rect((x+i)*MM, (y+i)*MM, (x+w-i)*MM, (y+h-i)*MM), radius=.125)
         sh.finish(color=None, fill=frame, even_odd=True, width=0); sh.commit()
         return h
     def qr(s, x, y, card, bg=(1,1,1)):
