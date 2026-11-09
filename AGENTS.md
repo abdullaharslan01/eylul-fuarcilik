@@ -37,8 +37,9 @@
 - **Temel ilke: her şey panelden yönetilir.** Panelde yapılan değişiklik uygulamalarda yaklaşık 1 dakika içinde görünür.
   Uygulamada sabit içerik ya da sunucusuz/demo mod yoktur. Ağ yoksa yalnızca son indirilen kopya gösterilir.
 - Ölçek hedefi: fuar başına günde 100 bin – 700 bin ziyaretçi. Saatler her zaman fuar saatiyle (Europe/Istanbul).
-- **Canlı:** API ve tanıtım sayfası `https://fuar.bulbi.co`; panel `https://panel.fuar.bulbi.co/panel/` (ana adresteki
-  `/panel` oraya yönlenir; kurulum `deploy/aws/panel-domain.sh`, kendi CloudFront'u ve sertifikası). Uygulamalar mağazada **1.3** (iOS build 12,
+- **Canlı:** API ve tanıtım sayfası `https://fuar.bulbi.co` (orada `/panel` yok, 404); panel organizasyonun kendi alt
+  adresinde: `https://eylulfuarcilik.panel.bulbi.co` (`*.panel.bulbi.co`: joker sertifika, kendi CloudFront'u, ALB kuralı;
+  `deploy/aws/panel-domain.sh`). Yeni organizasyon: `deploy/aws/config.env › PANEL_HOSTS`'a ad + push; tanımsız ad 404. Uygulamalar mağazada **1.3** (iOS build 12,
   Android versionCode 7; ikisi de 30–31 Ekim 2026'da yayına alındı).
 - **Fuarlar:**
   - `ankara-2026`: 24. Ankara Kitap Fuarı, ATO Congresium, 4–13 Aralık. Kaynak `backend/seed/catalog.json`: program, SSS ve
