@@ -220,7 +220,7 @@ ayrı commit ve push yapılır.
 - `GET /v1/staff/fairs/:id/gift-list?status=&q=&giftId=`, `POST .../gift-list/notify {status, giftId}`: Teslimat (Tümü / Teslim edildi / Bekliyor; hediyeye göre süzülür), panelle aynı liste; süre sınırı yok.
 - `GET /v1/staff/fairs/:id/scans?q=` (Okutmalar, aramalı), `GET .../visitors/:visitorId/log` (kişinin kaydı: kim okuttu, aldığı / teslim edilen / geri alınan / iptal edilen hediyeler ve kimin yaptığı, görev puanları), `GET .../me/stats` (Profil: bugün ve fuar boyunca okuttuğu QR, kişi, teslim ettiği hediye).
 - Teslim bildirimi toplu gider: teslim `delivery_notices`'e yazılır, son teslimden 60 sn (ilkinden en çok 2 dk) sonra worker kişiye tek bildirim ve tek SMS gönderir (`claims.js › notifyDelivered / flushDeliveryNotices`); arada geri alınan yazılmaz.
-- Kroki koridoru: `venueMap.standGap` (panel › Kroki › Koridor): uygulamaya giden krokide stantlar her yandan yarısı kadar daralır (`catalog.js › withCorridors`); panel asıl ölçüleri görür.
+- Kroki koridoru (`catalog.js › withCorridors`, panelde aynısı `MapEditor.jsx`): uygulamaya giden krokide aynı sıradaki yan yana stantlar (aralık ≤ 10) kısa kenarlarından birleşir; `venueMap.standGap` (panel › Kroki › Koridor) sıralar arasını ve sıra uçlarını açar. Panel asıl ölçüleri kaydeder.
 - Taslak fuar her yerde 404 döner.
 
 **Giriş ve hesap (`auth`):**
