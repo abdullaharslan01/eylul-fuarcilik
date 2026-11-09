@@ -210,7 +210,10 @@ ayrı commit ve push yapılır.
 - `GET /q/:kod`: uygulamayı ya da mağazayı açan sayfa.
 - `GET /indir`: baskıdaki QR'ın adresi, **hiç değişmez** (`baski/uygulama-indir/`). iPhone/iPad App Store'a, Android Google Play'e 302; öteki cihazlar iki bağlantı. Mağaza adresi panelde Uygulama güncellemesi'nden.
 - `POST /v1/me/phone/otp`: kendi numarası `phone_unchanged`, başkasının `phone_in_use` (409); kod gitmez.
-- `GET /v1/staff/fairs/:id/gift-list?status=&q=`, `POST .../gift-list/notify`: Kazananlar (Kazanan / Alan / Almayan), panelle aynı liste; görevli bildirimi fuar başına 5 dakikada bir.
+- `GET /v1/staff/fairs/:id/gift-list?status=&q=&giftId=`, `POST .../gift-list/notify {status, giftId}`: Teslimat (Tümü / Teslim edildi / Bekliyor; hediyeye göre süzülür), panelle aynı liste; süre sınırı yok.
+- `GET /v1/staff/fairs/:id/scans?q=` (Okutmalar, aramalı), `GET .../visitors/:visitorId/log` (kişinin kaydı: kim okuttu, aldığı / teslim edilen / geri alınan / iptal edilen hediyeler ve kimin yaptığı, görev puanları), `GET .../me/stats` (Profil: bugün ve fuar boyunca okuttuğu QR, kişi, teslim ettiği hediye).
+- Teslim bildirimi toplu gider: teslim `delivery_notices`'e yazılır, son teslimden 60 sn (ilkinden en çok 2 dk) sonra worker kişiye tek bildirim ve tek SMS gönderir (`claims.js › notifyDelivered / flushDeliveryNotices`); arada geri alınan yazılmaz.
+- Kroki koridoru: `venueMap.standGap` (panel › Kroki › Koridor): uygulamaya giden krokide stantlar her yandan yarısı kadar daralır (`catalog.js › withCorridors`); panel asıl ölçüleri görür.
 - Taslak fuar her yerde 404 döner.
 
 **Giriş ve hesap (`auth`):**
