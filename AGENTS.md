@@ -37,7 +37,8 @@
 - **Temel ilke: her şey panelden yönetilir.** Panelde yapılan değişiklik uygulamalarda yaklaşık 1 dakika içinde görünür.
   Uygulamada sabit içerik ya da sunucusuz/demo mod yoktur. Ağ yoksa yalnızca son indirilen kopya gösterilir.
 - Ölçek hedefi: fuar başına günde 100 bin – 700 bin ziyaretçi. Saatler her zaman fuar saatiyle (Europe/Istanbul).
-- **Canlı:** API ve panel `https://fuar.bulbi.co` (panel `/panel/`). Uygulamalar mağazada **1.3** (iOS build 12,
+- **Canlı:** API ve tanıtım sayfası `https://fuar.bulbi.co`; panel `https://panel.fuar.bulbi.co/panel/` (ana adresteki
+  `/panel` oraya yönlenir; kurulum `deploy/aws/panel-domain.sh`, kendi CloudFront'u ve sertifikası). Uygulamalar mağazada **1.3** (iOS build 12,
   Android versionCode 7; ikisi de 30–31 Ekim 2026'da yayına alındı).
 - **Fuarlar:**
   - `ankara-2026`: 24. Ankara Kitap Fuarı, ATO Congresium, 4–13 Aralık. Kaynak `backend/seed/catalog.json`: program, SSS ve
@@ -66,6 +67,11 @@ ayrı commit ve push yapılır.
 - Kökteki `legal/*.html` canlıda `https://fuar.bulbi.co/uploads/legal/…` adresinden sunulur (S3:
   `s3://bulbi-eylul-uploads/uploads/legal/`). Repo gizli olduğu için GitHub Pages kullanılmaz. Değiştirirsen S3'e
   yeniden yükle.
+- Tanıtım sayfası (uygulama tanıtımı, mağaza düğmeleri) backend `site/`: kök adres `/` `site/index.html`'i verir
+  (admin rolü; ALB'de `/` admin'e gider), görseller `/site/*` (public ve admin). Ekranlar iOS mağaza görüntülerinden
+  kırpılmış webp (`site/img/`). Özellikler bölümündeki telefon gerçek 3B (`site/phone3d.js`, three.js `site/vendor/`'da;
+  WebGL yoksa CSS telefon kalır). Başlık yazısı Lora (uygulamanınki). Sayfada panel bağlantısı yok (bilerek).
+  Değişince backend `main` deploy'u ile canlıya gider.
 
 ---
 
