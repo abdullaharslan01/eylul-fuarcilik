@@ -180,7 +180,7 @@ ayrı commit ve push yapılır.
 | `src/auth.js` | Ziyaretçi tokeni (HMAC), telefon biçimi, dakikada bir değişen hediye QR kodu, mesafe |
 | `src/adminUsers.js` | Panel kullanıcıları (scrypt), 12 saatlik token |
 | `src/otp.js` | SMS kodu: 6 hane, 5 deneme, yeniden gönderme 60 sn, saatte 5 |
-| `src/sms.js` | SMS gönderiminin sağlayıcıya bağlı kısmı (`log` / `mobildev` / `netgsm` / `none`): organizasyonun iki hesabı (MobilDev, Netgsm; panel › Organizasyonlar › SMS'te aktif olan seçilir, `POST /companies/:id/sms/test` servisin hata kodunu gösterir; Netgsm OTP Türkçe karaktersiz, dakikada 100) ve `{OTP}` şablonu, yoksa Bulbi'ninki. `SMS_PROVIDER=log` iken gerçek SMS hiç gitmez |
+| `src/sms.js` | SMS gönderiminin sağlayıcıya bağlı kısmı (`log` / `mobildev` / `netgsm` / `none`): organizasyonun iki hesabı (MobilDev, Netgsm; panel › Organizasyonlar › SMS'te aktif olan seçilir, `POST /companies/:id/sms/test` servisin hata kodunu gösterir; Netgsm OTP Türkçe karaktersiz, dakikada 100) ve `{OTP}` şablonu, yoksa Bulbi'ninki. **B planı:** organizasyonun hesabı gönderemezse (Netgsm hata kodu, paket bitti, 5 sn cevap yok) aynı metin bir kez Bulbi'nin MobilDev hesabıyla gider; geçersiz numarada (Netgsm 50) denenmez. Her deneme `sms_sends`'e yazılır (hesap `netgsm`/`mobildev`/`bulbi`, tür `otp`/`text`/`test`, gitti mi); panelde SMS penceresinde "Giden SMS" (`GET /companies/:id/sms/stats`, S). `SMS_PROVIDER=log` iken gerçek SMS hiç gitmez |
 | `src/identity.js` | Apple ve Google kimlik tokeni doğrulama |
 | `src/push.js` | Firebase Cloud Messaging. Konular `fair-<fuar>`, `event-<fuar>-<etkinlik>`, `visitor-<id>`; başlarına `PUSH_TOPIC_PREFIX` eklenir |
 | `src/deletion.js` | Hesap silme: hesap hemen kapanır, 30 gün sonra temizlenir; aynı kimliğin yeniden hediye toplamasını engelleyen kayıt kalır |
@@ -254,7 +254,7 @@ ayrı commit ve push yapılır.
 | Toplu kayıt | `POST /fairs/:id/batch {put:[{collection,item}], remove, singletons}`: tek işlemde (kroki editörü bunu kullanır) |
 | Tekil kayıtlar | `GET` / `PUT /fairs/:id/venue-map, gift-campaign, legal, event-kinds, facility-kinds` |
 | Kütüphane | `/library/publishers, authors, books`: her organizasyonun kendi kütüphanesi; süper kullanıcı `X-Fair-Id` göndermeli |
-| Organizasyon | `/companies` (S), `PUT /companies/:id/brand` (logo, renk, **about** = Hakkımızda metni, telefon, e-posta, web, adres; S), `PUT /companies/:id/legal` (S), `GET` / `PUT /companies/:id/sms` (S) |
+| Organizasyon | `/companies` (S), `PUT /companies/:id/brand` (logo, renk, **about** = Hakkımızda metni, telefon, e-posta, web, adres; S), `PUT /companies/:id/legal` (S), `GET` / `PUT /companies/:id/sms`, `GET /companies/:id/sms/stats` (S) |
 | Genel ayarlar | `/global-banners`, `/app-update` (zorunlu / önerilen güncelleme), `/app-info` ("Bulbi tarafından yapılmıştır" satırı), `/settings/review-account` (mağaza inceleme hesabı, S), `/scaling` (S) |
 | Bildirim | `POST /fairs/:id/notices/:nid/push`, `POST /fairs/:id/events/:eid/push`, `POST /fairs/:id/contest/notify`, `GET /fairs/:id/push-log` |
 | Kişiler | `GET /visitors` (süzgeçli), `GET /visitors/:id`, `DELETE /visitors/:id` (S), `GET /deletions` (S) |
@@ -315,7 +315,7 @@ ayrı commit ve push yapılır.
 | Panel | `companies` (organizasyon: marka, yasal metinler, SMS ayarı), `admin_users` |
 | Fuar ve içerik | `fairs` (`data` jsonb), `items` (fuarın koleksiyonları jsonb; tekil kayıtlar `id='main'`), `library` (her organizasyonun yayınevi / yazar / kitabı), `settings` |
 | Ziyaretçi | `visitors` (tek hesap, bütün fuarlar; `marketing_consent_at`, `explicit_consent_at`, `deletion_requested_at`), `visitor_fairs` (fuara katılım = o fuarın KVKK onayı) |
-| SMS | `otp_codes`, `otp_sends` |
+| SMS | `otp_codes`, `otp_sends`, `sms_sends` (giden her SMS; açılışta kurulur) |
 | Yarışma | `task_codes` (gizli QR → görev + yayınevi), `task_scans` (aynı okutmanın iki kez yazılmasını birincil anahtar engeller), `fair_players` (puan özeti), `gift_claims`, `gift_usage`, `gift_events` |
 | Görevli | `staff`, `staff_scans` |
 | Diğer | `push_log`, `device_days`, `blocked_identities`, `account_deletions` |
