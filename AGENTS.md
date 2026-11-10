@@ -301,6 +301,11 @@ ayrı commit ve push yapılır.
     edilen. Geri alma iki adım: teslimi kaldırır, sonra iptal edip puan ve stoğu döndürür. Stok alınan adetin altına inemez
     (panel ve görevli). Hesap silinince teslim alınmamış hediyeler stoğa döner. Teslimde kişiye bildirim, ticari ileti izni
     varsa SMS gider (`notifyDelivered`). Yük testi: 100 kişi, 300 eşzamanlı istek, 25 stok: tam 25 kişi aldı.
+  - **Kişi başı sınır (10 Kasım):** hediyede `perPersonLimit` (panel › Hediyeler › "Kişi başı en fazla", boşsa 1). Her
+    hediye kişi başı bir kez alınır; sınır 1'den büyükse ve puan/stok yetiyorsa uygulama "Kaç adet alacaksın?" sorar
+    (iOS sayfa, Android iletişim kutusu) ve `take`'e `{ quantity }` gider; puan ve stok adet kadar düşer, iptal hepsini
+    döndürür (`gift_claims.quantity`). Listelerde "Hediye × 2". Eski sürümler adet göndermez: 1. Hediye sayfasında
+    "Kişi başı en fazla N adet alınır".
 - `appUpdate` ve `appInfo` bütün fuarlarda aynıdır (`settings` tablosu).
 
 ### 5.5 Veri modeli (`db/schema.sql`)
