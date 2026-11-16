@@ -221,6 +221,10 @@ ayrı commit ve push yapılır.
 - `GET /v1/staff/fairs/:id/scans?q=` (Okutmalar, aramalı), `GET .../visitors/:visitorId/log` (kişinin kaydı: kim okuttu, aldığı / teslim edilen / geri alınan / iptal edilen hediyeler ve kimin yaptığı, görev puanları), `GET .../me/stats` (Profil: bugün ve fuar boyunca okuttuğu QR, kişi, teslim ettiği hediye).
 - Teslim bildirimi toplu gider: teslim `delivery_notices`'e yazılır, son teslimden 60 sn (ilkinden en çok 2 dk) sonra worker kişiye tek bildirim ve tek SMS gönderir (`claims.js › notifyDelivered / flushDeliveryNotices`); arada geri alınan yazılmaz.
 - Kroki koridoru (`catalog.js › withCorridors`, panelde aynısı `MapEditor.jsx`): uygulamaya giden krokide aynı sıradaki yan yana stantlar (aralık ≤ 10) kısa kenarlarından birleşir; `venueMap.standGap` (panel › Kroki › Koridor) sıralar arasını ve sıra uçlarını açar. Panel asıl ölçüleri kaydeder.
+- Stant numarası (panel): yayınevi formunda harf (A–Z açılır liste, son seçilen tarayıcıda hatırlanır) + numara, ör. `A-21`. Krokide
+  olmayan numara da girilir; yayınevinin krokideki standı varsa o stant yeni numarayı alır (kroki ile `publisher.stand` hep aynı).
+  Krokide olmayan numaralı yayınevi Kroki'de "yerleşmemiş" görünür; haritaya bırakılınca stant o numarayla açılır, kroki kaydı
+  bu numarayı silmez. Kroki › stant paneli › "Bütün stantları bu boyda yap": seçili stantın ölçüsü hepsine, her biri kendi ortasında.
 - Taslak fuar her yerde 404 döner.
 
 **Giriş ve hesap (`auth`):**
@@ -346,7 +350,7 @@ ayrı commit ve push yapılır.
   | `content.jsx` | Yayınevleri (ana sayfa seçimi), yazarlar, kitaplar, duyurular, hizmet türleri |
   | `Banners.jsx` | Fuar bannerları ve genel bannerlar |
   | `MapEditor.jsx` | Kroki: stantlar, alanlar, şekiller, tesisler (`/batch` ile kaydeder) |
-  | `Contest.jsx` | Görevler (QR PNG / PDF, okutma konumu, bir telefon bir hesap), Hediyeler, Katılımcılar (sıralama, Excel, bildirim), Görevliler (`Staff.jsx`) |
+  | `Contest.jsx` | Görevler (QR PNG / PDF, okutma konumu, bir telefon bir hesap), Hediyeler, Katılımcılar (sıralama, süzgeç: hediye aldı / teslim bekliyor / almadı ve okuttuğu görev — `GET /contest?gift=&taskId=`, Excel süzülmüş listeyi indirir; kişiye tıklayınca yazdıkları, hediyeleri, teslim), Görevliler (`Staff.jsx`). Ayrı Teslimat, Hediye kayıtları, Görev yanıtları sekmeleri yok (API uçları duruyor) |
   | `FairSettings.jsx` | Sekmeler: Genel, Görünüm (logo, renk, Hakkımızda ve iletişim, fuar kartı), Bölümler ve adlar, **Sık sorulan sorular**, Giriş ekranı, **Sözleşmeler** (dört metin), Yedek. Sağda canlı telefon önizlemesi (`components/PhonePreview.jsx`) |
   | `Companies.jsx` | Organizasyon: marka, Hakkımızda ve iletişim, dört yasal metin, SMS ayarı |
   | `MarketingConsents.jsx` | Kişiler: süzgeç, kişi kartı, Excel |
