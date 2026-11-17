@@ -225,6 +225,14 @@ ayrı commit ve push yapılır.
   olmayan numara da girilir; yayınevinin krokideki standı varsa o stant yeni numarayı alır (kroki ile `publisher.stand` hep aynı).
   Krokide olmayan numaralı yayınevi Kroki'de "yerleşmemiş" görünür; haritaya bırakılınca stant o numarayla açılır, kroki kaydı
   bu numarayı silmez. Kroki › stant paneli › "Bütün stantları bu boyda yap": seçili stantın ölçüsü hepsine, her biri kendi ortasında.
+- Stant numarasını uygulamada gizleme: panelin üst çubuğundaki ayarlar düğmesi (organizasyonun bütün fuarları,
+  `company_settings.data.hideStandNumbers`, `PUT /v1/admin/fairs/:id/company-settings`) hepsini gizler; açıkken yayınevi
+  formundaki "Stant numarası uygulamada görünsün" (`publisher` fuar kaydı `standHidden`) tek tek gizler. Numara panelde ve
+  veritabanında kalır, değiştirilebilir. Katalog (`catalog.js › #load`) gizli numarayı `stand` yerine `hiddenStand` ile
+  gönderir: mağazadaki eski sürümler (2.1 ve öncesi) "Stant —" yazar, "Krokide gör" düğmesi çıkmaz; krokide sahibi
+  `venueMap.stands[].publisherID` ile bulunur (logolar yerinde). Eski sürüm krokide boş stantların ve dokunulan stantın
+  numarasını yine gösterir. Yeni sürümler `hiddenStand`ı `stand`a koyup (`FairStore.apply`) numarayı hiçbir yerde yazmaz,
+  kroki ve "Krokide gör" çalışır (`Publisher.showsStand`, kutularda iOS `standCaption` / Android `StandCaption`).
 - Taslak fuar her yerde 404 döner.
 
 **Giriş ve hesap (`auth`):**
