@@ -39,8 +39,9 @@
 - Ölçek hedefi: fuar başına günde 100 bin – 700 bin ziyaretçi. Saatler her zaman fuar saatiyle (Europe/Istanbul).
 - **Canlı:** API ve tanıtım sayfası `https://fuar.bulbi.co` (orada `/panel` yok, 404); panel organizasyonun kendi alt
   adresinde: `https://eylulfuarcilik.panel.bulbi.co` (`*.panel.bulbi.co`: joker sertifika, kendi CloudFront'u, ALB kuralı;
-  `deploy/aws/panel-domain.sh`). Yeni organizasyon: `deploy/aws/config.env › PANEL_HOSTS`'a ad + push; tanımsız ad 404. Uygulamalar mağazada **2.0** (iOS build 25, Android versionCode 19). **2.1** (iOS build 26,
-  Android versionCode 20) 16 Kasım 2026'da iki mağazada incelemeye gönderildi; onaydan sonra elle yayınlanacak.
+  `deploy/aws/panel-domain.sh`). Yeni organizasyon: `deploy/aws/config.env › PANEL_HOSTS`'a ad + push; tanımsız ad 404. Uygulamalar mağazada **2.1** (iOS build 26, Android versionCode 20; 17 Kasım 2026'da yayınlandı). **2.2** (iOS build 27,
+  Android versionCode 21: stant numarası gizliyken "Stant" satırları kalkar) 17 Kasım 2026'da iki mağazada incelemeye
+  gönderildi; onaydan sonra elle yayınlanacak.
 - **Fuarlar:**
   - `ankara-2026`: 24. Ankara Kitap Fuarı, ATO Congresium, 4–13 Aralık. Kaynak `backend/seed/catalog.json`: program, SSS ve
     iletişim ankarakitapfuari.org.tr'den (6 Kasım); `scripts/fuar-yukle.mjs` sunucuya yükler ve eski demoyu temizler
@@ -438,7 +439,7 @@ ayrı commit ve push yapılır.
   - `API_BASE_URL` Debug ve Release'de `https://fuar.bulbi.co`.
   - "API adresi" build phase'i, Release'de adres boşsa derlemeyi durdurur.
   - `PUSH_TOPIC_PREFIX` Debug'da `test-`, Release'de boş.
-  - Sürüm: `MARKETING_VERSION 2.1`, `CURRENT_PROJECT_VERSION 26`. **Sonraki yükleme build 27.**
+  - Sürüm: `MARKETING_VERSION 2.2`, `CURRENT_PROJECT_VERSION 27`. **Sonraki yükleme build 28.**
 - **Mağaza yüklemesi:**
   - `xcodebuild archive`, ardından `xcodebuild -exportArchive` (ExportOptions: app-store-connect, destination upload,
     team `Q47SYK6PMC`).
@@ -471,7 +472,7 @@ ayrı commit ve push yapılır.
   - `gradle.properties › apiBaseUrl=https://fuar.bulbi.co` (`BuildConfig.API_BASE_URL`). Adres boşsa **release**
     derlemesi durur; debug durmaz.
   - İmza `android/signing/` klasöründen gelir (repoda yok, yalnızca bu Mac'te; yükleme anahtarı).
-  - Sürüm: `versionName 2.1`, `versionCode 20`. **Sonraki yükleme versionCode 21.**
+  - Sürüm: `versionName 2.2`, `versionCode 21`. **Sonraki yükleme versionCode 22.**
   - Play'e AAB yüklenir. Tarayıcıdan yüklemede 10 MB sınırı var: büyük paket parçalanıp sayfada birleştirilir.
 - Yerel docker'a karşı derleme (emülatör):
   ```bash
