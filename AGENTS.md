@@ -41,7 +41,7 @@
   adresinde: `https://eylulfuarcilik.panel.bulbi.co` (`*.panel.bulbi.co`: joker sertifika, kendi CloudFront'u, ALB kuralı;
   `deploy/aws/panel-domain.sh`). Yeni organizasyon: `deploy/aws/config.env › PANEL_HOSTS`'a ad + push; tanımsız ad 404. Uygulamalar mağazada **2.1** (iOS build 26, Android versionCode 20; 17 Kasım 2026'da yayınlandı). **2.2** (iOS build 27,
   Android versionCode 21: stant numarası gizliyken "Stant" satırları kalkar) 17 Kasım 2026'da iki mağazada incelemeye
-  gönderildi; Android 18 Kasım'da yayınlandı, iOS onaydan sonra elle yayınlanacak.
+  gönderildi; ikisi de yayında (Android 18 Kasım; iOS 19 Kasım itibarıyla Ready for Distribution).
 - **Fuarlar:**
   - `ankara-2026`: 24. Ankara Kitap Fuarı, ATO Congresium, 4–13 Aralık. Kaynak `backend/seed/catalog.json`: program, SSS ve
     iletişim ankarakitapfuari.org.tr'den (6 Kasım); `scripts/fuar-yukle.mjs` sunucuya yükler ve eski demoyu temizler
