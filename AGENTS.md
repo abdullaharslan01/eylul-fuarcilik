@@ -226,8 +226,9 @@ ayrı commit ve push yapılır.
   olmayan numara da girilir; yayınevinin krokideki standı varsa o stant yeni numarayı alır (kroki ile `publisher.stand` hep aynı).
   Krokide olmayan numaralı yayınevi Kroki'de "yerleşmemiş" görünür; haritaya bırakılınca stant o numarayla açılır, kroki kaydı
   bu numarayı silmez. Kroki › stant paneli › "Bütün stantları bu boyda yap": seçili stantın ölçüsü hepsine, her biri kendi ortasında.
-- Hediyeleri uygulamada gizleme (`fair.hideGifts`): Hediyeler sayfasının sağ üstündeki "Uygulamada göster" ya da Fuar ayarları ›
-  Görünüm › Hazırlanıyor ekranları. Katalog (`catalog.js › #load`) yarışmayı uygulamalara kapalı gönderir (`modules.contest`
+- Hediyeler uygulamada: Hediyeler sayfasının sağ üstünde Açık / Yakında ekranı (`fair.hideGifts`; Fuar ayarları › Görünüm ›
+  Hazırlanıyor ekranları'nda da) / Kapalı (`fair.removeGifts`: sekme her sürümde kalkar, ekran yok; hideGifts'ten önce gelir).
+  Yakında ekranı: Katalog (`catalog.js › #load`) yarışmayı uygulamalara kapalı gönderir (`modules.contest`
   false; sunucu okutmayı da `contest_disabled` ile reddeder), `giftsOff` boşsa "Hediyeler en kısa zamanda açılacak" yazar.
   Mağazadaki 2.2 ve öncesi Hediyeler sekmesini tamamen kaldırır; yeni sürümler (`Fair.shows`: `hasContest || hideGifts`)
   sekmeyi tutup bu ekranı gösterir. Panel ve görevli teslimi çalışmaya devam eder.
