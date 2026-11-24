@@ -70,7 +70,7 @@ iOS sürümleri: **17, 18, 26, 27** (simülatör; 18 indirilemiyorsa raporda yaz
 | C6 | Program: gün, tür süzgeci, "şimdi" çizgisine kaydırma, canlı / iptal / saat değişti etiketleri | `eylulrehber://program` + `eylul.now` |
 | C7 | Etkinlik, yayınevi, yazar, kitap sayfaları (uzun ad / başlık) | `eylulrehber://event/<id>`, `publisher/`, `author/`, `book/` |
 | C8 | Arama (sayılar "1.508" biçiminde, sonuç yok durumu) | `eylulrehber://search` |
-| C9 | Kroki: bütün plan görünür, yayınevi adları stantların içinde, yakınlaşıp uzaklaşınca ad kaybolmaz; dokununca seçim ve yakınlaşma; boş stant; tesis simgeleri (iOS 17'de WC) | `eylulrehber://map` |
+| C9 | Kroki: bütün plan görünür, yayınevi adları stantların içinde, yakınlaşıp uzaklaşınca ad kaybolmaz; dokununca seçim ve yakınlaşma; boş stant; tesis simgeleri (iOS 17'de WC), en uzakta küçük, yakınlaşınca büyür | `eylulrehber://map` |
 | C10b | QR okutma beklerken kitap sayfası çevrilir; yazı "QR okunuyor" → 2 sn "Puanın işleniyor" → 5 sn sonra "Fuar şu an çok kalabalık" ve açıklama; "Vazgeç" kapatır. Sunucu 5xx verirse kişi hata görmeden 3 kez yeniden denenir | yavaş sunucu (ör. canlı yük testi sırasında) |
 | C9b2 | Krokideki aramada yalnızca yayınevleri çıkar; yayınevine dokununca stantı krokide seçili ve ortalanmış açılır (detay değil); geri aramaya döner. İki parmakla istenen noktaya yakınlaşılır, en yakında yazılar net (normal ve tam ekran) | `eylulrehber://map` |
 | C9e | Krokide salonun zemini boyalı: stantların arası yol olarak seçilir (açık ve koyu), panelde de aynı renk | `eylulrehber://map` |
@@ -81,7 +81,7 @@ iOS sürümleri: **17, 18, 26, 27** (simülatör; 18 indirilemiyorsa raporda yaz
 | C9b | Takvimde etkinliksiz gün: çip yok, ortada yer tutucu; ⓘ'ye iki kez basınca tek sayfa | `eylul.now 2026-12-07T13:42:00+03:00` |
 | C10 | Duyurular ve duyuru sayfası | `eylulrehber://notices` |
 | C11 | Planım (boş ve dolu), çakışma uyarısı | `eylulrehber://plan` |
-| C12 | Hediyeler (girişsiz, girişli, yarışma kapalı) | `eylulrehber://gifts` |
+| C12 | Hediyeler (girişsiz, girişli, yarışma kapalı); panelde Hediyeler › Uygulamada: Açık / Yakında ("Hediyeler en kısa zamanda açılacak") / Kapalı (sekme yok). Hediye alma yeri doluysa ekranda kart, "Hediyeyi alıyor musun?" metninde o yer; boşsa kart yok, "Danışma" | `eylulrehber://gifts` |
 | C13 | Giriş ekranı (KVKK + Kullanıcı Sözleşmesi kutusu, Apple / Google / telefon) | `-eylul.page signin` |
 | C14 | Yan menü, Hakkımızda ve iletişim, Sözleşmeler ve Politikalar, Ayarlar (dil, görünüm, bildirim) | `-eylul.page menu\|about\|agreements\|settings` |
 | C15 | Hata ekranı ("Fuar bilgisi yüklenemedi") | sunucu kapalıyken / bozuk fuar |

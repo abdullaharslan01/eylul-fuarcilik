@@ -41,7 +41,11 @@
   adresinde: `https://eylulfuarcilik.panel.bulbi.co` (`*.panel.bulbi.co`: joker sertifika, kendi CloudFront'u, ALB kuralı;
   `deploy/aws/panel-domain.sh`). Yeni organizasyon: `deploy/aws/config.env › PANEL_HOSTS`'a ad + push; tanımsız ad 404. Uygulamalar mağazada **2.1** (iOS build 26, Android versionCode 20; 17 Kasım 2026'da yayınlandı). **2.2** (iOS build 27,
   Android versionCode 21: stant numarası gizliyken "Stant" satırları kalkar) 17 Kasım 2026'da iki mağazada incelemeye
-  gönderildi; ikisi de yayında (Android 18 Kasım; iOS 19 Kasım itibarıyla Ready for Distribution).
+  gönderildi; ikisi de yayında (Android 18 Kasım; iOS 19 Kasım itibarıyla Ready for Distribution). **2.3** (iOS build 28,
+  Android versionCode 22: hediye alma yeri kartı, tesis simgeleri uzaklaştıkça küçülür, Hediyeler Yakında ekranı)
+  24 Kasım 2026'da iki mağazada incelemeye gönderildi; onaydan sonra yayınlama elle (kullanıcı onayıyla).
+  Play'in "android.hardware.screen.portrait gerekli" uyarısı 2.3'te bırakıldı; sonraki sürümde manifeste
+  `uses-feature … required="false"` eklenecek.
 - **Fuarlar:**
   - `ankara-2026`: 24. Ankara Kitap Fuarı, ATO Congresium, 4–13 Aralık. Kaynak `backend/seed/catalog.json`: program, SSS ve
     iletişim ankarakitapfuari.org.tr'den (6 Kasım); `scripts/fuar-yukle.mjs` sunucuya yükler ve eski demoyu temizler
@@ -325,6 +329,10 @@ ayrı commit ve push yapılır.
     (iOS sayfa, Android iletişim kutusu) ve `take`'e `{ quantity }` gider; puan ve stok adet kadar düşer, iptal hepsini
     döndürür (`gift_claims.quantity`). Listelerde "Hediye × 2". Eski sürümler adet göndermez: 1. Hediye sayfasında
     "Kişi başı en fazla N adet alınır".
+  - **Hediye alma yeri (24 Kasım):** `giftCampaign.pickupInfo {title ≤60, text ≤300}` (panel › Hediyeler üstünde
+    "Hediye alma yeri"). Doluysa Hediyeler ekranında kart (iOS `GiftsView › GiftPickupCard`, Android `GiftsScreens ›
+    GiftPickupCard`) ve "Hediyeyi alıyor musun?" metninde yer (`deliveryNote`, `pickupPlace`); boşsa kart yok, metin
+    "Danışma" der. Hediye QR'ı ve giriş ekranındaki "Danışma" yazıları henüz bu yere bağlı değil.
 - `appUpdate` ve `appInfo` bütün fuarlarda aynıdır (`settings` tablosu).
 
 ### 5.5 Veri modeli (`db/schema.sql`)
@@ -445,7 +453,7 @@ ayrı commit ve push yapılır.
   - `API_BASE_URL` Debug ve Release'de `https://fuar.bulbi.co`.
   - "API adresi" build phase'i, Release'de adres boşsa derlemeyi durdurur.
   - `PUSH_TOPIC_PREFIX` Debug'da `test-`, Release'de boş.
-  - Sürüm: `MARKETING_VERSION 2.2`, `CURRENT_PROJECT_VERSION 27`. **Sonraki yükleme build 28.**
+  - Sürüm: `MARKETING_VERSION 2.3`, `CURRENT_PROJECT_VERSION 28`. **Sonraki yükleme build 29.**
 - **Mağaza yüklemesi:**
   - `xcodebuild archive`, ardından `xcodebuild -exportArchive` (ExportOptions: app-store-connect, destination upload,
     team `Q47SYK6PMC`).
@@ -478,7 +486,7 @@ ayrı commit ve push yapılır.
   - `gradle.properties › apiBaseUrl=https://fuar.bulbi.co` (`BuildConfig.API_BASE_URL`). Adres boşsa **release**
     derlemesi durur; debug durmaz.
   - İmza `android/signing/` klasöründen gelir (repoda yok, yalnızca bu Mac'te; yükleme anahtarı).
-  - Sürüm: `versionName 2.2`, `versionCode 21`. **Sonraki yükleme versionCode 22.**
+  - Sürüm: `versionName 2.3`, `versionCode 22`. **Sonraki yükleme versionCode 23.**
   - Play'e AAB yüklenir. Tarayıcıdan yüklemede 10 MB sınırı var: büyük paket parçalanıp sayfada birleştirilir.
 - Yerel docker'a karşı derleme (emülatör):
   ```bash
@@ -507,7 +515,7 @@ iOS yolları `ios/EylulRehber/`'a, Android yolları `android/app/src/main/java/c
 | Program (gün, tür süzgeci, canlı, iptal / erteleme; arama kutusu listenin dışında, hep üstte; bugüne / başa kendiliğinden kaydırma yalnızca gün değişince, detaydan dönünce liste yerinde) | `Features/Program/ProgramView.swift`, `EventDetailView.swift` | `ui/program/ProgramScreen.kt`, `ProgramShared.kt`, `EventDetailScreen.kt` | `Events.jsx` | `events`, `eventKinds`, `liveStatus`, `update`, `fair.programMode` |
 | Program yöntemi (fuarın tamamı: Otomatik saate göre / Manuel her etkinlik "Başladı"–"Bitti" elle; manuelde başlatılmayan etkinlik gün bitince geçmiş) | `FairStore.status`, `StaffFieldView.swift` (Pano › Program) | `Stores.status`, `FieldTab.kt` | `Events.jsx` (üstte Program yöntemi) | `PUT /admin/fairs/:id/program-mode`, `PUT /v1/staff/fairs/:id/program-mode`; otomatiğe dönünce `liveStatus`'lar silinir; fuar kaydı `programMode`'u ezmez |
 | "Hazırlanıyor" ekranları (program / kroki yokken) | `GiftsOffView.swift › PlaceholderScreen` | `GiftsOffScreen.kt › PlaceholderScreen` | `FairSettings.jsx` (Görünüm › Hazırlanıyor ekranları) | `fair.programSoon`, `fair.mapSoon` (giftsOff biçimi) |
-| Kroki (stant planı, tesisler). Tek Canvas, stant başına ad stanta sığdırılır, yakınlığa göre gizlenmez; hareket yeniden çizim yapmaz (iOS `scaleEffect`+Equatable, Android `graphicsLayer`); yazı yerleşim formülü iki platformda aynı (`FloorStand.layout`) | `Features/Map/FloorPlanScreen.swift`, `FloorPlanCanvas.swift`, `FloorPlanViewport.swift` | `ui/map/MapScreens.kt` | `MapEditor.jsx` | `venueMap`, `facilities` |
+| Kroki (stant planı, tesisler). Tek Canvas, stant başına ad stanta sığdırılır, yakınlığa göre gizlenmez; hareket yeniden çizim yapmaz (iOS `scaleEffect`+Equatable, Android `graphicsLayer`); yazı yerleşim formülü iki platformda aynı (`FloorStand.layout`); tesis simgesi uzaklaştıkça küçülür (`min(24, max(10, ölçek × 24))`, iOS `FloorPlanViewport.pinSize`, Android `pinSize`) | `Features/Map/FloorPlanScreen.swift`, `FloorPlanCanvas.swift`, `FloorPlanViewport.swift` | `ui/map/MapScreens.kt` | `MapEditor.jsx` | `venueMap`, `facilities` |
 | Konuk ülke (afişli sade liste, detay sayfası, konuk = yazar) | `Features/Home/FairInfo.swift › EditionsView, EditionDetailView, ImageCarousel` | `ui/home/FairInfo.kt` | `FairSettings.jsx` (Konuk Ülke) | `fair.editions` (`guests`, `partners`, `gallery`) |
 | Duyurular ve bildirim | `Features/Notices/NoticesView.swift`, `NoticeDetailView.swift` | `ui/notices/NoticesScreens.kt` | `content.jsx` (duyurular), `components/PushButton.jsx` | `notices`, push `fair-<fuar>` |
 | Planım, hatırlatma, widget | `Features/Plan/PlanView.swift`, `Core/Session/ReminderScheduler.swift`, `PlanWidgetSync.swift`, `EylulWidget/` | `ui/plan/PlanScreen.kt`, `core/Reminders.kt`, `core/PlanTracking.kt` | — | cihazda |
