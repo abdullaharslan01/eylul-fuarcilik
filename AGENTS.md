@@ -493,7 +493,6 @@ iOS yolları `ios/EylulRehber/`'a, Android yolları `android/app/src/main/java/c
 |---|---|---|---|---|
 | Fuar seçimi, fuar değiştir | `Features/Account/FairPickerView.swift`, `Core/Data/FairDirectory.swift` | `ui/FairPicker.kt`, `core/Fairs.kt` | `Fairs.jsx` (durum: taslak / yayında) | `GET /v1/fairs?q=` |
 | Açılış ekranı | `App/SplashView.swift` | `ui/SplashScreen.kt` | — | `fair.summary`, `FairStore.dayStatus` |
-| İlk açılış turu | `Features/Home/AppTour.swift` | `ui/AppTour.kt` | — | `eylul.tour.done` |
 | Ana sayfa (bannerlar, program bölümü: kalan etkinlikler sırayla `count` kadar, yoksa bölüm yok; popüler yayınevleri, arama) | `Features/Home/HomeView.swift` | `ui/home/HomeScreen.kt` | Ana ekran sayfası, `Banners.jsx` | `banners`, `fair.homeProgram`, `fair.homePublishers`, `fair.sponsors`, `fair.ticketUrl` |
 | **Fuar bilgileri (ⓘ)**: tanıtım, tarih, saat, SSS, konum, Hakkımızda bağlantısı | `Features/Home/FairInfo.swift` | `ui/home/FairInfo.kt` | `FairSettings.jsx` (Genel, Sık sorulan sorular) | `fair.summary`, `fair.cover`, `fair.faq`, `fair.location` |
 | Gerçek harita, uzaklık, yol tarifi | `Features/Home/VenueMap.swift` (MapKit, Apple / Google Haritalar) | `ui/home/VenueMap.kt` (MapLibre, Google Haritalar / `geo:`) | `FairSettings.jsx` (`components/LocationPicker.jsx`) | `fair.location` |
@@ -533,7 +532,6 @@ iOS yolları `ios/EylulRehber/`'a, Android yolları `android/app/src/main/java/c
 | Bağlantı aç | `-eylul.openLink eylulrehber://event/e7` | `--es eylul.openLink eylulrehber://event/e7` |
 | QR okutmuş gibi | `-eylul.scan <QR içeriği>` | `--es eylul.scan <QR içeriği>` |
 | Sayfa aç | `-eylul.page menu\|info\|about\|settings\|agreements\|signin` | yok |
-| Turu atla | `-eylul.tour.done YES` | ilk açılışta "Geç" |
 | Telefon önceden dolu | `-eylul.test.phone …` | yok |
 | Hatırlatma iznini sorma (ekran görüntüsü için) | `-eylul.screenshotMode YES` | yok |
 

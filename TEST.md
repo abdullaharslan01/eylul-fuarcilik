@@ -64,7 +64,7 @@ iOS sürümleri: **17, 18, 26, 27** (simülatör; 18 indirilemiyorsa raporda yaz
 |---|---|---|
 | C1 | Fuar seçici (ilk açılış, iki dil) | uygulamayı sil-kur / `uninstall` |
 | C2 | Açılış ekranı (doğru fuarın logosu, fuar değişince başka fuarın adı görünmez) | 0,2 sn arayla görüntü |
-| C3 | İlk açılış turu | `-eylul.tour.done` vermeden / ilk açılış |
+| C3 | İlk açılışta tanıtım turu yok: fuar seçilince doğrudan ana sayfa, kaydırma çalışır (tur 24 Kasım 2026'da kaldırıldı) | uygulamayı sil-kur |
 | C4 | Ana sayfa: bannerlar, bugünkü imzalar, popüler yayınevleri, arama kutusu | varsayılan |
 | C5 | Fuar bilgileri: tanıtım, tarih, saat, SSS, harita, uzaklık, yol tarifi | `-eylul.page info` / ⓘ |
 | C6 | Program: gün, tür süzgeci, "şimdi" çizgisine kaydırma, canlı / iptal / saat değişti etiketleri | `eylulrehber://program` + `eylul.now` |
