@@ -43,7 +43,8 @@
   Android versionCode 21: stant numarası gizliyken "Stant" satırları kalkar) 17 Kasım 2026'da iki mağazada incelemeye
   gönderildi; ikisi de yayında (Android 18 Kasım; iOS 19 Kasım itibarıyla Ready for Distribution). **2.3** (iOS build 28,
   Android versionCode 22: hediye alma yeri kartı, tesis simgeleri uzaklaştıkça küçülür, Hediyeler Yakında ekranı)
-  24 Kasım 2026'da iki mağazada incelemeye gönderildi; onaydan sonra yayınlama elle (kullanıcı onayıyla).
+  24 Kasım 2026'da iki mağazada incelemeye gönderildi. Android 25 Kasım'da yayınlandı; iOS incelemede (onaydan sonra
+  yayınlama elle, kullanıcı onayıyla).
   Play'in "android.hardware.screen.portrait gerekli" uyarısı 2.3'te bırakıldı; sonraki sürümde manifeste
   `uses-feature … required="false"` eklenecek.
 - **Fuarlar:**
