@@ -207,6 +207,11 @@ ayrı commit ve push yapılır.
 - `scripts/loadtest.js`: yerel yük testi. `scripts/canli-yuk.mjs` ve `k6-yuk.js`: AWS kapasite testi.
 - `deploy/aws/`: AWS betikleri. `deploy.sh` ARM64 imajı ECR'ye iter ve beş ECS servisini günceller. Diğerleri:
   `olcek.sh`, `render_task.py`, `config.env` (kaynak kimlikleri), `firebase-wif.sh`, `sms-from-bulbi.sh`.
+- **Alarmlar:** Eylül'ün CloudWatch alarmları (5xx, CPU, yavaş, DB, Redis) SNS `eylul-alarmlar` → abdullah.arslan@bulbi.co.
+  Ortak `bulbi-prod` kümesindeki EventBridge kuralı `bulbi-prod-task-crashed` ise kümede duran her görevi (başarıyla
+  bitse bile) "task crashed" diye `bulbi-prod-alerts`'e (Canberk Uçar) gönderir; Eylül servis çökmesi de oraya gider.
+  **Canlı veritabanında tek seferlik SQL / betik görevini `bulbi-prod`'da çalıştırma:** `eylul-tek-seferlik` kümesini
+  kullan (Fargate, yalnızca bu iş için, 25 Kasım 2026); yoksa Canberk'e yanlış çökme e-postası gider.
 - `.github/workflows/deploy.yml`:
   - Her PR'da test.
   - `main`'e push'ta test, ardından OIDC ile AWS'ye yayın (`deploy/aws/deploy.sh`).
