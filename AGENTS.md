@@ -43,10 +43,14 @@
   Android versionCode 21: stant numarası gizliyken "Stant" satırları kalkar) 17 Kasım 2026'da iki mağazada incelemeye
   gönderildi; ikisi de yayında (Android 18 Kasım; iOS 19 Kasım itibarıyla Ready for Distribution). **2.3** (iOS build 28,
   Android versionCode 22: hediye alma yeri kartı, tesis simgeleri uzaklaştıkça küçülür, Hediyeler Yakında ekranı)
-  24 Kasım 2026'da iki mağazada incelemeye gönderildi. Android 25 Kasım'da yayınlandı; iOS incelemede (onaydan sonra
-  yayınlama elle, kullanıcı onayıyla).
-  Play'in "android.hardware.screen.portrait gerekli" uyarısı 2.3'te bırakıldı; sonraki sürümde manifeste
-  `uses-feature … required="false"` eklenecek.
+  24 Kasım 2026'da iki mağazada incelemeye gönderildi; ikisi de yayında (Android 25, iOS 26 Kasım).
+  **2.4** (iOS build 29, Android versionCode 23: etkinlik sayfasında Saat / Süre / Katılım / Yer tek kartta alt alta,
+  uzun değer iki satır + "Devamını oku"; Katılım yalnızca panelde yazıldıysa; "Fuar yeri" haritasında konum izni
+  reddedildiyse "Ayarları aç") 26 Kasım 2026'da iki mağazada incelemeye gönderildi; yayınlama elle (kullanıcı onayıyla).
+  App Store ekran görüntüleri 2.4'te yenilendi: 6.9" (1320×2868, iPhone 17 Pro Max) 7 görsel, Media Manager ›
+  "iPhone with Dynamic Island (large display)"; İngilizce ve 6.3" bu setten türer ("Using Existing Assets"). 1–5 canlı
+  veriyle, Hediyeler (6–7) yerel docker'da demo hesapla (canlıda hediye yokken). Play görselleri eski (Play en çok 2:1 ister).
+  Play'in "android.hardware.screen.portrait gerekli" uyarısı hâlâ duruyor; manifeste `uses-feature … required="false"` eklenecek.
 - **Fuarlar:**
   - `ankara-2026`: 24. Ankara Kitap Fuarı, ATO Congresium, 4–13 Aralık. Kaynak `backend/seed/catalog.json`: program, SSS ve
     iletişim ankarakitapfuari.org.tr'den (6 Kasım); `scripts/fuar-yukle.mjs` sunucuya yükler ve eski demoyu temizler
@@ -459,7 +463,7 @@ ayrı commit ve push yapılır.
   - `API_BASE_URL` Debug ve Release'de `https://fuar.bulbi.co`.
   - "API adresi" build phase'i, Release'de adres boşsa derlemeyi durdurur.
   - `PUSH_TOPIC_PREFIX` Debug'da `test-`, Release'de boş.
-  - Sürüm: `MARKETING_VERSION 2.3`, `CURRENT_PROJECT_VERSION 28`. **Sonraki yükleme build 29.**
+  - Sürüm: `MARKETING_VERSION 2.4`, `CURRENT_PROJECT_VERSION 29`. **Sonraki yükleme build 30.**
 - **Mağaza yüklemesi:**
   - `xcodebuild archive`, ardından `xcodebuild -exportArchive` (ExportOptions: app-store-connect, destination upload,
     team `Q47SYK6PMC`).
@@ -492,7 +496,7 @@ ayrı commit ve push yapılır.
   - `gradle.properties › apiBaseUrl=https://fuar.bulbi.co` (`BuildConfig.API_BASE_URL`). Adres boşsa **release**
     derlemesi durur; debug durmaz.
   - İmza `android/signing/` klasöründen gelir (repoda yok, yalnızca bu Mac'te; yükleme anahtarı).
-  - Sürüm: `versionName 2.3`, `versionCode 22`. **Sonraki yükleme versionCode 23.**
+  - Sürüm: `versionName 2.4`, `versionCode 23`. **Sonraki yükleme versionCode 24.**
   - Play'e AAB yüklenir. Tarayıcıdan yüklemede 10 MB sınırı var: büyük paket parçalanıp sayfada birleştirilir.
 - Yerel docker'a karşı derleme (emülatör):
   ```bash
